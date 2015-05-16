@@ -1,0 +1,22 @@
+LWJGL/GLFW Tutorials
+=======================
+
+- http://www.lwjgl.org/guide																Java		Anfänger
+
+OpenGL Tutorials (Komplette Tutorials)
+=======================
+https://open.gl/drawing																		C++			Anfänger
+http://www.opengl-tutorial.org																C++			Anfänger
+http://ogldev.atspace.co.uk																	C++			Anfänger
+http://www.rastertek.com/tutgl40.html														C++			Fortgeschritten (Setzt einiges an Vorkentnissen vorraus)
+
+OpenGL Tutorials (Spezifische Teil-Tutorials)
+======================
+http://wiki.lwjgl.org/wiki/Using_Vertex_Buffer_Objects_(VBO)								Java		Anfänger
+http://www.gamedev.net/page/resources/_/technical/opengl/opengl-batch-rendering-r3900		C++			Fortgeschritten
+
+Bemerkungen
+=====================
+Alle Tutorials <3.0 sind veraltet, da sich die API von OpenGL von 2.1 auf 3.0 extrem verändert hat.
+Darunter fällt z.B. eine Seite die in Google immernoch recht hoch im PageRank steht: http://nehe.gamedev.net
+	
