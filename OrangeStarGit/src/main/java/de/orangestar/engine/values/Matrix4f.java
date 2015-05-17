@@ -140,7 +140,7 @@ public class Matrix4f {
         return frustum(xmin, xmax, ymin, ymax, znear, zfar);
     }
 
-    public static Matrix4f Ortho2D(float left, float right, float bottom, float top, float znear, float zfar) {
+    public static Matrix4f Ortho2D(float left, float right, float bottom, float top) {
         float zNear = -1.0f;
         float zFar = 1.0f;
         float invZ = 1.0f / (zFar - zNear);
@@ -148,31 +148,27 @@ public class Matrix4f {
         float invX = 1.0f / (right - left);
 
         Matrix4f result = new Matrix4f();
-                
-        //first column
-        result.m00 = (2.0f*invX);
-        result.m10 = (0.0f);
-        result.m20 = (0.0f);
-        result.m30 = (0.0f);
 
-        //second column
-        result.m01 = (0.0f);
-        result.m11 = (2.0f*invY);
-        result.m21 = (0.0f);
-        result.m31 = (0.0f);
-                 
-        //third column
-        result.m02 = (0.0f);
-        result.m12 = (0.0f);
-        result.m22 = (-2.0f*invZ);
-        result.m32 = (0.0f);
-                 
-        //fourth column
-        result.m03 = (-(right + left)*invX);
-        result.m13 = (-(top + bottom)*invY);
-        result.m23 = (-(zFar + zNear)*invZ);
+        result.m00 = (2.0f * invX);
+//        result.m10 = (0.0f);
+//        result.m20 = (0.0f);
+//        result.m30 = (0.0f);
+
+//        result.m01 = (0.0f);
+        result.m11 = (2.0f * invY);
+//        result.m21 = (0.0f);
+//        result.m31 = (0.0f);
+
+//        result.m02 = (0.0f);
+//        result.m12 = (0.0f);
+        result.m22 = (-2.0f * invZ);
+//        result.m32 = (0.0f);
+
+        result.m03 = (-(right + left) * invX);
+        result.m13 = (-(top  + bottom) * invY);
+        result.m23 = (-(zFar + zNear) * invZ);
         result.m33 = (1.0f);
-                 
+
         return result;
     }
     

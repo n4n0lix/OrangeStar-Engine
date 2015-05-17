@@ -32,7 +32,7 @@ public class Shader {
     public static final String VsAttribNameColor        = "vs_color";
     public static final int    VsAttribLocColor         = 1;
     
-    public static final String VsAttribNameTexCoord     = "vs_texcoord";
+    public static final String VsAttribNameTexCoord     = "vs_uv";
     public static final int    VsAttribLocTexCoord      = 2;
     
     public static final String VsAttribNameInstances_Position   = "vs_instance_position";
@@ -45,7 +45,7 @@ public class Shader {
     public static final int    VsAttribLocInstances_UV          = 14;
     
     public static final String FsAttribNameColor        = "fs_color";
-    public static final String FsAttribNameTexCoord     = "fs_texcoord";
+    public static final String FsAttribNameTexCoord     = "fs_uv";
         
     public static final String OutAttibNameColor        = "out_color";
     

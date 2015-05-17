@@ -147,6 +147,12 @@ public class RenderingPrototype {
             // Bind VAO
             GL30.glBindVertexArray( vao );
             
+            offset = offset + 0.01f;
+            GL20.glUniform3f(unilocation, offset, offset -1f , 1.0f);
+            if(offset > 4.2f){
+            	offset = 0;
+            }
+            
             // Do the draw call
             GL11.glDrawArrays( GL11.GL_TRIANGLES, 0, 3 );
             // Unbind vao
@@ -223,13 +229,14 @@ public class RenderingPrototype {
     private void createShader() {
         String dummyVertexShaderSrc =
                 "#version 330 core"
+                + "\n" + "uniform vec3 uni_wvp;"
                 + "\n" + "layout(location = 0) in vec3 vs_position;"
                 + "\n" + "layout(location = 1) in vec4 vs_color;"
                 + "\n" + ""
                 + "\n" + "out vec4 fs_color;"
                 + "\n" + ""
                 + "\n" + "void main() {"
-                + "\n" + "    gl_Position = vec4(vs_position, 1.0);"
+                + "\n" + "    gl_Position = vec4(vs_position, 1.0) * vec4(uni_wvp, 1.0);"
                 + "\n" + "    fs_color = vs_color;"
                 + "\n" + "}"
                 ;
@@ -280,12 +287,15 @@ public class RenderingPrototype {
             System.out.println("Shader linking failed: " + GL20.glGetProgramInfoLog(shader));
             System.exit(-1);
         }
+        unilocation = GL20.glGetUniformLocation(shader, "uni_wvp");
   
         GL20.glValidateProgram(shader);
         GL20.glDeleteShader(idVertexShader);
         GL20.glDeleteShader(idFragmentShader);
     }
-  
+    
+    private float offset;
+    private int unilocation;
     private int vao;
     private int vbo;
     private int shader;

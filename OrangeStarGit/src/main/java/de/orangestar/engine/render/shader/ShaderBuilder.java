@@ -131,7 +131,7 @@ public class ShaderBuilder {
         }
         
         if (_hasTexCoord) {
-            builder.append("out vec2 fs_texcoord;").append("\n");
+            builder.append("out vec2 ").append(Shader.FsAttribNameTexCoord).append(";").append("\n");
         }
             
         builder.append("\n");
@@ -158,7 +158,7 @@ public class ShaderBuilder {
             }
             
             if (_hasTexCoord) {
-                builder.append("    ").append("fs_texcoord = vs_texcoord;").append("\n");
+                builder.append("    ").append(Shader.FsAttribNameTexCoord).append(" = ").append(Shader.VsAttribNameTexCoord).append(";").append("\n");
             }
         }
 

@@ -75,7 +75,7 @@ public class RenderManager extends AbstractManager {
 
         setWorldMatrix(Matrix4f.One);
         setViewMatrix(Matrix4f.One);
-        setProjectionMatrix(Matrix4f.Ortho2D( 0, width, height, 0, 0, 1));
+        setProjectionMatrix(Matrix4f.Ortho2D( 0, width, height, 0));
 
         RenderModule mod;
         for(GameObject obj : World.Get()) {
