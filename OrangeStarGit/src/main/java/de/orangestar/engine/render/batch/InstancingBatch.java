@@ -87,7 +87,7 @@ public class InstancingBatch extends Batch {
         GL30.glBindVertexArray( _vaoId );
         
         if (shader.isTextured() && texture != null) {
-            texture.link(shader);
+            texture.setAsActiveTexture(shader);
         }
         GL31.glDrawArraysInstanced(type.getGLId(), 0, _vboNumVertices, _iboNumInstances);
 

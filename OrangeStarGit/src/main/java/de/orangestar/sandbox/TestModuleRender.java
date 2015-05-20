@@ -27,7 +27,7 @@ public class TestModuleRender extends RenderModule {
         material.setShader(Shader.StreamingBatchShader);
         material.setTexture(ResourceManager.Get().getTexture(new File("texture2.png")));
         
-        ATileMap tilemap = new ATileMap(material);
+        ATileMap tilemap = new ATileMap(material, 16, 16);
         tilemap.setData(data);
         
         setActor(tilemap);

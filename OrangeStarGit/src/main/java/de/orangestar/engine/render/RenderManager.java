@@ -58,7 +58,7 @@ public class RenderManager extends AbstractManager {
         
         // Make the OpenGL context current
         glfwMakeContextCurrent(_mainWindow.handle());
-        setBackbuffers(1);
+        setVSync(false);
         
         GLContext.createFromCurrent();
 	}
@@ -118,8 +118,8 @@ public class RenderManager extends AbstractManager {
 	/**
 	 * Sets the number of used backbuffers. 1 = Double Buffering, 2 = Triple Buffering, ..., to avoid tearing.
 	 */
-	public void setBackbuffers(int numBackBuffers) {
-	    glfwSwapInterval(numBackBuffers);	    
+	public void setVSync(boolean vSync) {
+	    glfwSwapInterval(vSync ? 2 : 1);	    
 	}
 	
 	public ByteBuffer getWVPBuffer() {

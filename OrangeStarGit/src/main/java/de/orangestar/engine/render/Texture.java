@@ -32,6 +32,10 @@ public class Texture implements Resource {
     
     public Texture(ByteBuffer buffer, int width, int height, boolean linearFiltering) {
         DebugManager.Get().glClearError();
+        
+        _width = width;
+        _height = height;
+        
         // 1# Configure texture object
         _id = GL11.glGenTextures();
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, _id);
@@ -57,8 +61,8 @@ public class Texture implements Resource {
     /**
      * Sets this texture as the 'to use' texture. Texture unit 0 will be used.
      */
-    public void link(Shader shader) {
-        link(shader, 0);
+    public void setAsActiveTexture(Shader shader) {
+        setAsActiveTexture(shader, 0);
     }
 
     /**
@@ -66,15 +70,55 @@ public class Texture implements Resource {
      * @param shader The shader that to use this texture
      * @param textureSlot The texture unit slot in the shader to which this texture will be bound
      */
-    public void link(Shader shader, int textureSlot) {
+    public void setAsActiveTexture(Shader shader, int textureSlot) {
         GL20.glUniform1i(shader.getTexture0Location(), textureSlot);
         GL13.glActiveTexture(GL13.GL_TEXTURE0); // TODO: textureSlot
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, _id);
     }
 
+    public int getWidth() {
+        return _width;
+    }
+    
+    public int getHeight() {
+        return _height;
+    }
+    
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (int) (_id ^ (_id >>> 32));
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Texture other = (Texture) obj;
+        if (_id != other._id)
+            return false;
+        return true;
+    }
+
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                              PRIVATE                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+    private int _id;
+    
+    private int _width;
+    private int _height;
+    
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    /*                           PRIVATE STATIC                           */
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
     
     /**
      * Writes the color data of a buffered image into a ByteBuffer and returns it.
@@ -101,33 +145,4 @@ public class Texture implements Resource {
         
         return buffer;
     }
-    
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (int) (_id ^ (_id >>> 32));
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Texture other = (Texture) obj;
-        if (_id != other._id)
-            return false;
-        return true;
-    }
-
-    private int _id;
-    
-    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    /*                           PRIVATE STATIC                           */
-    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 }

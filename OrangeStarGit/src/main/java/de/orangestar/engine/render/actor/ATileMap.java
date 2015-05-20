@@ -6,6 +6,7 @@ import java.util.List;
 
 import de.orangestar.engine.render.Material;
 import de.orangestar.engine.render.PrimitiveType;
+import de.orangestar.engine.render.Texture;
 import de.orangestar.engine.render.batch.BatchFactory;
 import de.orangestar.engine.render.batch.StreamingBatch;
 import de.orangestar.engine.values.Color4f;
@@ -16,20 +17,25 @@ import de.orangestar.engine.values.Vertex;
 public class ATileMap extends Actor {
 
     
-    public ATileMap(Material material) {
+    public ATileMap(Material material, int tileWidth, int tileHeight) {
         _batch = BatchFactory.createStreaming(material, 32768);
+        setMaterial(material);
+        setTileSize(tileWidth, tileHeight);
     }
     
-    public void setWidth(int width) {
-
-    }
-    
-    public void setHeight(int height) {
+    public void setTileSize(int width, int height) {
+        _tileWidth = width;
+        _tileHeight = height;
         
+        // Calculate number of tiles per row and per column
+        _tilesPerRow    = _textureWidth  / _tileWidth;
+        _tilesPerColumn = _textureHeight / _tileHeight;
     }
     
     public void setMaterial(Material mat) {
         _batch.setMaterial(mat);
+        _textureWidth = _batch.getMaterial().getTexture().getWidth();
+        _textureHeight = _batch.getMaterial().getTexture().getHeight();
     }
     
     public Material getMaterial() {
@@ -39,16 +45,27 @@ public class ATileMap extends Actor {
     public void setData(int[][] data) {
         _batch.clear();
         
-        _data = data;
         List<Vertex> vertices = new ArrayList<>(data.length * data[0].length * 4);
+        
+        
         
         for(int i = 0; i < data.length; i++) {
             for (int p = 0; p < data[i].length; p++) {
-                if (data[i][p] == 0) {
-                    vertices.addAll( Arrays.asList(generateQuad( i * 32, p * 32, 32, 32, 0f, 0f, 0.5f, 1f)));
-                } else {
-                    vertices.addAll( Arrays.asList(generateQuad( i * 32, p * 32, 32, 32, 0.5f, 0f, 0.5f, 1f)));
-                }
+                
+                int subimageID  = data[i][p];
+                int subimageX   = subimageID % _tilesPerRow;
+                int subimageY   = subimageID / _tilesPerColumn;
+                float uvPerX    = 1f / _textureWidth  * _tileWidth;
+                float uvPerY    = 1f / _textureHeight * _tileHeight;
+                
+                vertices.addAll( Arrays.asList(generateQuad( i * _tileWidth, 
+                                                             p * _tileHeight, 
+                                                             _tileWidth, 
+                                                             _textureHeight, 
+                                                             subimageX * uvPerX, 
+                                                             subimageY * uvPerY, 
+                                                             uvPerX, 
+                                                             uvPerY)));
                 
             }
         }
@@ -61,8 +78,16 @@ public class ATileMap extends Actor {
         _batch.render(PrimitiveType.TRIANGLES);
     }
 
-    private int[][]         _data;
     private StreamingBatch  _batch;
+    
+    private int _tileWidth;
+    private int _tileHeight;
+    
+    private int _tilesPerColumn;
+    private int _tilesPerRow;
+    
+    private int _textureWidth;
+    private int _textureHeight;
     
     private static Vertex[] generateQuad(float x, float y, float width, float height, float uv_x, float uv_y, float uv_width, float uv_height) {
         return new Vertex[] {
