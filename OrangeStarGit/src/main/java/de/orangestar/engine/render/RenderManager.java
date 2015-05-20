@@ -58,7 +58,7 @@ public class RenderManager extends AbstractManager {
         
         // Make the OpenGL context current
         glfwMakeContextCurrent(_mainWindow.handle());
-        setBackbuffers(2);
+        setBackbuffers(1);
         
         GLContext.createFromCurrent();
 	}
