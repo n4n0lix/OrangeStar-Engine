@@ -61,7 +61,7 @@ public class ATileMap extends Actor {
                 vertices.addAll( Arrays.asList(generateQuad( i * _tileWidth, 
                                                              p * _tileHeight, 
                                                              _tileWidth, 
-                                                             _textureHeight, 
+                                                             _tileHeight, 
                                                              subimageX * uvPerX, 
                                                              subimageY * uvPerY, 
                                                              uvPerX, 
