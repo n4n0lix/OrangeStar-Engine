@@ -19,13 +19,13 @@ public class TestModuleRender extends RenderModule {
         
         for(int i = 0; i < data.length; i++) {
             for(int p = 0; p < data[0].length; p++) {
-                data[i][p] = new Random().nextInt(2);
+                data[i][p] = new Random().nextInt(20);
             }
         }
         
         Material material = new Material();
         material.setShader(Shader.StreamingBatchShader);
-        material.setTexture(ResourceManager.Get().getTexture(new File("texture2.png")));
+        material.setTexture(ResourceManager.Get().getTexture(new File("texture_large.png")));
         
         ATileMap tilemap = new ATileMap(material, 16, 16);
         tilemap.setData(data);
