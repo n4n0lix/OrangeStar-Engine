@@ -53,28 +53,12 @@ public class Engine {
 		boolean programEnd = false;
 
 	    // Used to determine if the logical updating is lagging
-        long tickcurrent  = System.currentTimeMillis();
-        long tickprevious = System.currentTimeMillis();
-        long tickduration = 0;
-        long lag = 0;
+
         	    
 	    while ( !programEnd ) {
-            tickcurrent  = System.currentTimeMillis();
-            tickduration = tickcurrent - tickprevious;
-            tickprevious = tickcurrent;
-            lag          += tickduration;
-	        
 	        GLWindow.doGuiEvents();
 	        _inputManager.update();
-	        
-	        // Catch up
-            while ( lag >= GameManager.TICK_TIME )
-            {
-                _gameManager.update();
-                lag -= GameManager.TICK_TIME;
-            }
-            
-            _renderManager.setExtrapolation( 1f + (float) lag / (float) GameManager.TICK_TIME );
+	        _gameManager.update();
             _renderManager.update();
 
 	        programEnd = _renderManager.requestsExit() || _gameManager.requestsExit() || _inputManager.requestsExit();
