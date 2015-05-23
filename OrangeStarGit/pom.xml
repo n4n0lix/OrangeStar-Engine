@@ -3,7 +3,22 @@
     <groupId>de.orangestar</groupId>
     <artifactId>de.orangestar</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-  
+    
+	<dependencies>
+	    <dependency>
+	        <groupId>org.lwjgl</groupId>
+	        <artifactId>lwjgl</artifactId>
+	        <version>3.0.0a</version>
+	        <scope>system</scope>
+	        <systemPath>${basedir}/libs/lwjgl-3.0.0/jar/lwjgl.jar</systemPath>
+	    </dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+		</dependency>
+	</dependencies>
+	
     <build>
         <plugins>
            <plugin>
