@@ -9,6 +9,10 @@ public class Color4f {
         this(0.0f,0.0f,0.0f);
     }
     
+    public Color4f(float rgb) {
+        this(rgb,rgb,rgb);
+    }
+    
     public Color4f(float r1, float g1, float b1) {
         this(r1,g1,b1,1.0f);
     }    

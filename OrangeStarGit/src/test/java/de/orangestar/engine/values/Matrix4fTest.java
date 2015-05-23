@@ -15,7 +15,7 @@ public class Matrix4fTest {
     }
     
     @Test
-    public void Constructor() {
+    public void constructors() {
         // Matrix4f(float val)
         for(int i = 0; i < 1000; i++) {
             float val = rnd.nextFloat();

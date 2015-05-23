@@ -91,12 +91,12 @@ public class ATileMap extends Actor {
     
     private static Vertex[] generateQuad(float x, float y, float width, float height, float uv_x, float uv_y, float uv_width, float uv_height) {
         return new Vertex[] {
-                new Vertex(new Vector3f(          x,          y, 0.0f), new Color4f(0.5f, 0.5f, 0.5f, 1f), new Vector2f(uv_x,            uv_y)),
-                new Vertex(new Vector3f(  x + width,          y, 0.0f), new Color4f(0.5f, 0.5f, 0.5f, 1f), new Vector2f(uv_x + uv_width, uv_y)),  
-                new Vertex(new Vector3f(          x, y + height, 0.0f), new Color4f(0.5f, 0.5f, 0.5f, 1f), new Vector2f(uv_x,            uv_y + uv_height)),
-                new Vertex(new Vector3f(  x + width,          y, 0.0f), new Color4f(0.5f, 0.5f, 0.5f, 1f), new Vector2f(uv_x + uv_width, uv_y)),  
-                new Vertex(new Vector3f(          x, y + height, 0.0f), new Color4f(0.5f, 0.5f, 0.5f, 1f), new Vector2f(uv_x,            uv_y + uv_height)),
-                new Vertex(new Vector3f(  x + width, y + height, 0.0f), new Color4f(0.5f, 0.5f, 0.5f, 1f), new Vector2f(uv_x + uv_width, uv_y + uv_height)),
+                new Vertex(new Vector3f(          x,          y, 0.0f), new Color4f(0.5f), new Vector2f(uv_x,            uv_y)),
+                new Vertex(new Vector3f(  x + width,          y, 0.0f), new Color4f(0.5f), new Vector2f(uv_x + uv_width, uv_y)),  
+                new Vertex(new Vector3f(          x, y + height, 0.0f), new Color4f(0.5f), new Vector2f(uv_x,            uv_y + uv_height)),
+                new Vertex(new Vector3f(  x + width,          y, 0.0f), new Color4f(0.5f), new Vector2f(uv_x + uv_width, uv_y)),  
+                new Vertex(new Vector3f(          x, y + height, 0.0f), new Color4f(0.5f), new Vector2f(uv_x,            uv_y + uv_height)),
+                new Vertex(new Vector3f(  x + width, y + height, 0.0f), new Color4f(0.5f), new Vector2f(uv_x + uv_width, uv_y + uv_height)),
           };
     }
     

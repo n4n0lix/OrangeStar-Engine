@@ -6,6 +6,10 @@ import java.util.List;
 
 public class World implements Iterable<GameObject> {
     
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    /*                               Public                               */
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    
     public void addGameObject(GameObject object) {
         if (object == null) {
             throw new IllegalArgumentException("GameObject is null!");
@@ -18,6 +22,10 @@ public class World implements Iterable<GameObject> {
     public Iterator<GameObject> iterator() {
         return _gameObjects.iterator();
     }
+    
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    /*                              Private                               */
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
     private List<GameObject> _gameObjects;
     

@@ -201,14 +201,16 @@ public class ShaderBuilder {
      * Adds the MAIN method to the fragment shader code.
      */
     private void fs_main(StringBuilder builder) {
-        builder.append("void main() {").append("\n");
+        builder.append(DiffuseColorFunction + "\n");
+        builder.append("void main() {" + "\n");
 
         if (_fragmentCustomCode != null) {
             builder.append(_fragmentCustomCode);
         } else {
             if (_hasTexCoord) {
                 if (_hasColor) {
-                    builder.append("    ").append(Shader.OutAttibNameColor).append(" = ").append(" texture2D(").append(Shader.UniAttribNameTexture0).append(",").append(Shader.FsAttribNameTexCoord).append(") * (").append(Shader.FsAttribNameColor).append(" + vec4(0.5,0.5,0.5,0));").append("\n");
+                    builder.append("    " + Shader.OutAttibNameColor + " = texture2D(" + Shader.UniAttribNameTexture0 + "," + Shader.FsAttribNameTexCoord + ");").append("\n");
+//                    builder.append("    " + Shader.OutAttibNameColor + " = diffuse(" + Shader.OutAttibNameColor + ", " + Shader.FsAttribNameColor + ");" + "\n");
                 } else {
                     builder.append("    ").append(Shader.OutAttibNameColor).append(" = ").append(" texture2D(").append(Shader.UniAttribNameTexture0).append(",").append(Shader.FsAttribNameTexCoord).append(");").append("\n");
                 }
@@ -223,6 +225,15 @@ public class ShaderBuilder {
         
         builder.append("}").append("\n");
     }
+    
+    private static String DiffuseColorFunction = "vec4 diffuse(in vec4 color, in vec4 diffuse_color) {" + "\n"
+                                               + "    vec4 component1 = clamp(diffuse_color - vec4(0.5,0.5,0.5,0.5), vec4(0,0,0,0), vec4(1,1,1,1)) * 2;" + "\n"
+                                               + "    vec4 component2 = vec4( color.x < 0.5 ? color.x * 2 : 1.0 - color.x/2," + "\n"
+                                               + "                            color.y < 0.5 ? color.y * 2 : 1.0 - color.y/2," + "\n"
+                                               + "                            color.z < 0.5 ? color.z * 2 : 1.0 - color.z/2," + "\n"
+                                               + "                            color.w < 0.5 ? color.w * 2 : 1.0 - color.w/2);" + "\n"
+                                               + "    return component1 + component2;" + "\n"
+                                               + "}" + "\n";
     
     private boolean     _hasColor       = false;
     private boolean     _hasTexCoord    = false;
