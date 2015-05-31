@@ -1,6 +1,7 @@
 package de.orangestar.engine.render.batch;
 
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.BufferUtils;
@@ -29,6 +30,46 @@ import de.orangestar.engine.values.Vertex;
 public class InstancingBatch extends Batch {
     
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    /*                           Inner Classes                            */
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    
+    public static class Builder {
+        
+        public Builder material(Material material) {
+            _material = material;
+            return this;
+        }
+        
+        public Builder vertices(List<Vertex> vertices) {
+            _vertices = vertices;
+            return this;
+        }
+        
+        public InstancingBatch build() {
+            if (_vertices == null) {
+                _vertices = new ArrayList<>();
+            }
+            
+            if (_material == null) {
+                throw new IllegalStateException("Material is null!");
+            }
+            
+            if (_material.getShader() == null) {
+                throw new IllegalStateException("Shader is null!");
+            }
+            
+            if (!_material.getShader().isInstanced()) {
+                throw new IllegalStateException("Shader doesn't support instancing!");
+            }
+            
+            return new InstancingBatch(_vertices, _material);
+        }
+        
+        private Material _material;
+        private List<Vertex> _vertices;
+    }
+    
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
@@ -37,14 +78,14 @@ public class InstancingBatch extends Batch {
      * @param transforms A list of transformations that each represents an instance
      */
     public void addInstances(List<Transform> transforms) {
-        // 1# Create buffer
+        // 1# Create buffer and put the instances transforms in it
         FloatBuffer buffer = BufferUtils.createFloatBuffer(_shader.getMaxInstances() * Matrix4f.ComponentsCount);
         for(Transform transform : transforms) {
             transform.toMatrix4f().writeTo(buffer, Order.COLUMN_MAJOR);
         }
         buffer.flip();
 
-        // 2# Write data
+        // 2# Write data the buffer into the opengl buffer
         GL30.glBindVertexArray(_vaoId);
         
             GL15.glBindBuffer( GL15.GL_ARRAY_BUFFER, _iboId);
@@ -89,7 +130,7 @@ public class InstancingBatch extends Batch {
         if (shader.isTextured() && texture != null) {
             texture.setAsActiveTexture(shader);
         }
-        GL31.glDrawArraysInstanced(type.getGLId(), 0, _vboNumVertices, _iboNumInstances);
+        GL31.glDrawArraysInstanced(type.glConst(), 0, _vboNumVertices, _iboNumInstances);
 
         GL30.glBindVertexArray( 0 );
         _material.getShader().unbind();

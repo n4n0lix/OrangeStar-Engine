@@ -1,6 +1,8 @@
 package de.orangestar.engine.render.batch;
 
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.BufferUtils;
@@ -15,30 +17,91 @@ import de.orangestar.engine.values.Vertex;
 
 /**
  * A batch to bundle draw calls with the same material.
+ * The batch renders every given vertex. If at least one index is given via {@link addIndicesData} this batch switches
+ * to indexed rendering.
  * @author Basti
  */
 public class StreamingBatch extends Batch {
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    /*                           Inner Classes                            */
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    
+    /**
+     * Creates a batch used for bundling vertices that use the same material for rendering.
+     * (Indexed rendering is optional)
+     * 
+     * (Default) Max Vertices: 116508 (4 megabytes of vertex data)
+     * (Default) Max Indices:  262144 (1 megabyte of index data)
+     *
+     */
+    public static class Builder {
+        
+        public Builder material(Material material) {
+            _material = material;
+            return this;
+        }
+        
+        public Builder vertices(int maxVertices) {
+            _maxVertices = maxVertices;
+            return this;
+        }
+        
+        public Builder indices(int maxIndices) {
+            _maxIndices = maxIndices;
+            return this;
+        }
+        
+        public StreamingBatch build() {
+            if (!(_maxVertices > 0))
+                throw new IllegalArgumentException("Cannot create empty batch.");
+            
+            if (!(_maxIndices >= 0))
+                throw new IllegalArgumentException("Cannot create batch with negative index amount.");
+
+            if (_material == null) 
+                throw new IllegalArgumentException("Material is null.");
+            
+            if (_material.getShader() == null) 
+                throw new IllegalArgumentException("Shader is null.");
+            
+            return new StreamingBatch(_material, _maxVertices, _maxIndices);
+        }
+        
+        private Material _material;
+        private int      _maxVertices = 116508;
+        private int      _maxIndices  = 262144;
+        
+    }
+    
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
     /**
-     * Whether this batch has space to store the given vertices.
+     * If this batch has space to store the given vertices.
      * @param vertices A list of vertices
      */
-    public boolean hasEnoughSpace(List<Vertex> vertices) {
-        return _numVertices + vertices.size() <= _maxNumVertices;
+    public boolean hasEnoughSpaceVertices(List<Vertex> vertices) {
+        return _vertices.size() + vertices.size() <= _maxNumVertices;
+    }
+    
+    /**
+     * If this batch has space to store the given indices.
+     * @param vertices A list of vertices
+     */
+    public boolean hasEnoughSpaceIndices(List<Integer> indices) {
+        return _indices.size() + indices.size() <= _maxNumIndices;
     }
     
     @Override
     public boolean isEmpty() {
-        return _numVertices == 0;
+        return _vertices.isEmpty();
     }
     
     @Override
     public boolean isFull() {
-        return _numVertices >= _maxNumVertices;
+        return _vertices.size() >= _maxNumVertices;
     }
     
     /**
@@ -48,26 +111,23 @@ public class StreamingBatch extends Batch {
      * @require hasEnoughSpace(vertices)
      */
     public void addVertexData(List<Vertex> vertices) {
-        if(!hasEnoughSpace(vertices)) {
-            DebugManager.Get().info(StreamingBatch.class, "Vertex data is too large for batch. Data is discarded.");
+        if(!hasEnoughSpaceVertices(vertices)) {
+            throw new IllegalArgumentException("Vertex data is too large for batch.");
         }
         
-        // 1# Create buffer
-        FloatBuffer buffer = BufferUtils.createByteBuffer(vertices.size() * Vertex.ByteSize).asFloatBuffer();
-        for(Vertex vertex : vertices) {
-            vertex.writeToFloatBuffer(buffer);
+        _vertices.addAll(vertices);
+    }
+    
+    /**
+     * Adds indices to the indexbuffer.
+     * @param indices
+     */
+    public void addIndicesData(List<Integer> indices) {
+        if(!hasEnoughSpaceIndices(indices)) {
+            throw new IllegalArgumentException("Index data is too large for batch.");
         }
-        buffer.flip();
-
-        // 2# Write data
-        GL30.glBindVertexArray(_idVAO);
         
-            GL15.glBindBuffer( GL15.GL_ARRAY_BUFFER, _idVertexBuffer);
-            GL15.glBufferSubData( GL15.GL_ARRAY_BUFFER, _numVertices * Vertex.ByteSize, buffer);
-            GL15.glBindBuffer( GL15.GL_ARRAY_BUFFER, 0);
-            
-        GL30.glBindVertexArray(0);
-        _numVertices  += vertices.size();
+        _indices.addAll(_indices);
     }
     
     /**
@@ -76,8 +136,11 @@ public class StreamingBatch extends Batch {
     public Material getMaterial() {
         return _material;
     }
-    
-    
+
+    /**
+     * Sets the material used by this batch.
+     * @param mat
+     */
     public void setMaterial(Material mat) {
         _material = mat;
     }
@@ -96,63 +159,99 @@ public class StreamingBatch extends Batch {
     
     @Override
     public void render(PrimitiveType type) {  
+        sendVerticesToGPU();
+        
+        boolean isIndexedRendering = !_indices.isEmpty();
+
         _material.getShader().bind();
         GL30.glBindVertexArray( _idVAO );
 
-        GL11.glDrawArrays( type.getGLId(), 0, _numVertices );
-        
+        if (isIndexedRendering) {
+            IntBuffer intBuffer = BufferUtils.createIntBuffer(_indices.size());
+            for(Integer i : _indices) {
+                intBuffer.put(i);
+            }
+            intBuffer.flip();
+            
+            GL11.glDrawElements(type.glConst(), intBuffer);
+        } else {
+            GL11.glDrawArrays( type.glConst(), 0, _vertices.size() );
+        }
+
         GL30.glBindVertexArray( 0 );
         _material.getShader().unbind();
     }
     
     @Override
     public void clear() {
-        _numVertices  = 0;
+        _vertices.clear();
+        _indices.clear();
     }
     
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                              Package                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    
+
     /**
      * Package-Private Constructor
      * @param mat The material for which vertices will be bundled
-     * @param maxSize The maximum amount of vertices that can be stored by this batch
+     * @param maxVertices The maximum amount of vertices that can be stored by this batch
      */
-    StreamingBatch(Material mat, int maxSize) {
+    StreamingBatch(Material mat, int maxVertices, int maxIndices) {
         _material = mat;
-        _maxNumVertices = maxSize;
+        _maxNumVertices = maxVertices;
+        _maxNumIndices  = maxIndices;
+        _vertices = new ArrayList<>();
+        _indices = new ArrayList<>();
         
-        // 1# Setup OpenGL objects
+        // Setup OpenGL objects
         // VAO
         _idVAO = GL30.glGenVertexArrays();
         GL30.glBindVertexArray(_idVAO);
         
-        // VBO
-        _idVertexBuffer = GL15.glGenBuffers();
-        GL15.glBindBuffer( GL15.GL_ARRAY_BUFFER, _idVertexBuffer);
-        GL15.glBufferData( GL15.GL_ARRAY_BUFFER, _maxNumVertices * Vertex.ByteSize, null, GL15.GL_STREAM_DRAW );
+            // VBO
+            _idVertexBuffer = GL15.glGenBuffers();
+            GL15.glBindBuffer( GL15.GL_ARRAY_BUFFER, _idVertexBuffer);
+            GL15.glBufferData( GL15.GL_ARRAY_BUFFER, _maxNumVertices * Vertex.ByteSize, null, GL15.GL_STREAM_DRAW );
+                
+            _material.getShader().layoutVBO();
             
-        _material.getShader().layoutVBO();
-        
-        GL15.glBindBuffer( GL15.GL_ARRAY_BUFFER, _idVertexBuffer);
+            GL15.glBindBuffer( GL15.GL_ARRAY_BUFFER, 0);
             
         GL30.glBindVertexArray(0);   
-
-        GL15.glBindBuffer( GL15.GL_ARRAY_BUFFER, 0);
     }
     
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                              Private                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
+    private void sendVerticesToGPU() {
+        // 1# Create buffer
+        FloatBuffer floatBuffer = BufferUtils.createByteBuffer(_vertices.size() * Vertex.ByteSize).asFloatBuffer();
+        for(Vertex vertex : _vertices) {
+            vertex.writeToFloatBuffer(floatBuffer);
+        }
+        floatBuffer.flip();      
+
+        // 2# Send data to GPU
+        GL30.glBindVertexArray(_idVAO);
+        
+            GL15.glBindBuffer( GL15.GL_ARRAY_BUFFER, _idVertexBuffer);
+            GL15.glBufferSubData( GL15.GL_ARRAY_BUFFER, 0, floatBuffer);
+            GL15.glBindBuffer( GL15.GL_ARRAY_BUFFER, 0);
+        
+        GL30.glBindVertexArray(0);
+    }
+    
+    private List<Vertex> _vertices;
+    private List<Integer> _indices;
     
     private int _idVAO;
     private int _idVertexBuffer;
 
     private Material _material;
     
-    private int _numVertices;
     private int _maxNumVertices;
+    private int _maxNumIndices;
         
 }
