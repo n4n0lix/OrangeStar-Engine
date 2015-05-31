@@ -8,7 +8,6 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.glfw.GLFW;
 
 /**
  * A basic rendering window.
@@ -18,14 +17,20 @@ import org.lwjgl.glfw.GLFW;
  */
 public class GLWindow {
 
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    /*                            Public Static                           */
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    
+    /**
+     * Does the OS dependent event handling for all windows of this GLFW instance.
+     */
 	public static void doGuiEvents() {
 		glfwPollEvents();
 	}
-	
-	private long _handle;
-	
-	private int _width;
-	private int _height;
+
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    /*                               Public                               */
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	
 	public GLWindow() {
         // Configure our window
@@ -34,12 +39,9 @@ public class GLWindow {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // the window will stay hidden after creation
         glfwWindowHint(GLFW_RESIZABLE, GL_TRUE); // the window will be resizable
- 
-        int WIDTH = 800;
-        int HEIGHT = 600;
- 
+
         // Create the window
-        _handle = glfwCreateWindow(WIDTH, HEIGHT, "Hello World!", NULL, NULL);
+        _handle = glfwCreateWindow(800, 600, "Hello World!", NULL, NULL);
         if ( _handle == NULL ) {
         	throw new RuntimeException("Failed to create the GLFW window");
         }
@@ -109,4 +111,11 @@ public class GLWindow {
 	public boolean closeRequested() {
 	    return glfwWindowShouldClose(_handle) == GL_TRUE;
 	}
+	
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    /*                              Private                               */
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+    private long _handle;
+    
 }

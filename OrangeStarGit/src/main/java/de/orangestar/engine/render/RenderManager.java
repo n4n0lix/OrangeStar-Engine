@@ -3,38 +3,24 @@ package de.orangestar.engine.render;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
-import java.io.File;
-import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWvidmode;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
 import de.orangestar.engine.AbstractManager;
-import de.orangestar.engine.logic.GameManager;
 import de.orangestar.engine.logic.GameObject;
 import de.orangestar.engine.logic.World;
-import de.orangestar.engine.logic.modules.LogicModule;
-import de.orangestar.engine.logic.modules.RenderModule;
-import de.orangestar.engine.render.actor.ATileMap;
-import de.orangestar.engine.render.batch.BatchFactory;
-import de.orangestar.engine.render.batch.InstancingBatch;
-import de.orangestar.engine.render.shader.Shader;
-import de.orangestar.engine.resources.ResourceManager;
-import de.orangestar.engine.values.Color4f;
 import de.orangestar.engine.values.Matrix4f;
 import de.orangestar.engine.values.Matrix4f.Order;
-import de.orangestar.engine.values.Quaternion4f;
-import de.orangestar.engine.values.Transform;
-import de.orangestar.engine.values.Vector2f;
-import de.orangestar.engine.values.Vector3f;
-import de.orangestar.engine.values.Vertex;
 
+/**
+ * Manager who organizes the visualisation of the game world onto the output display.
+ * 
+ * @author Basti
+ */
 public class RenderManager extends AbstractManager {
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -43,13 +29,10 @@ public class RenderManager extends AbstractManager {
 	
 	@Override
 	public void start() {
-	    setWorldMatrix(Matrix4f.One);
-	    setViewMatrix(Matrix4f.One);
-	    setProjectionMatrix(Matrix4f.Ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0, 1f));
-	    
 	    // Get the resolution of the primary monitor
         ByteBuffer vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         
+        // Setup the mainwindow and display it in the center of the displays
         _mainWindow = new GLWindow();
         _mainWindow.setPostion(
                 (GLFWvidmode.width(vidmode) - _mainWindow.getWidth()) / 2,
@@ -57,43 +40,41 @@ public class RenderManager extends AbstractManager {
         _mainWindow.show();
         
         // Make the OpenGL context current
-        glfwMakeContextCurrent(_mainWindow.handle());
+        glfwMakeContextCurrent(_mainWindow.handle());        
+        GLContext.createFromCurrent();
+        
+        // Setup settings of context
         setVSync(false);
         
-        GLContext.createFromCurrent();
+        // Enable Alpha Blending
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
 	}
 
     @Override
     public void update() {
+        // Clear the screen with black
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
+        // Adjust the viewport (to match the current window size etc)
         final float width  = _mainWindow.getRenderWidth();
         final float height = _mainWindow.getRenderHeight();
-        
-        glClearColor(0.4f, 0.7f, 1.0f, 0.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glViewport(0, 0, _mainWindow.getRenderWidth(), _mainWindow.getRenderHeight());
 
+        
         setWorldMatrix(Matrix4f.One);
         setViewMatrix(Matrix4f.One);
-        setProjectionMatrix(Matrix4f.Ortho2D( 0, width, height, 0));
+        setProjectionMatrix(Matrix4f.Ortho2D( 0, width, height, 0)); // Setup basic 2D orthographical view
 
-        RenderModule mod;
+        // Render all gameobjects that live in the world
         for(GameObject obj : World.Get()) {
             if (obj._moduleRender != null) {
                 obj._moduleRender.render();
             }
         }
-        
-//        offset += tW * GameManager.DELTA_TIME;
-//        if (offset > 0) {
-//            offset -= tW;
-//        }
-//
-//        tilemap.render(new Transform(new Vector3f(offset, 0f, 0f), Vector3f.One, Quaternion4f.Identity));
-        
-//        RenderManager.Get().setWorldMatrix(new Transform(new Vector3f(offset, 0f, 0f), Vector3f.One, Quaternion4f.Identity).toMatrix4f());
-//        instanceBatch.render(PrimitiveType.TRIANGLE_STRIP);
-                
+                     
+        // Display the rendered content
         glfwSwapBuffers(_mainWindow.handle());
     }
     
@@ -116,25 +97,28 @@ public class RenderManager extends AbstractManager {
 	}
 	
 	/**
-	 * Sets the number of used backbuffers. 1 = Double Buffering, 2 = Triple Buffering, ..., to avoid tearing.
+	 * This enables or disables vsync.
 	 */
 	public void setVSync(boolean vSync) {
 	    glfwSwapInterval(vSync ? 2 : 1);	    
 	}
 	
+	/**
+	 * Returns the ByteBuffer that contains the WVP matrix.
+	 */
 	public ByteBuffer getWVPBuffer() {
-        if (wvpChanged) {
+        if (_wvpHasChanged) {
             
-            wvp = world.mul(view).mul(projection);
+            _world_view_projection = _world.mul(_view).mul(_projection);
             
-            wvpBuffer = BufferUtils.createByteBuffer(16 * Float.BYTES);
-            wvp.writeTo(wvpBuffer, Order.COLUMN_MAJOR);
-            wvpBuffer.flip();
+            _wvpBuffer = BufferUtils.createByteBuffer(16 * Float.BYTES);
+            _world_view_projection.writeTo(_wvpBuffer, Order.COLUMN_MAJOR);
+            _wvpBuffer.flip();
             
-            wvpChanged = false;
+            _wvpHasChanged = false;
         }
 	    
-	    return wvpBuffer.asReadOnlyBuffer();
+	    return _wvpBuffer.asReadOnlyBuffer();
 	}
 	
 	/**
@@ -142,16 +126,16 @@ public class RenderManager extends AbstractManager {
 	 * relatively to the absolute zero point in space.
 	 */
 	public void setWorldMatrix(Matrix4f matrix) {
-	    world = matrix;
-	    wvpChanged = true;
+	    _world = matrix;
+	    _wvpHasChanged = true;
 	}
 	
 	/**
 	 * Sets the view matrix that positions the camera in the <i>World</i>.
 	 */
     public void setViewMatrix(Matrix4f matrix) {
-        view = matrix;
-        wvpChanged = true;
+        _view = matrix;
+        _wvpHasChanged = true;
     }
     
     /**
@@ -159,8 +143,8 @@ public class RenderManager extends AbstractManager {
      * into another projection (e.g. Perspective-View, Orthogonal-View)
      */
     public void setProjectionMatrix(Matrix4f matrix) {
-        projection = matrix;
-        wvpChanged = true;
+        _projection = matrix;
+        _wvpHasChanged = true;
     }
     
     public void setExtrapolation(float extrapolation) {
@@ -181,6 +165,15 @@ public class RenderManager extends AbstractManager {
 	
 	private GLWindow _mainWindow;
 
+    private float       _extrapolation;
+    
+    private boolean     _wvpHasChanged;
+    private Matrix4f    _world;
+    private Matrix4f    _view;
+    private Matrix4f    _projection;
+    private Matrix4f    _world_view_projection;
+    private ByteBuffer  _wvpBuffer;
+	
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	/*                              SINGLETON                             */
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -198,19 +191,6 @@ public class RenderManager extends AbstractManager {
 	}
 
 	private static RenderManager INSTANCE = null;
-    
-	private float _extrapolation;
-    
-    private boolean  wvpChanged;
-    private Matrix4f world;
-    private Matrix4f view;
-    private Matrix4f projection;
-    private Matrix4f wvp;
-    private ByteBuffer wvpBuffer;
-
-    private ATileMap tilemap;
-    private int tW = 32;
-    private float offset = -tW;
 
 }
 

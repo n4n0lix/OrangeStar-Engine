@@ -1,35 +1,38 @@
 package de.orangestar.engine.render;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.nio.ByteBuffer;
-
-import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL21;
 import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GL32;
-import org.lwjgl.opengl.GL33;
-
 import de.orangestar.engine.debug.DebugManager;
 import de.orangestar.engine.render.shader.Shader;
-import de.orangestar.engine.resources.Resource;
 
-public class Texture implements Resource {
+public class Texture {
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               PUBLIC                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
+    /**
+     * Creates a texture by a given image.
+     * @param img The source image
+     * @param linearFiltering If the image shall be linear filtered
+     */
     public Texture(BufferedImage img, boolean linearFiltering) {
         this( bufferedImageToByteBuffer(img), img.getWidth(), img.getHeight(), linearFiltering);
     }
     
+    /**
+     * Creates a texture by given raw data.
+     * @param buffer The bytebuffer that contains the data
+     * @param width The width of the texture
+     * @param height The height of the texture
+     * @param linearFiltering If the image shall be linear filtered
+     */
     public Texture(ByteBuffer buffer, int width, int height, boolean linearFiltering) {
         DebugManager.Get().glClearError();
         
@@ -66,20 +69,28 @@ public class Texture implements Resource {
     }
 
     /**
-     * Sets this texture as the 'to use' texture.
+     * Sets this texture as the 'active texture' for a shader.
      * @param shader The shader that to use this texture
      * @param textureSlot The texture unit slot in the shader to which this texture will be bound
      */
     public void setAsActiveTexture(Shader shader, int textureSlot) {
         GL20.glUniform1i(shader.getTexture0Location(), textureSlot);
-        GL13.glActiveTexture(GL13.GL_TEXTURE0); // TODO: textureSlot
+        GL13.glActiveTexture(glTextureSlot(textureSlot));
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, _id);
     }
 
+    /**
+     * Returns the width of the texture in pixels.
+     * @return The width
+     */
     public int getWidth() {
         return _width;
     }
     
+    /**
+     * Returns the height of the texture in pixels.
+     * @return The height
+     */
     public int getHeight() {
         return _height;
     }
@@ -144,5 +155,23 @@ public class Texture implements Resource {
         buffer.flip();
         
         return buffer;
+    }
+    
+    /**
+     * Simply maps an integer value onto the texture slot constants from OpenGL.
+     * @param slot
+     */
+    private static int glTextureSlot(int slot) {
+        switch(slot) {
+            case 0: return GL13.GL_TEXTURE0;
+            case 1: return GL13.GL_TEXTURE1;
+            case 2: return GL13.GL_TEXTURE2;
+            case 3: return GL13.GL_TEXTURE3;
+            case 4: return GL13.GL_TEXTURE4;
+            case 5: return GL13.GL_TEXTURE5;
+            case 6: return GL13.GL_TEXTURE6;
+            case 7: return GL13.GL_TEXTURE7;
+            default: return -1;
+        }
     }
 }

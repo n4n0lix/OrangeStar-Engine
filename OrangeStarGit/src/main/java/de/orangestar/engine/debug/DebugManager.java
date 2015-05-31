@@ -22,12 +22,13 @@ public class DebugManager extends AbstractManager {
     
     @Override
 	public void start() {
+        // Redirect the GLFW error message pipeline to System.err
 		glfwSetErrorCallback(errorCallback = errorCallbackPrint(System.err));
 	}
 	
     @Override
     public void update() {
- 
+
 	}
 	    
 	@Override
@@ -55,10 +56,20 @@ public class DebugManager extends AbstractManager {
         }
 	}
 	
+	/**
+	 * Send a debug message.
+	 * @param clazz The class from which the message was send
+	 * @param message The message
+	 */
 	public void debug(Class<?> clazz, String message) {
 	    System.out.println("DEBUG - " + clazz.getSimpleName() + ".class : " + message);
 	}
 	
+	/**
+     * Send an info message.
+     * @param clazz The class from which the message was send
+     * @param message The message
+     */
 	public void info(Class<?> clazz, String message) {
 	    System.out.println("INFO - " + clazz.getSimpleName() + ".class : " + message);
 	}

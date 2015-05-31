@@ -6,7 +6,6 @@ import de.orangestar.engine.AbstractManager;
 import de.orangestar.engine.render.RenderManager;
 import de.orangestar.engine.values.Transform;
 import de.orangestar.sandbox.TestGameState;
-import de.orangestar.sandbox.TestGameObject;
 
 /**
  * Handles the main logic of the game.

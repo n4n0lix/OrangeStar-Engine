@@ -25,6 +25,7 @@ public class InputManager extends AbstractManager {
 	
 	@Override
 	public void start() {
+	    _renderManager = RenderManager.Get();
 	    _keyboardLayout = KeyboardLayout.QWERTZ;
 	    
 //        glfwSetKeyCallback(_renderManager.getMainWindow().handle(), keyCallback = new GLFWKeyCallback() {
@@ -61,7 +62,7 @@ public class InputManager extends AbstractManager {
 	private GLFWKeyCallback    _keyCallback;
 	private KeyboardLayout     _keyboardLayout;
 
-    private RenderManager   _renderManager   = RenderManager.Get();
+    private RenderManager      _renderManager;
 	
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	/*                              SINGLETON                             */

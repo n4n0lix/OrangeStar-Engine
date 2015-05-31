@@ -62,8 +62,11 @@ public class Vector3f {
         this(0.0f, 0.0f, 0.0f);
     }
 
-    public Vector3f(float x1, float y1, float z1)
-    {
+    public Vector3f(float x1, float y1) {
+        this(x1, y1, 0);
+    }
+    
+    public Vector3f(float x1, float y1, float z1) {
         x = x1;
         y = y1;
         z = z1;

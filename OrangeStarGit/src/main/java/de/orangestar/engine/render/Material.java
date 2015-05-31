@@ -3,38 +3,73 @@ package de.orangestar.engine.render;
 import de.orangestar.engine.render.shader.Shader;
 import de.orangestar.engine.values.Color4f;
 
+/**
+ * Material that consists of atleast a shader, an optional color and optional texture.
+ * Describes the appearence of objects and how they are being rendered.
+ * 
+ * @author Basti
+ */
 public class Material {
 
+    public static class Builder {
+
+        public Builder texture(Texture texture) {
+            _texture = texture;
+            return this;
+        }
+        
+        public Builder shader(Shader shader) {
+            _shader = shader;
+            return this;
+        }
+        
+        public Builder color(Color4f color) {
+            _color = color;
+            return this;
+        }
+        
+        public Material build() {
+            return new Material(_texture, _shader, _color);
+        }
+        
+        private Texture _texture;
+        private Shader  _shader;
+        private Color4f _color;
+        
+    }
+    
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
-    public Material() {
-
+    public Material(Texture tex, Shader shader, Color4f color) {
+        _texture = tex;
+        _shader  = shader;
+        _color   = color;
     }
 
+    /**
+     * Returns the texture of this material.
+     * @return A texture
+     */
     public Texture getTexture() {
         return _texture;
     }
-    
-    public void setTexture(Texture _texture) {
-        this._texture = _texture;
-    }
-    
+
+    /**
+     * Returns the shader of this material.
+     * @return A shader
+     */
     public Shader getShader() {
         return _shader;
     }
-    
-    public void setShader(Shader _shader) {
-        this._shader = _shader;
-    }
-    
+
+    /**
+     * Returns the color of this material.
+     * @return A color
+     */
     public Color4f getColor() {
         return _color;
-    }
-    
-    public void setColor(Color4f _color) {
-        this._color = _color;
     }
 
     @Override

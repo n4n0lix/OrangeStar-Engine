@@ -22,6 +22,10 @@ public class ResourceManager extends AbstractManager {
         
     }
 
+    public Texture getTexture(String file) {
+        return getTexture(new File(file));
+    }
+    
     public Texture getTexture(File file) {
         Texture result = null;
         
