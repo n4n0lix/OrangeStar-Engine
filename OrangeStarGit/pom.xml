@@ -21,15 +21,93 @@
 	
     <build>
         <plugins>
+        	<!-- REQUIRE JAVA 1.8 -->
            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
+            <!-- COPY LIBRARIES TO TARGET -->
+            <plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-dependency-plugin</artifactId>
+			    <executions>
+			        <execution>
+			            <id>copy-dependencies</id>
+			            <phase>prepare-package</phase>
+			            <goals>
+			                <goal>copy-dependencies</goal>
+			            </goals>
+			            <configuration>
+			                <outputDirectory>${project.build.directory}/libs</outputDirectory>
+			                <overWriteReleases>false</overWriteReleases>
+			                <overWriteSnapshots>false</overWriteSnapshots>
+			                <overWriteIfNewer>true</overWriteIfNewer>
+			            </configuration>
+			        </execution>
+			    </executions>
+			</plugin>
+			<!-- WRITE MAIN CLASS AND CLASSPATH INTO JAR-MANIFEST -->
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-jar-plugin</artifactId>
+			    <configuration>
+			        <archive>
+			            <manifest>
+			                <addClasspath>true</addClasspath>
+			                <classpathPrefix>libs/</classpathPrefix>
+			                <mainClass>de.orangestar.sandbox.Main</mainClass>
+			            </manifest>
+			            <manifestEntries>
+			                <Class-Path>libs/lwjgl-3.0.0a.jar</Class-Path>
+			            </manifestEntries>
+			        </archive>
+			    </configuration>
+			</plugin>
+			<plugin>
+		        <artifactId>maven-resources-plugin</artifactId>
+		        <version>2.7</version>
+		        <executions>
+		          <!-- COPY NATIVES -->
+		          <execution>
+		            <id>copy-natives</id>
+		            <phase>validate</phase>
+		            <goals>
+		              <goal>copy-resources</goal>
+		            </goals>
+		            <configuration>
+		              <outputDirectory>${basedir}/target/libs</outputDirectory>
+		              <resources>          
+		                <resource>
+		                  <directory>libs/lwjgl-3.0.0/native</directory>
+		                  <filtering>false</filtering>
+		                </resource>
+		              </resources>              
+		            </configuration>            
+		          </execution>
+		          <!-- COPY TEXTURES -->
+		          <execution>
+		            <id>copy-textures</id>
+		            <phase>validate</phase>
+		            <goals>
+		              <goal>copy-resources</goal>
+		            </goals>
+		            <configuration>
+		              <outputDirectory>${basedir}/target/textures</outputDirectory>
+		              <resources>          
+		                <resource>
+		                  <directory>textures</directory>
+		                  <filtering>false</filtering>
+		                </resource>
+		              </resources>              
+		            </configuration>            
+		          </execution>
+		        </executions>
+		      </plugin>
         </plugins>
     </build>
 </project>

@@ -4,6 +4,8 @@ import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
+import java.io.File;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
@@ -22,6 +24,9 @@ import de.orangestar.engine.resources.ResourceManager;
 public class Engine {
 
 	public void run(String... args) {
+	    // Point the VM to the native libraries
+	    System.setProperty("org.lwjgl.librarypath", new File("libs").getAbsolutePath());
+	    
 	    // Not in RenderManager, because we want to be able to debug the renderer initialization
 	    if ( glfwInit() != GL11.GL_TRUE ) {
             throw new IllegalStateException("Unable to initialize GLFW");

@@ -34,7 +34,7 @@ public class WorldMap extends GameObject {
                 }
             }
 
-            Texture tileset = ResourceManager.Get().getTexture("texture_large.png");
+            Texture tileset = ResourceManager.Get().getTexture("textures/texture_large.png");
             ClassicTileMap tilemap = new ClassicTileMap(tileset, 16, 16);
             tilemap.setData(data);
             

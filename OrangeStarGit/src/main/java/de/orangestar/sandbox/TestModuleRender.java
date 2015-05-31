@@ -41,8 +41,8 @@ public class TestModuleRender extends RenderModule {
 
 
         ClassicTileMap tilemap;
-        tilemap = new ClassicTileMap(ResourceManager.Get().getTexture("texture_large.png"), 16, 16);
-//        tilemap = new ClassicTileMap(ResourceManager.Get().getTexture("greyscale.png"), 1, 1);
+        tilemap = new ClassicTileMap(ResourceManager.Get().getTexture("textures/texture_large.png"), 16, 16);
+//        tilemap = new ClassicTileMap(ResourceManager.Get().getTexture("textures/greyscale.png"), 1, 1);
         tilemap.setData(data);
         
         setRootActor(tilemap);
