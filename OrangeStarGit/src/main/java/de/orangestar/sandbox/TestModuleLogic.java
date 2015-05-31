@@ -13,21 +13,21 @@ public class TestModuleLogic extends LogicModule {
 
     @Override
     public void onUpdate() {
-        Transform transform = getGameObject().getTransform();
-        
-        if (direction) {
-            transform.position.x += speed * GameManager.DELTA_TIME;
-            
-            if (transform.position.x > 0) {
-                direction = !direction;
-            }
-        } else {
-            transform.position.x -= speed * GameManager.DELTA_TIME;
-            
-            if (transform.position.x < -32f) {
-                direction = !direction;
-            }
-        }
+//        Transform transform = getGameObject().getTransform();
+//        
+//        if (direction) {
+//            transform.position.x += speed * GameManager.DELTA_TIME;
+//            
+//            if (transform.position.x > 0) {
+//                direction = !direction;
+//            }
+//        } else {
+//            transform.position.x -= speed * GameManager.DELTA_TIME;
+//            
+//            if (transform.position.x < -320f) {
+//                direction = !direction;
+//            }
+//        }
 
     }
 
