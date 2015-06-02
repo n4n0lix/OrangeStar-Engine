@@ -63,17 +63,17 @@ public class ClassicTileMap extends Actor {
                 int subimageID  = data[i][p];
                 int subimageX   = subimageID % _tilesPerRow;
                 int subimageY   = subimageID / _tilesPerColumn;
-                float uvPerX    = 1f / _textureWidth  * _tileWidth;
-                float uvPerY    = 1f / _textureHeight * _tileHeight;
+                float uvSubimageWidth    = 1f / _textureWidth  * _tileWidth;
+                float uvSubimageHeight    = 1f / _textureHeight * _tileHeight;
                 
                 vertices.addAll( Arrays.asList(generateQuad( i * _tileWidth, 
                                                              p * _tileHeight, 
                                                              _tileWidth, 
                                                              _tileHeight, 
-                                                             subimageX * uvPerX, 
-                                                             subimageY * uvPerY, 
-                                                             uvPerX, 
-                                                             uvPerY)));
+                                                             subimageX * uvSubimageWidth, 
+                                                             subimageY * uvSubimageHeight, 
+                                                             uvSubimageWidth, 
+                                                             uvSubimageHeight)));
             }
         }
         
@@ -84,7 +84,6 @@ public class ClassicTileMap extends Actor {
     @Override
     public void onRender() {
         _batch.render(PrimitiveType.TRIANGLES);
-//        _batch.clear();
     }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

@@ -4,6 +4,8 @@ import de.orangestar.engine.logic.GameObject;
 import de.orangestar.engine.logic.modules.RenderModule;
 import de.orangestar.engine.render.Texture;
 import de.orangestar.engine.render.actor.ClassicTileMap;
+import de.orangestar.engine.render.actor.ModernTileMap;
+import de.orangestar.engine.render.actor.ModernTileMap.Surface;
 import de.orangestar.engine.resources.ResourceManager;
 import de.orangestar.engine.tools.random.NoiseGenerator;
 import de.orangestar.engine.tools.random.PerlinNoiseGenerator;
@@ -37,7 +39,7 @@ public class WorldMap extends GameObject {
             Texture tileset = ResourceManager.Get().getTexture("textures/texture_large.png");
             ClassicTileMap tilemap = new ClassicTileMap(tileset, 16, 16);
             tilemap.setData(data);
-            
+                        
             setRootActor(tilemap);
         }
 
@@ -47,7 +49,7 @@ public class WorldMap extends GameObject {
     
     public WorldMap() {        
         _moduleRender = new WorldMapRenderModule(this);
-        getTransform().scale = new Vector3f(.5f,.5f, 0f);
+        getTransform().scale = new Vector3f( 1f, 1f, 0f);
     }
     
 }

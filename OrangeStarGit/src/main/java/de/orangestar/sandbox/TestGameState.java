@@ -10,6 +10,7 @@ public class TestGameState extends GameState {
     public void onStateStart() {
         super.onStateStart();
         
+        // Add WorldMap to World
         World.Get().addGameObject(new WorldMap());
     }
     
