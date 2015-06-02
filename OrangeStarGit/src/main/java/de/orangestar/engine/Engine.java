@@ -57,7 +57,6 @@ public class Engine {
 	private void mainloop() {
 		boolean programEnd = false;
 
-	    // Used to determine if the logical updating is lagging
 
         	    
 	    while ( !programEnd ) {
