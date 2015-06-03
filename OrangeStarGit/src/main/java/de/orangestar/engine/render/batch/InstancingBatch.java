@@ -183,7 +183,7 @@ public class InstancingBatch extends Batch {
         GL15.glBindBuffer( GL15.GL_ARRAY_BUFFER, _iboId);
         GL15.glBufferData( GL15.GL_ARRAY_BUFFER, _material.getShader().getMaxInstances() * Matrix4f.ByteSize, null, GL15.GL_STREAM_DRAW );
         
-        _shader.layoutIBO();
+        _shader.layoutInstancedRendering();
         
         GL15.glBindBuffer( GL15.GL_ARRAY_BUFFER, 0);
     }

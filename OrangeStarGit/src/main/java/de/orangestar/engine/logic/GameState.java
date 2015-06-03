@@ -22,7 +22,7 @@ public abstract class GameState {
     
     protected void next(GameState state) {
         _nextState = state;
-        _hasFinished = true;
+        _hasFinished = true; // TODO: Move this out of here, because gamestate hasn't finished yet.
     }
     
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

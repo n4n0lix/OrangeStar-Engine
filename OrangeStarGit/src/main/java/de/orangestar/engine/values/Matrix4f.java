@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
 public class Matrix4f {
+    
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
     /*                      Public Static                      */
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -64,13 +65,6 @@ public class Matrix4f {
             buffer.put(m30); buffer.put(m31); buffer.put(m32); buffer.put(m33);
         }
     }
-//    
-//    public void writeTo(FloatBuffer buffer) {
-//        buffer.put(m00); buffer.put(m01); buffer.put(m02); buffer.put(m03);
-//        buffer.put(m10); buffer.put(m11); buffer.put(m12); buffer.put(m13);
-//        buffer.put(m20); buffer.put(m21); buffer.put(m22); buffer.put(m23);
-//        buffer.put(m30); buffer.put(m31); buffer.put(m32); buffer.put(m33);
-//    }
     
     public static Matrix4f rotationAxis(float angle, Vector3f axis) {
 
@@ -128,7 +122,7 @@ public class Matrix4f {
                     );
     }
 
-    public static Matrix4f Perspective(float fov, float ratio, float znear, float zfar) {
+    public static Matrix4f perspective(float fov, float ratio, float znear, float zfar) {
         float xmin, xmax, ymin, ymax;
 
         ymax = znear * (float) Math.tan(Math.toRadians(fov * 0.5f));
@@ -140,7 +134,7 @@ public class Matrix4f {
         return frustum(xmin, xmax, ymin, ymax, znear, zfar);
     }
 
-    public static Matrix4f Ortho2D(float left, float right, float bottom, float top) {
+    public static Matrix4f ortho2D(float left, float right, float bottom, float top) {
         float zNear = -1.0f;
         float zFar = 1.0f;
         float invZ = 1.0f / (zFar - zNear);
@@ -149,30 +143,30 @@ public class Matrix4f {
 
         Matrix4f result = new Matrix4f();
 
-        result.m00 = (2.0f * invX);
-//        result.m10 = (0.0f);
-//        result.m20 = (0.0f);
-//        result.m30 = (0.0f);
+        result.m00 = 2.0f * invX;
+//        result.m10 = 0.0f;
+//        result.m20 = 0.0f;
+//        result.m30 = 0.0f;
 
-//        result.m01 = (0.0f);
-        result.m11 = (2.0f * invY);
-//        result.m21 = (0.0f);
-//        result.m31 = (0.0f);
+//        result.m01 = 0.0f;
+        result.m11 = 2.0f * invY;
+//        result.m21 = 0.0f;
+//        result.m31 = 0.0f;
 
-//        result.m02 = (0.0f);
-//        result.m12 = (0.0f);
-        result.m22 = (-2.0f * invZ);
-//        result.m32 = (0.0f);
+//        result.m02 = 0.0f);
+//        result.m12 = 0.0f);
+        result.m22 = -2.0f * invZ;
+//        result.m32 = 0.0f;
 
-        result.m03 = (-(right + left) * invX);
-        result.m13 = (-(top  + bottom) * invY);
-        result.m23 = (-(zFar + zNear) * invZ);
-        result.m33 = (1.0f);
+        result.m03 = -(right + left) * invX;
+        result.m13 = -(top  + bottom) * invY;
+        result.m23 = -(zFar + zNear) * invZ;
+        result.m33 = 1.0f;
 
         return result;
     }
     
-    public static Matrix4f Ortho(float left, float right, float bottom, float top, float znear, float zfar) {
+    public static Matrix4f ortho(float left, float right, float bottom, float top, float znear, float zfar) {
         if (left == right || bottom == top || znear == zfar)
             return One;
 
@@ -188,7 +182,7 @@ public class Matrix4f {
                     );
     }
 
-    public static Matrix4f OrthoLHCentered(float left, float right, float bottom, float top, float znear, float zfar) {
+    public static Matrix4f orthoLHCentered(float left, float right, float bottom, float top, float znear, float zfar) {
         float zRange = 1.0f / (zfar - znear);
         
         Matrix4f result = new Matrix4f(Matrix4f.One);
@@ -202,16 +196,17 @@ public class Matrix4f {
         return result;
     }
     
-    public static Matrix4f OrthoLH(float width, float height, float znear, float zfar) {
+    public static Matrix4f orthoLH(float width, float height, float znear, float zfar) {
         float halfWidth =  width * 0.5f;
         float halfHeight = height * 0.5f;
 
-        return OrthoLHCentered(-halfWidth, halfWidth, -halfHeight, halfHeight, znear, zfar);
+        return orthoLHCentered(-halfWidth, halfWidth, -halfHeight, halfHeight, znear, zfar);
     }
 
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
     /*                         Public                          */
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+    
     public Matrix4f()
     {
         this( 0.0f, 0.0f, 0.0f, 0.0f,

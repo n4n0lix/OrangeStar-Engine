@@ -30,13 +30,12 @@ public class ResourceManager extends AbstractManager {
         Texture result = null;
         
         try {
-        
-        if (file.getName().toLowerCase().endsWith(".png")) {
-                result = new Texture( ImageIO.read(file), false);
-        }
+            // PNG
+            if (file.getName().toLowerCase().endsWith(".png")) {
+                    result = new Texture( ImageIO.read(file), false);
+            }
         
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
             

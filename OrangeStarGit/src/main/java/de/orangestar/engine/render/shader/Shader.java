@@ -23,9 +23,11 @@ public class Shader {
 
     /* Shader layout */
 
+    /* Vertex shader - uniforms */
     public static final String UniAttribNameWVP         = "uni_wvp";
     public static final String UniAttribNameTexture0    = "uni_texture0";
     
+    /* Vertex shader - attributes */
     public static final String VsAttribNamePosition     = "vs_position";
     public static final int    VsAttribLocPosition      = 0;
     
@@ -44,13 +46,13 @@ public class Shader {
     public static final String VsAttribNameInstances_UV         = "vs_instance_uv";
     public static final int    VsAttribLocInstances_UV          = 14;
     
+    /* Fragment shader - uniforms */
     public static final String FsAttribNameColor        = "fs_color";
     public static final String FsAttribNameTexCoord     = "fs_uv";
         
     public static final String OutAttibNameColor        = "out_color";
     
     /* Default engine shaders */
-    
     public static final Shader StreamingBatchShader = new ShaderBuilder()
                                                             .textured()
                                                             .colored()
@@ -116,11 +118,17 @@ public class Shader {
         _locTexture0  = GL20.glGetUniformLocation(_id, Shader.UniAttribNameTexture0);
     }
     
+    /**
+     * Set this shader as the active shader.
+     */
     public void bind() {
         GL20.glUseProgram(_id);
         GL20.glUniformMatrix4fv(_locWVP, 1, true, RenderManager.Get().getWVPBuffer());
     }
         
+    /**
+     * Don't use this shader any longer as the active shader.
+     */
     public void unbind() {
         GL20.glUseProgram(0);
     }
@@ -131,16 +139,19 @@ public class Shader {
     public void layoutVBO() {
         int offset = 0;
         
+        // Setup vertex position attribute
         GL20.glEnableVertexAttribArray(Shader.VsAttribLocPosition);
         GL20.glVertexAttribPointer(Shader.VsAttribLocPosition, Vector3f.ComponentsCount, GL11.GL_FLOAT, false, Vertex.ByteSize, offset); 
         offset += Vector3f.ByteSize;
 
+        // Setup vertex color attribute
         if (_isColored) {
             GL20.glEnableVertexAttribArray(Shader.VsAttribLocColor);
             GL20.glVertexAttribPointer(Shader.VsAttribLocColor, Color4f.ComponentsCount, GL11.GL_FLOAT, false, Vertex.ByteSize, offset); 
             offset += Color4f.ByteSize;
         }
         
+        // Setup vertex texcoord attribute
         if (_isTextured) {
             GL20.glEnableVertexAttribArray(Shader.VsAttribLocTexCoord);
             GL20.glVertexAttribPointer(Shader.VsAttribLocTexCoord, Vector2f.ComponentsCount, GL11.GL_FLOAT, false, Vertex.ByteSize, offset); 
@@ -151,20 +162,26 @@ public class Shader {
     /**
      * Tells OpenGL the instances layout of this shader. Use this when a BufferObject for instanced rendering is setup.
      */
-    public void layoutIBO() {
+    public void layoutInstancedRendering() {
         if (_isInstanced) {
+            // Setup the transform attribute for the incoming instances
+            
+            // 1st column of the transformation matrix
             GL20.glEnableVertexAttribArray(Shader.VsAttribLocInstances_Position_0);
             GL20.glVertexAttribPointer(Shader.VsAttribLocInstances_Position_0, 4, GL11.GL_FLOAT, false, Matrix4f.ByteSize, 0);
             GL33.glVertexAttribDivisor(Shader.VsAttribLocInstances_Position_0, 1);
             
+            // 2nd column of the transformation matrix4x4
             GL20.glEnableVertexAttribArray(Shader.VsAttribLocInstances_Position_1);
             GL20.glVertexAttribPointer(Shader.VsAttribLocInstances_Position_1, 4, GL11.GL_FLOAT, false, Matrix4f.ByteSize, 4 * Float.BYTES);
             GL33.glVertexAttribDivisor(Shader.VsAttribLocInstances_Position_1, 1);
             
+            // 3rd column of the transformation matrix4x4
             GL20.glEnableVertexAttribArray(Shader.VsAttribLocInstances_Position_2);
             GL20.glVertexAttribPointer(Shader.VsAttribLocInstances_Position_2, 4, GL11.GL_FLOAT, false, Matrix4f.ByteSize, 8 * Float.BYTES);
             GL33.glVertexAttribDivisor(Shader.VsAttribLocInstances_Position_2, 1);
             
+            // 4th column of the transformation matrix4x4
             GL20.glEnableVertexAttribArray(Shader.VsAttribLocInstances_Position_3);
             GL20.glVertexAttribPointer(Shader.VsAttribLocInstances_Position_3, 4, GL11.GL_FLOAT, false, Matrix4f.ByteSize, 12 * Float.BYTES);
             GL33.glVertexAttribDivisor(Shader.VsAttribLocInstances_Position_3, 1);
@@ -185,14 +202,12 @@ public class Shader {
         return _isColored;
     }
 
-
     /**
      * If this shader supports textured rendering.
      */
     public boolean isTextured() {
         return _isTextured;
     }
-    
 
     /**
      * If this shader supports instanced rendering, the maximum amount of rendered instances.

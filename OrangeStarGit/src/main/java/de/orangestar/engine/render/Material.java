@@ -4,13 +4,22 @@ import de.orangestar.engine.render.shader.Shader;
 import de.orangestar.engine.values.Color4f;
 
 /**
- * Material that consists of atleast a shader, an optional color and optional texture.
+ * Material that consists of atleast a shader, an optional color and an optional texture.
  * Describes the appearence of objects and how they are being rendered.
  * 
  * @author Basti
  */
 public class Material {
 
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    /*                            Public Static                           */
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    
+    /**
+     * A fluent Material-builder.
+     * 
+     * @author Basti
+     */
     public static class Builder {
 
         public Builder texture(Texture texture) {

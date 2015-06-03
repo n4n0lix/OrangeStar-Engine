@@ -17,6 +17,10 @@ public abstract class RenderModule extends Module {
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
+    /**
+     * Public-Constructor
+     * @param parent The owner of this instance
+     */
     public RenderModule(GameObject parent) {
         super(parent);
     }

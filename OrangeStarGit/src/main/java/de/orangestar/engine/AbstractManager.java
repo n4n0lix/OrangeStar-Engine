@@ -35,9 +35,7 @@ public abstract class AbstractManager {
 	}
 	
 	/**
-	 * Protected Default-Constructor
+	 * Enforce protected Default-Constructor
 	 */
-	protected AbstractManager() {
-		
-	}
+	protected AbstractManager() { }
 }

@@ -1,14 +1,9 @@
 package de.orangestar.engine;
 
-import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
-
 import java.io.File;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GLContext;
-
 import de.orangestar.engine.debug.DebugManager;
 import de.orangestar.engine.input.InputManager;
 import de.orangestar.engine.logic.GameManager;
@@ -23,6 +18,10 @@ import de.orangestar.engine.resources.ResourceManager;
  */
 public class Engine {
 
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    /*                               Public                               */
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    
 	public void run(String... args) {
 	    // Point the VM to the native libraries
 	    System.setProperty("org.lwjgl.librarypath", new File("libs").getAbsolutePath());
@@ -48,16 +47,19 @@ public class Engine {
 
 	}
 	
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    /*                              Private                               */
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+	
 	/**
 	 * Contains the heart logic of the engine.
 	 * The used mainloop-approach allows fixed-time logical step updates to preserve logical determinism, but also 
 	 * allows a variable frame rate, so that slower pc's will still be able to calculate the same gameworld as
-	 * faster pc's, but at a lower rendering rate.
+	 * faster pc's, but at a lower rendering rate. The logic for this is implemented in {@link GameManager.update()}
+	 * and {@link RenderManager.update()}.
 	 */
 	private void mainloop() {
 		boolean programEnd = false;
-
-
         	    
 	    while ( !programEnd ) {
 	        GLWindow.doGuiEvents();

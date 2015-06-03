@@ -65,7 +65,7 @@ public class RenderManager extends AbstractManager {
         
         setWorldMatrix(Matrix4f.One);
         setViewMatrix(Matrix4f.One);
-        setProjectionMatrix(Matrix4f.Ortho2D( 0, width, height, 0)); // Setup basic 2D orthographical view
+        setProjectionMatrix(Matrix4f.ortho2D( 0, width, height, 0)); // Setup basic 2D orthographical view
 
         // Render all gameobjects that live in the world
         for(GameObject obj : World.Get()) {

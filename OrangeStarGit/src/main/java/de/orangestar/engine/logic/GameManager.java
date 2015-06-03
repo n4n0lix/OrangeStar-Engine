@@ -1,7 +1,5 @@
 package de.orangestar.engine.logic;
 
-import java.util.Set;
-
 import de.orangestar.engine.AbstractManager;
 import de.orangestar.engine.render.RenderManager;
 import de.orangestar.engine.values.Transform;
@@ -26,7 +24,7 @@ public class GameManager extends AbstractManager {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    
+
 	@Override
 	public void start() {
 	    gamestate = new TestGameState(); // TODO: Find a better way for gamestate injection
