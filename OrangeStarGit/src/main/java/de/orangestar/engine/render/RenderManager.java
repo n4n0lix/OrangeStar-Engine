@@ -54,13 +54,13 @@ public class RenderManager extends AbstractManager {
     @Override
     public void update() {
         // Clear the screen with black
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        GL11.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         // Adjust the viewport (to match the current window size etc)
         final float width  = _mainWindow.getRenderWidth();
         final float height = _mainWindow.getRenderHeight();
-        glViewport(0, 0, _mainWindow.getRenderWidth(), _mainWindow.getRenderHeight());
+        GL11.glViewport(0, 0, _mainWindow.getRenderWidth(), _mainWindow.getRenderHeight());
 
         
         setWorldMatrix(Matrix4f.One);
