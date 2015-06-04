@@ -59,7 +59,7 @@ public class Shader {
                                                             .build();
     
     public static final Shader InstancingBatchShader = new ShaderBuilder()
-                                                            .instanced(32768)
+//                                                            .instanced(32768)
                                                             .textured()
                                                             .colored()
                                                             .build();

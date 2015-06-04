@@ -54,14 +54,14 @@ public class ShaderBuilder {
         return this;
     }
     
-    /**
-     * The shader shall support instanced rendering with a maximum of <i>maxInstances</i> instances.
-     */
-    public ShaderBuilder instanced(int maxInstances) {
-        _hasInstanced = true;
-        _numInstances = maxInstances;
-        return this;
-    }
+//    /**
+//     * The shader shall support instanced rendering with a maximum of <i>maxInstances</i> instances.
+//     */
+//    public ShaderBuilder instanced(int maxInstances) {
+//        _hasInstanced = true;
+//        _numInstances = maxInstances;
+//        return this;
+//    }
     
     /**
      * The shader shall use a custom vertexshader code.
