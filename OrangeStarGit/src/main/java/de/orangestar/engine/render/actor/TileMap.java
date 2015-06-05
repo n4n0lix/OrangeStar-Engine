@@ -19,13 +19,13 @@ import de.orangestar.engine.values.Vertex;
  * 
  * @author Basti
  */
-public class ClassicTileMap extends Actor {
+public class TileMap extends Actor {
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
-    public ClassicTileMap(Texture texture, int tileWidth, int tileHeight) {
+    public TileMap(Texture texture, int tileWidth, int tileHeight) {
         Material material = new Material.Builder()
                                                     .texture(texture)
                                                     .shader(Shader.StreamingBatchShader)
