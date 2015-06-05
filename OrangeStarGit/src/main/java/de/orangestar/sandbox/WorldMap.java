@@ -3,7 +3,7 @@ package de.orangestar.sandbox;
 import de.orangestar.engine.logic.GameObject;
 import de.orangestar.engine.logic.modules.RenderModule;
 import de.orangestar.engine.render.Texture;
-import de.orangestar.engine.render.actor.ClassicTileMap;
+import de.orangestar.engine.render.actor.TileMap;
 import de.orangestar.engine.render.actor.ModernTileMap;
 import de.orangestar.engine.render.actor.ModernTileMap.Surface;
 import de.orangestar.engine.resources.ResourceManager;
@@ -37,7 +37,7 @@ public class WorldMap extends GameObject {
             }
 
             Texture tileset = ResourceManager.Get().getTexture("textures/texture_large.png");
-            ClassicTileMap tilemap = new ClassicTileMap(tileset, 16, 16);
+            TileMap tilemap = new TileMap(tileset, 16, 16);
             tilemap.setData(data);
 //          double[][] noise = new PerlinNoiseGenerator().generate2DMap(40, 40, System.currentTimeMillis());
 //          noise = NoiseGenerator.translate(noise, -1.0d, +1.0d, 0.0d, 1.0d);
