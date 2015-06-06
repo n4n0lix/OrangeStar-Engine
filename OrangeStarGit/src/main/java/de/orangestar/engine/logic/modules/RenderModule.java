@@ -11,7 +11,7 @@ import de.orangestar.engine.values.Transform;
  * 
  * @author Basti
  */
-public abstract class RenderModule extends Module {
+public class RenderModule extends Module {
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
@@ -22,7 +22,16 @@ public abstract class RenderModule extends Module {
      * @param parent The owner of this instance
      */
     public RenderModule(GameObject parent) {
+        this(parent, null);
+    }
+    
+    /**
+     * Public-Constructor
+     * @param parent The owner of this instance
+     */
+    public RenderModule(GameObject parent, Actor actor) {
         super(parent);
+        setRootActor(actor);
     }
 
     /**
@@ -69,11 +78,6 @@ public abstract class RenderModule extends Module {
 
         _actor.render(predictedT);
     }
-    
-    /**
-     * Implement rendering code here.
-     */
-    public abstract void onRender();
     
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                              Private                               */

@@ -3,6 +3,7 @@ package de.orangestar.engine.render.batch;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.lwjgl.BufferUtils;
@@ -102,6 +103,16 @@ public class StreamingBatch extends Batch {
     @Override
     public boolean isFull() {
         return _vertices.size() >= _maxNumVertices;
+    }
+    
+    /**
+     * Adds the given vertices to this batch.
+     * @param vertices A list of vertices
+     * 
+     * @require hasEnoughSpace(vertices)
+     */
+    public void addVertexData(Vertex[] vertices) {
+        addVertexData(Arrays.asList(vertices));
     }
     
     /**

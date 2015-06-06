@@ -72,8 +72,6 @@ public class WorldMap extends GameObject {
             setRootActor(tilemap);
         }
 
-        @Override
-        public void onRender() { }
     }
     
     public WorldMap() {        

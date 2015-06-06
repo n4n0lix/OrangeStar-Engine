@@ -27,9 +27,9 @@ public class TileMap extends Actor {
     
     public TileMap(Texture texture, int tileWidth, int tileHeight) {
         Material material = new Material.Builder()
-                                                    .texture(texture)
-                                                    .shader(Shader.StreamingBatchShader)
-                                                    .build();
+                                            .texture(texture)
+                                            .shader(Shader.StreamingBatchShader)
+                                            .build();
         
         
         
