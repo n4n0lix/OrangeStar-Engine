@@ -1,4 +1,4 @@
-package de.orangestar.sandbox;
+package de.orangestar.game;
 
 import de.orangestar.engine.Engine;
 import de.orangestar.engine.logic.World;

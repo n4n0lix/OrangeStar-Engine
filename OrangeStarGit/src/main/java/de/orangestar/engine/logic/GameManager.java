@@ -3,6 +3,7 @@ package de.orangestar.engine.logic;
 import de.orangestar.engine.AbstractManager;
 import de.orangestar.engine.render.RenderManager;
 import de.orangestar.engine.values.Transform;
+import de.orangestar.game.MainGameStateDummy;
 import de.orangestar.sandbox.TestGameState;
 
 /**
@@ -27,7 +28,7 @@ public class GameManager extends AbstractManager {
 
 	@Override
 	public void start() {
-	    gamestate = new TestGameState(); // TODO: Find a better way for gamestate injection
+	    gamestate = new MainGameStateDummy(); // TODO: Find a better way for gamestate injection
 	    gamestate.onStateStart();
 	}
 

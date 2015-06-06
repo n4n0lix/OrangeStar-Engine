@@ -10,11 +10,11 @@ public abstract class GameState {
         return _hasFinished;
     }
     
-    public void onStateStart() { }
+    public abstract void onStateStart();
 
-    public void onUpdate() { }
+    public abstract void onUpdate();
     
-    public void onStateEnd() { }
+    public abstract void onStateEnd();
     
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                             Protected                              */

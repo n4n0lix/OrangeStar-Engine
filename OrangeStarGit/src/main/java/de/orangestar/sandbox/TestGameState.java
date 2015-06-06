@@ -8,10 +8,20 @@ public class TestGameState extends GameState {
     
     @Override
     public void onStateStart() {
-        super.onStateStart();
-        
         // Add WorldMap to World
         World.Get().addGameObject(new WorldMap());
+    }
+
+    @Override
+    public void onUpdate() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void onStateEnd() {
+        // TODO Auto-generated method stub
+        
     }
     
 }
