@@ -21,19 +21,19 @@ public class Vertex {
         
     public Vector3f position;
     public Color4f  color;
-    public Vector2f uv;
+    public Vector2f texCoord;
 
     public Vertex(Vector3f pos, Color4f col, Vector2f tex) {
         position = pos;
         color = col;
-        uv = tex;
+        texCoord = tex;
     }
     
     public void writeToFloatBuffer(FloatBuffer buffer) {
         buffer.put( new float[] {
                         position.x, position.y, position.z,
                         color.r, color.g, color.b, color.a,
-                        uv.x, uv.y
+                        texCoord.x, texCoord.y
                     } );
     }
 
