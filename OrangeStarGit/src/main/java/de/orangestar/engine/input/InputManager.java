@@ -1,13 +1,11 @@
 package de.orangestar.engine.input;
 
-import static org.lwjgl.glfw.Callbacks.*;
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
-
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
+import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
 import de.orangestar.engine.AbstractManager;
-import de.orangestar.engine.debug.DebugManager;
 import de.orangestar.engine.render.RenderManager;
 
 /**
@@ -27,6 +25,27 @@ public class InputManager extends AbstractManager {
 	public void start() {
 	    _renderManager = RenderManager.Get();
 	    _keyboardLayout = KeyboardLayout.QWERTZ;
+	    _window = _renderManager.getMainWindow().handle();
+	  //  _cursorPos = _mouse.getMousePosition();
+	    
+	    GLFW.glfwSetCursorPosCallback(_window , _cursorPos = new GLFWCursorPosCallback(){
+
+			@Override
+			public void invoke(long window, double x, double y) {
+				System.out.println(x + ":x " + y + ":y");
+				
+			} 
+	    	
+	    });
+	    GLFW.glfwSetMouseButtonCallback(_window, _mouseButton =  new GLFWMouseButtonCallback(){
+
+			@Override
+			public void invoke(long window, int button, int action, int mods) {
+				System.out.println("Button: " + button);
+				
+			}
+	    	
+	    });
 	    
 //        glfwSetKeyCallback(_renderManager.getMainWindow().handle(), keyCallback = new GLFWKeyCallback() {
 //            @Override
@@ -61,6 +80,10 @@ public class InputManager extends AbstractManager {
 	
 	private GLFWKeyCallback    _keyCallback;
 	private KeyboardLayout     _keyboardLayout;
+	private Mouse 			   _mouse;
+	private GLFWCursorPosCallback      _cursorPos;
+	private GLFWMouseButtonCallback _mouseButton;
+    private long _window;
 
     private RenderManager      _renderManager;
 	
