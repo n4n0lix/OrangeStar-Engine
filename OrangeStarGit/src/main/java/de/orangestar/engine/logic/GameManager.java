@@ -1,6 +1,7 @@
 package de.orangestar.engine.logic;
 
 import de.orangestar.engine.AbstractManager;
+import de.orangestar.engine.input.InputManager;
 import de.orangestar.engine.render.RenderManager;
 import de.orangestar.engine.values.Transform;
 import de.orangestar.game.MainGameStateDummy;
@@ -60,6 +61,8 @@ public class GameManager extends AbstractManager {
                 gamestate.onUpdate();
             }
         
+            InputManager.Get().update();
+            
             // 1.2# Update the world
             for(GameObject obj : World.Get()) {
                 obj.setLastTransform(Transform.duplicate(obj.getTransform()));

@@ -1,5 +1,8 @@
 package de.orangestar.game;
 
+import de.orangestar.engine.input.InputManager;
+import de.orangestar.engine.input.Key.KeyState;
+import de.orangestar.engine.input.Keyboard;
 import de.orangestar.engine.logic.GameState;
 import de.orangestar.engine.logic.World;
 import de.orangestar.game.game_objects.Player;
@@ -8,12 +11,18 @@ public class MainGameStateDummy extends GameState {
     
     @Override
     public void onStateStart() {
+        // Input
+        _keyboard = InputManager.Get().getKeyboard();
+        
+        // Gameobjects
         World.Get().addGameObject(new Player());
     }
 
     @Override
     public void onUpdate() {
-
+        if (_keyboard.W.getState() == KeyState.PRESSED) {
+            System.out.println("Oh my gosh W was pressed!");
+        }
     }
 
     @Override
@@ -21,4 +30,7 @@ public class MainGameStateDummy extends GameState {
 
     }
 
+    
+    private Keyboard _keyboard;
+        
 }

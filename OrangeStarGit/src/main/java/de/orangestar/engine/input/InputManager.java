@@ -6,6 +6,7 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
 import de.orangestar.engine.AbstractManager;
+import de.orangestar.engine.input.Key.KeyState;
 import de.orangestar.engine.render.RenderManager;
 
 /**
@@ -17,29 +18,30 @@ import de.orangestar.engine.render.RenderManager;
  */
 public class InputManager extends AbstractManager {
 	
+    // TODO: AsyncKeyListener for text input
+    
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	/*                               PUBLIC                               */
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	
 	@Override
 	public void start() {
-	    _renderManager = RenderManager.Get();
+	    long windowHandle = RenderManager.Get().getMainWindow().handle();
 	    _keyboardLayout = KeyboardLayout.QWERTZ;
-	    _window = _renderManager.getMainWindow().handle();
 	    _mouse = new Mouse();
 	    
-	    GLFW.glfwSetCursorPosCallback(_window , _cursorPos = new GLFWCursorPosCallback(){
+	    GLFW.glfwSetCursorPosCallback(windowHandle, _cursorPosCallback = new GLFWCursorPosCallback(){
 
 			@Override
 			public void invoke(long window, double x, double y) {
 				_mouse.setxPos(x);
 				_mouse.setyPos(y);
-				System.out.println(x + ":x " + y + ":y");
+				//System.out.println(x + ":x " + y + ":y");
 				
 			} 
 	    	
 	    });
-	    GLFW.glfwSetMouseButtonCallback(_window, _mouseButton =  new GLFWMouseButtonCallback(){
+	    GLFW.glfwSetMouseButtonCallback(windowHandle, _mouseButtonCallback =  new GLFWMouseButtonCallback(){
 
 			@Override
 			public void invoke(long window, int button, int action, int mods) {
@@ -54,26 +56,49 @@ public class InputManager extends AbstractManager {
 	    	
 	    });
 	    
-//        glfwSetKeyCallback(_renderManager.getMainWindow().handle(), keyCallback = new GLFWKeyCallback() {
-//            @Override
-//            public void invoke(long window, int key, int scancode, int action, int mods) {
-//                if ( key == _keyboardLayout.convert(GLFW_KEY_Z) && action == GLFW_RELEASE )
-//                    glfwSetWindowShouldClose(window, GL_TRUE);
-//            }
-//        });
+        // Keyboard
+        _asyncKeyboard = new Keyboard();
+        _syncKeyboard  = new Keyboard();
+        
+        GLFW.glfwSetKeyCallback(windowHandle, _keyCallback = new GLFWKeyCallback() {
+            @Override
+            public void invoke(long window, int glfwkey, int scancode, int action, int mods) {
+                Key key = _asyncKeyboard.getKeyByGLFW(glfwkey);
+                if (key != null) {
+                    key.setStatus(action == GLFW.GLFW_PRESS || action == GLFW.GLFW_REPEAT);
+                }
+            }
+        });
 	}
 	
     @Override
     public void update() {
-        // TODO: Implement input handling here
+        // Synchronize keyboard input, so that the exposed Keyboard instance doesn't change between ticks.
+        for(Key asyncKey : _asyncKeyboard) {
+            // Let the current keyboard layout do its convertion work, glfw is default US-QWERTY
+            int glfwKey = _keyboardLayout.convert(asyncKey._glfwKey);
+            
+            Key syncKey = _syncKeyboard.getKeyByGLFW(glfwKey);
+            syncKey.setStatus(KeyState.isDown(asyncKey.getState()));
+        }
     }
     	
 	@Override
 	public void shutdown() {
-		//keyCallback.release();
+		_keyCallback.release();
+		_mouseButtonCallback.release();
+		_cursorPosCallback.release();
 	}
 	
-	public void 	      setKeyboardLayout(KeyboardLayout layout) {
+	public Mouse getMouse() {
+	    return _mouse;
+	}
+	
+	public Keyboard getKeyboard() {
+	    return _syncKeyboard;
+	}
+	
+	public void setKeyboardLayout(KeyboardLayout layout) {
 	    _keyboardLayout = layout;
 	}
 	
@@ -85,15 +110,17 @@ public class InputManager extends AbstractManager {
 	/*                              PRIVATE                               */
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	
-	private GLFWKeyCallback    _keyCallback;
-	private KeyboardLayout     _keyboardLayout;
 	private Mouse 			   _mouse;
-	private GLFWCursorPosCallback      _cursorPos;
-	private GLFWMouseButtonCallback _mouseButton;
-    private long _window;
+	private GLFWCursorPosCallback      _cursorPosCallback;
+	private GLFWMouseButtonCallback    _mouseButtonCallback;
 
-    private RenderManager      _renderManager;
-	
+    // Keyboard
+    private GLFWKeyCallback     _keyCallback;
+    
+    private KeyboardLayout      _keyboardLayout;
+    private Keyboard            _asyncKeyboard;
+    private Keyboard            _syncKeyboard;
+    
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	/*                              SINGLETON                             */
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
