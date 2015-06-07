@@ -27,6 +27,7 @@ public class InputManager extends AbstractManager {
 	    _keyboardLayout = KeyboardLayout.QWERTZ;
 	    _window = _renderManager.getMainWindow().handle();
 	  //  _cursorPos = _mouse.getMousePosition();
+	    _mouse = new Mouse();
 	    
 	    GLFW.glfwSetCursorPosCallback(_window , _cursorPos = new GLFWCursorPosCallback(){
 
@@ -41,8 +42,15 @@ public class InputManager extends AbstractManager {
 
 			@Override
 			public void invoke(long window, int button, int action, int mods) {
-				System.out.println("Button: " + button);
-				
+				switch(button) {
+					case 0: if(action == 1) { _mouse.setButton0(true);	}
+							else if(action == 0) { _mouse.setButton0(false); }
+						break;
+					case 1: if(action == 1) { _mouse.setButton1(true);	}
+							else if(action == 0) { _mouse.setButton1(false); }
+						break;
+					case 2:
+				}		
 			}
 	    	
 	    });

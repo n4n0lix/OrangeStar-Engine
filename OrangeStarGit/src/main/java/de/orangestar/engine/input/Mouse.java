@@ -13,25 +13,14 @@ public class Mouse {
 		return _button1Pressed;
 	}
 
-	public void onPress(int button) {
-		if (button == 0) {
-			_button0Pressed = true;
-		} else if (button == 1) {
-			_button1Pressed = true;
-		} else {
-
-		}
+	public void setButton0(boolean b) {
+		_button0Pressed = b;
 	}
 
-	public void onRelease(int button) {
-		if (button == 0) {
-			_button0Pressed = false;
-		} else if (button == 1) {
-			_button1Pressed = false;
-		} else {
-
-		}
+	public void setButton1(boolean b) {
+		_button1Pressed = b;
 	}
+
 	// static class MousePosition extends GLFWCursorPosCallback{
 	// @Override
 	// public void invoke(long window, double x, double y) {
