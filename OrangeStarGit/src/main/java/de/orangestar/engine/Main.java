@@ -1,6 +1,5 @@
-package de.orangestar.game;
+package de.orangestar.engine;
 
-import de.orangestar.engine.Engine;
 
 public class Main {
 

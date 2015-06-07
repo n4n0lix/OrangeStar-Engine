@@ -60,7 +60,7 @@
 			            <manifest>
 			                <addClasspath>true</addClasspath>
 			                <classpathPrefix>libs/</classpathPrefix>
-			                <mainClass>de.orangestar.sandbox.Main</mainClass>
+			                <mainClass>de.orangestar.engine.Main</mainClass>
 			            </manifest>
 			            <manifestEntries>
 			                <Class-Path>libs/lwjgl-3.0.0a.jar</Class-Path>
