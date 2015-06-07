@@ -4,7 +4,22 @@ public class Mouse {
 
 	private boolean _button0Pressed;
 	private boolean _button1Pressed;
+	private boolean _button2Pressed;
+	private double  _xPos;
+	private double  _yPos;
+	
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+	/*                               GETTER                               */
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+	public double getxPos() {
+		return _xPos;
+	}
+	
+	public double getyPos() {
+		return _yPos;
+	}
+	
 	public boolean getButton0() {
 		return _button0Pressed;
 	}
@@ -13,12 +28,32 @@ public class Mouse {
 		return _button1Pressed;
 	}
 
+	public boolean getButton2() {
+		return _button2Pressed;
+	}
+
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+	/*                               SETTTER                              */
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+	public void setxPos(double x) {
+		_xPos = x;
+	}
+
+	public void setyPos(double y) {
+		_yPos = y;
+	}
+
 	public void setButton0(boolean b) {
 		_button0Pressed = b;
 	}
 
 	public void setButton1(boolean b) {
 		_button1Pressed = b;
+	}
+
+	public void setButton2(boolean b) {
+		_button2Pressed = b;
 	}
 
 	// static class MousePosition extends GLFWCursorPosCallback{
