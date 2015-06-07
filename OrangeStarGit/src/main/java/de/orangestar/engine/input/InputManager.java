@@ -43,11 +43,9 @@ public class InputManager extends AbstractManager {
 			@Override
 			public void invoke(long window, int button, int action, int mods) {
 				switch(button) {
-					case 0: if(action == 1) { _mouse.setButton0(true);	}
-							else if(action == 0) { _mouse.setButton0(false); }
+					case 0: _mouse.setButton0(action == 1);
 						break;
-					case 1: if(action == 1) { _mouse.setButton1(true);	}
-							else if(action == 0) { _mouse.setButton1(false); }
+					case 1: _mouse.setButton1(action == 1);
 						break;
 					case 2:
 				}		
