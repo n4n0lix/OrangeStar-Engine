@@ -6,6 +6,7 @@ import de.orangestar.engine.input.Keyboard;
 import de.orangestar.engine.logic.GameState;
 import de.orangestar.engine.logic.World;
 import de.orangestar.game.game_objects.Player;
+import de.orangestar.game.game_objects.WorldMap;
 
 public class MainGameStateDummy extends GameState {
     
@@ -16,6 +17,7 @@ public class MainGameStateDummy extends GameState {
         
         // Gameobjects
         World.Get().addGameObject(new Player());
+        World.Get().addGameObject(new WorldMap());
     }
 
     @Override
