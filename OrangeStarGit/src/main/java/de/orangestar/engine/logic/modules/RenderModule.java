@@ -1,5 +1,7 @@
 package de.orangestar.engine.logic.modules;
 
+import java.util.Comparator;
+
 import de.orangestar.engine.logic.GameObject;
 import de.orangestar.engine.render.RenderManager;
 import de.orangestar.engine.render.actor.Actor;
@@ -13,6 +15,18 @@ import de.orangestar.engine.values.Transform;
  */
 public class RenderModule extends Module {
 
+    /**
+     * Used to compare the rendering priority of two actors.
+     * 
+     * @author Basti
+     */
+    public static class RenderingPriorityComparer implements Comparator<RenderModule> {
+        @Override
+        public int compare(RenderModule o1, RenderModule o2) {
+            return Integer.compare(o1.getLayer(), o2.getLayer());
+        }
+    }
+    
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -51,6 +65,23 @@ public class RenderModule extends Module {
     }
     
     /**
+     * Sets on which layer the root actor is rendered. Use this to control which actor
+     * is displayed in front/back of other actors.
+     * @param layer The layer
+     */
+    public void setLayer(int layer) {
+        _layer = layer;
+    }
+    
+    /**
+     * Returns the layer on which the root actor is rendered.
+     * @return A layer id
+     */
+    public int getLayer() {
+        return _layer;
+    }
+        
+    /**
      * Renders this rendermodule. (Called every frame from the {@link RenderManager})
      */
     public void render() {
@@ -84,4 +115,6 @@ public class RenderModule extends Module {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
     private Actor _actor;
+    private int   _layer;
+    
 }

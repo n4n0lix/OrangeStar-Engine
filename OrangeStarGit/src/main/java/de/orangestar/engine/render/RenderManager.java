@@ -4,6 +4,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.nio.ByteBuffer;
+import java.util.PriorityQueue;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWvidmode;
@@ -13,6 +14,8 @@ import org.lwjgl.opengl.GLContext;
 import de.orangestar.engine.AbstractManager;
 import de.orangestar.engine.logic.GameObject;
 import de.orangestar.engine.logic.World;
+import de.orangestar.engine.logic.modules.RenderModule;
+import de.orangestar.engine.render.actor.Actor;
 import de.orangestar.engine.values.Matrix4f;
 import de.orangestar.engine.values.Matrix4f.Order;
 
@@ -67,11 +70,18 @@ public class RenderManager extends AbstractManager {
         setViewMatrix(Matrix4f.One);
         setProjectionMatrix(Matrix4f.ortho2D( 0, width, height, 0)); // Setup basic 2D orthographical view
 
-        // Render all gameobjects that live in the world
+        // Use a priority queue to sort all rendermodules by its rendering priority
+        PriorityQueue<RenderModule> renderingQueue = new PriorityQueue<>(10, new RenderModule.RenderingPriorityComparer());
+        
         for(GameObject obj : World.Get()) {
             if (obj._moduleRender != null) {
-                obj._moduleRender.render();
+                renderingQueue.add(obj._moduleRender);
             }
+        }
+        
+        // Render
+        for(RenderModule module : renderingQueue) {
+            module.render();
         }
                      
         // Display the rendered content
