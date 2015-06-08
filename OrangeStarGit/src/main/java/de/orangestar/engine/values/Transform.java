@@ -56,6 +56,44 @@ public class Transform {
     }
     
     /**
+     * Sets the position to the given Vector3f and returns this instance.
+     * @param pos The new position
+     * @return this
+     */
+    public Transform position(Vector3f pos) {
+        this.position = pos;
+        return this;
+    }
+    
+   /**
+    * Sets the scale to the given Vector3f and returns this instance.
+    * @param scale The new scale
+    * @return this
+    */
+    public Transform scale(Vector3f scale) {
+        this.scale = scale;
+        return this;
+    }
+    
+    /**
+     * Sets the rotation to the given Quaternion4f and returns this instance.
+     * @param rotation The new rotation
+     * @return this
+     */
+    public Transform rotate(Quaternion4f rotation) {
+        this.rotation = rotation;
+        return this;
+    }
+    
+    /**
+     * Shortcut for scale(new Vector3f(val, val, val))
+     */
+    public Transform scale(float val) {
+        this.scale = new Vector3f(val, val, val);
+        return this;
+    }
+    
+    /**
      * Converts the transform in a matrix (4x4) representation.
      * @return A transformation matrix
      */
