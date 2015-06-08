@@ -21,4 +21,8 @@ public class PlayableGroup extends GameObject {
 	public void removePlayer(Player player) {
 		_playerList.remove(player);
 	}
+	
+	public List<Player> getList() {
+		return _playerList;
+	}
 }
