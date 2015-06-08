@@ -175,6 +175,8 @@ public class StreamingBatch extends Batch {
         boolean isIndexedRendering = !_indices.isEmpty();
 
         _material.getShader().bind();
+        _material.getTexture().setAsActiveTexture(_material.getShader());
+        
         GL30.glBindVertexArray( _idVAO );
 
         if (isIndexedRendering) {
