@@ -1,11 +1,13 @@
 package de.orangestar.game.game_objects;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import de.orangestar.engine.logic.GameObject;
 
-public class PlayableGroup extends GameObject {
+public class PlayableGroup extends GameObject implements Iterable<Player> {
 	
 	private List<Player> _playerList;
 	
@@ -22,7 +24,12 @@ public class PlayableGroup extends GameObject {
 		_playerList.remove(player);
 	}
 	
-	public List<Player> getList() {
-		return _playerList;
+	public List<Player> getPlayers() {
+		return Collections.unmodifiableList(_playerList);
 	}
+
+    @Override
+    public Iterator<Player> iterator() {
+        return _playerList.iterator();
+    }
 }
