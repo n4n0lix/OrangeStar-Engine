@@ -1,11 +1,12 @@
 package de.orangestar.engine.logic;
 
 import de.orangestar.engine.AbstractManager;
+import de.orangestar.engine.GameObject;
+import de.orangestar.engine.World;
 import de.orangestar.engine.input.InputManager;
 import de.orangestar.engine.render.RenderManager;
 import de.orangestar.engine.values.Transform;
 import de.orangestar.game.MainGameStateDummy;
-import de.orangestar.sandbox.TestGameState;
 
 /**
  * Handles the main logic of the game.
@@ -65,12 +66,8 @@ public class GameManager extends AbstractManager {
             
             // 1.2# Update the world
             for(GameObject obj : World.Get()) {
-                obj.setLastTransform(Transform.duplicate(obj.getTransform()));
-            }
-
-            for(GameObject obj : World.Get()) {
-                if (obj._moduleLogic != null) {
-                    obj._moduleLogic.onUpdate();
+                if (obj.getLogicModule() != null) {
+                    obj.getLogicModule().onUpdate();
                 }
             }
             

@@ -1,13 +1,14 @@
-package de.orangestar.game.game_objects;
+package de.orangestar.game;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import de.orangestar.engine.logic.GameObject;
+import de.orangestar.engine.GameObject;
+import de.orangestar.game.gameobjects.Player;
 
-public class PlayableGroup extends GameObject implements Iterable<Player> {
+public class PlayableGroup implements Iterable<Player> {
 	
 	private List<Player> _playerList;
 	
@@ -32,4 +33,5 @@ public class PlayableGroup extends GameObject implements Iterable<Player> {
     public Iterator<Player> iterator() {
         return _playerList.iterator();
     }
+    
 }

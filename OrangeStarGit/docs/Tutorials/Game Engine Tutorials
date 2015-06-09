@@ -1,4 +1,4 @@
 Game Engine Tutorials
 ====================
-
-http://gafferongames.com/game-physics/fix-your-timestep/ - Mainloop Logical Timestep and Framerate
+General Game Patterns:						http://gameprogrammingpatterns.com/
+Mainloop Logical Timestep and Framerate:    http://gafferongames.com/game-physics/fix-your-timestep/

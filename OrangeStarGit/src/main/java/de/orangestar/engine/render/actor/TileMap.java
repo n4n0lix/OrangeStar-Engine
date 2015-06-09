@@ -50,6 +50,14 @@ public class TileMap extends Actor {
         _tilesPerColumn = _textureHeight / _tileHeight;
     }
     
+    public int getTileWidth() {
+       return _tileWidth;
+    }
+    
+    public int getTileHeight() {
+        return _tileHeight;
+    }
+    
     public void setData(int[][] data) {
         _batch.clear();
         

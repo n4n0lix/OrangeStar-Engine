@@ -12,11 +12,11 @@ public class Mouse {
 	/*                               GETTER                               */
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-	public double getxPos() {
+	public double getX() {
 		return _xPos;
 	}
 	
-	public double getyPos() {
+	public double getY() {
 		return _yPos;
 	}
 	

@@ -6,6 +6,8 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
 import de.orangestar.engine.AbstractManager;
+import de.orangestar.engine.GameObject;
+import de.orangestar.engine.World;
 import de.orangestar.engine.input.Key.KeyState;
 import de.orangestar.engine.render.RenderManager;
 
@@ -27,7 +29,6 @@ public class InputManager extends AbstractManager {
 	@Override
 	public void start() {
 	    long windowHandle = RenderManager.Get().getMainWindow().handle();
-	    _keyboardLayout = KeyboardLayout.QWERTZ;
 	    _mouse = new Mouse();
 	    
 	    GLFW.glfwSetCursorPosCallback(windowHandle, _cursorPosCallback = new GLFWCursorPosCallback(){
@@ -75,11 +76,14 @@ public class InputManager extends AbstractManager {
     public void update() {
         // Synchronize keyboard input, so that the exposed Keyboard instance doesn't change between ticks.
         for(Key asyncKey : _asyncKeyboard) {
-            // Let the current keyboard layout do its convertion work, glfw is default US-QWERTY
-            int glfwKey = _keyboardLayout.convert(asyncKey._glfwKey);
-            
-            Key syncKey = _syncKeyboard.getKeyByGLFW(glfwKey);
-            syncKey.setStatus(KeyState.isDown(asyncKey.getState()));
+            Key syncKey = _syncKeyboard.getKeyByGLFW(asyncKey._glfwKey);
+            syncKey.setStatus(asyncKey.getState().isDown());
+        }
+        
+        for(GameObject obj : World.Get()) {
+            if (obj.getInputModule() != null) {
+                obj.getInputModule().onUpdate();
+            }
         }
     }
     	
@@ -98,14 +102,6 @@ public class InputManager extends AbstractManager {
 	    return _syncKeyboard;
 	}
 	
-	public void setKeyboardLayout(KeyboardLayout layout) {
-	    _keyboardLayout = layout;
-	}
-	
-	public KeyboardLayout getKeyboardLayout() {
-	    return _keyboardLayout;
-	}
-	
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	/*                              PRIVATE                               */
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -117,7 +113,6 @@ public class InputManager extends AbstractManager {
     // Keyboard
     private GLFWKeyCallback     _keyCallback;
     
-    private KeyboardLayout      _keyboardLayout;
     private Keyboard            _asyncKeyboard;
     private Keyboard            _syncKeyboard;
     

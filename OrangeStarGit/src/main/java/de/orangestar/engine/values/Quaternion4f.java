@@ -8,10 +8,11 @@ public class Quaternion4f {
 
     public static final int ComponentsCount = 4;
     public static final int ByteSize = 4 * Float.BYTES;
+
+    public static Quaternion4f identity() {
+        return new Quaternion4f(0.0f, 0.0f, 0.0f, 1.0f);
+    }
     
-    public static final Quaternion4f   Identity = new Quaternion4f(0.0f, 0.0f, 0.0f, 1.0f);
-
-
     public static Quaternion4f   lerp(Quaternion4f q1, Quaternion4f q2, float amount) {
         return (q1.mul(1.0f - amount).add(q2.mul(amount)) ).Normalized();
     }
@@ -146,5 +147,8 @@ public class Quaternion4f {
         return true;
     }
     
-    
+    @Override
+    public String toString() {
+        return super.toString() + "[ " + x + ", " + y  + ", " + z + ", " + w + " ]";
+    }
 }

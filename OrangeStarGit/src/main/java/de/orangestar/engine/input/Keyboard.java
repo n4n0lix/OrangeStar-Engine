@@ -99,7 +99,7 @@ public class Keyboard implements Iterable<Key> {
         StringBuilder builder = new StringBuilder("Keyboard { Pressed: ");
         
         for(Key key : this) {
-            if (KeyState.isDown(key.getState())) {
+            if (key.getState().isDown()) {
                 builder.append(key._glfwKey).append(" ");
             }
         }

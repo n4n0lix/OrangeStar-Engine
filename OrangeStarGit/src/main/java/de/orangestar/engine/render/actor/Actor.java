@@ -1,7 +1,6 @@
 package de.orangestar.engine.render.actor;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.lwjgl.opengl.GL11;
 
 import de.orangestar.engine.render.RenderManager;
 import de.orangestar.engine.values.Transform;
@@ -32,7 +31,7 @@ public abstract class Actor {
 //        }
 //        
 //    }
-    
+        
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -55,7 +54,7 @@ public abstract class Actor {
     public void setVisible(boolean visible) {
         _isVisible = visible;
     }
-    
+        
 //    /**
 //     * Adds a child actor to this one.
 //     * @param child An actor
@@ -108,7 +107,8 @@ public abstract class Actor {
         if (!_isVisible) {
             return;
         }
-        
+//        System.out.println("Rendering at " + transform.position.toString());
+
         RenderManager.Get().setWorldMatrix(transform.toMatrix4f());
         onRender();
     }
@@ -120,6 +120,7 @@ public abstract class Actor {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
     private boolean     _isVisible;
+
     
 //    private Actor       _parent;
 //    private List<Actor> _children;

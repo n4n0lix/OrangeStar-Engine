@@ -5,9 +5,13 @@ public class Vector3f {
     public static final int ComponentsCount = 3;
     public static final int ByteSize = 3 * Float.BYTES;
     
-    public static final Vector3f Zero = new Vector3f(0.0f, 0.0f, 0.0f);
-    public static final Vector3f One  = new Vector3f(1.0f, 1.0f, 1.0f);
-
+    public static Vector3f zero() {
+        return new Vector3f(0f, 0f, 0f);
+    }
+    
+    public static Vector3f one() {
+        return new Vector3f(1f, 1f, 1f);
+    }
 
     public static float    distance(Vector3f v1, Vector3f v2)
     {
@@ -154,6 +158,11 @@ public class Vector3f {
         if (Float.floatToIntBits(z) != Float.floatToIntBits(other.z))
             return false;
         return true;
+    }
+    
+    @Override
+    public String toString() {
+        return super.toString() + "[" + x + ", " + y + ", " + z + " ]";
     }
 
     public float x;

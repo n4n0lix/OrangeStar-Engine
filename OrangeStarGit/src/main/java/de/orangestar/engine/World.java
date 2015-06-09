@@ -1,8 +1,10 @@
-package de.orangestar.engine.logic;
+package de.orangestar.engine;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import de.orangestar.engine.logic.GameManager;
 
 public class World implements Iterable<GameObject> {
     

@@ -46,7 +46,11 @@ public class Transform {
     }
     
     public Transform() {
-        this(Vector3f.Zero, Vector3f.One, Quaternion4f.Identity);
+        this(
+                Vector3f.zero(), 
+                Vector3f.one(), 
+                Quaternion4f.identity()
+            );
     }
     
     public Transform(Vector3f pos, Vector3f sca, Quaternion4f rot) {
@@ -115,6 +119,11 @@ public class Transform {
         Matrix4f rotationMatrix = rotation.toMatrix4f();
         
         return scalingMatrix.mul(rotationMatrix).mul(translateMatrix);
+    }
+    
+    @Override
+    public String toString() {
+        return super.toString() + "{ POS: " + position + " | SCA: " + scale + " | ROT: " + rotation + " }";
     }
     
     public Vector3f position;

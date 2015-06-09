@@ -12,10 +12,9 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
 import de.orangestar.engine.AbstractManager;
-import de.orangestar.engine.logic.GameObject;
-import de.orangestar.engine.logic.World;
-import de.orangestar.engine.logic.modules.RenderModule;
-import de.orangestar.engine.render.actor.Actor;
+import de.orangestar.engine.GameObject;
+import de.orangestar.engine.World;
+import de.orangestar.engine.render.component.RenderComponent;
 import de.orangestar.engine.values.Matrix4f;
 import de.orangestar.engine.values.Matrix4f.Order;
 
@@ -71,17 +70,17 @@ public class RenderManager extends AbstractManager {
         setProjectionMatrix(Matrix4f.ortho2D( 0, width, height, 0)); // Setup basic 2D orthographical view
 
         // Use a priority queue to sort all rendermodules by its rendering priority
-        PriorityQueue<RenderModule> renderingQueue = new PriorityQueue<>(10, new RenderModule.RenderingPriorityComparer());
+        PriorityQueue<RenderComponent> renderingQueue = new PriorityQueue<>(10, new RenderComponent.RenderingPriorityComparer());
         
         for(GameObject obj : World.Get()) {
-            if (obj._moduleRender != null) {
-                renderingQueue.add(obj._moduleRender);
+            if (obj.getRenderModule() != null) {
+                renderingQueue.add(obj.getRenderModule());
             }
         }
         
         // Render
-        for(RenderModule module : renderingQueue) {
-            module.render();
+        for(RenderComponent module : renderingQueue) {
+            module.onRender();
         }
                      
         // Display the rendered content

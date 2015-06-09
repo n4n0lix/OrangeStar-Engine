@@ -1,32 +1,31 @@
-package de.orangestar.engine.logic.modules;
+package de.orangestar.engine;
 
-import de.orangestar.engine.logic.GameObject;
 
 /**
  * Base class for gameobject modules.
  * 
  * @author Basti
  */
-public abstract class Module {
+public abstract class Component {
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    
-    /**
-     * Public-Constructor.
-     * @param parent The associated gameobject
-     */
-    public Module(GameObject parent) {
-        _parent = parent;
-    }
-    
+        
     /**
      * Returns the associated gameobject.
      * @return A gameobject
      */
     public GameObject getGameObject() {
         return _parent;
+    }
+    
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    /*                              Package                               */
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    
+    public void setGameObject(GameObject obj) {
+        _parent = obj;
     }
     
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

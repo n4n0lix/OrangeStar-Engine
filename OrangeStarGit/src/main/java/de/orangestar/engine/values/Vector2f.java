@@ -5,10 +5,13 @@ public class Vector2f {
     public static final int ComponentsCount = 2;
     public static final int ByteSize = 2 * Float.BYTES;
     
-    public static final Vector2f Zero = new Vector2f(0.0f, 0.0f);
-    public static final Vector2f One  = new Vector2f(1.0f, 1.0f);
-
-
+    public static Vector2f zero() {
+        return new Vector2f(0f, 0f);
+    }
+    
+    public static Vector2f one() {
+        return new Vector2f(1f, 1f);
+    }
     public static float    Distance(Vector2f v1, Vector2f v2)
     {
         return (v1.sub(v2)).Length();

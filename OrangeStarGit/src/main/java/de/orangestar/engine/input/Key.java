@@ -15,12 +15,12 @@ public class Key {
     public static enum KeyState {
         PRESSED, HOLD_DOWN, RELEASED, UP;
         
-        public static boolean isDown(KeyState state) {
-            return state == HOLD_DOWN || state == PRESSED;
+        public boolean isDown() {
+            return this == HOLD_DOWN || this == PRESSED;
         }
         
-        public static boolean isUp(KeyState state) {
-            return state == UP || state == RELEASED;
+        public boolean isUp() {
+            return this == UP || this == RELEASED;
         }
     }
 
@@ -86,6 +86,22 @@ public class Key {
      */
     public KeyState getState() {
         return _state;
+    }
+    
+    public boolean isPressed() {
+        return _state == KeyState.PRESSED;
+    }
+    
+    public boolean isDown() {
+        return _state == KeyState.HOLD_DOWN;
+    }
+    
+    public boolean isReleased() {
+        return _state == KeyState.RELEASED;
+    }
+    
+    public boolean isUp() {
+        return _state == KeyState.UP;
     }
     
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
