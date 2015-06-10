@@ -2,9 +2,9 @@ package de.orangestar.game.gameobjects;
 
 import de.orangestar.engine.logic.component.UnitLogicComponent;
 
-public class Player_Logic extends UnitLogicComponent {
+public class PlayerLogicComponent extends UnitLogicComponent {
 
-    public Player_Logic() {
+    public PlayerLogicComponent() {
         // "Zoom" by 2x
         getTransform().scale(2f);
     }

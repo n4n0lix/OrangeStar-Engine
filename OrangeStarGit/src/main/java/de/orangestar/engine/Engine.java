@@ -1,15 +1,17 @@
 package de.orangestar.engine;
 
-import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.GLFW.glfwInit;
+
 import java.io.File;
 
 import org.lwjgl.opengl.GL11;
+
 import de.orangestar.engine.debug.DebugManager;
 import de.orangestar.engine.input.InputManager;
 import de.orangestar.engine.logic.GameManager;
+import de.orangestar.engine.physic.PhysicManager;
 import de.orangestar.engine.render.GLWindow;
 import de.orangestar.engine.render.RenderManager;
-import de.orangestar.engine.resources.ResourceManager;
 
 /**
  * The core component of the engine.
@@ -33,15 +35,15 @@ public class Engine {
 	    
 		_debugManager.start();
 		_renderManager.start();
+		_physicManager.start();
 	    _inputManager.start();
-	    _resourceManager.start();
 		_gameManager.start();
 
 		mainloop();
 		
 		_gameManager.shutdown();
-		_resourceManager.shutdown();
 	    _inputManager.shutdown();
+	    _physicManager.shutdown();
 		_renderManager.shutdown();
 		_debugManager.shutdown();
 
@@ -63,8 +65,9 @@ public class Engine {
         	    
 	    while ( !programEnd ) {
 	        GLWindow.doGuiEvents();
-	        _inputManager.update();
+	        //_inputManager.update();   Moved into GameManager.update()
 	        _gameManager.update();
+	        //_physicManager.update();  Moved into GameManager.update()
             _renderManager.update();
 
 	        programEnd = _renderManager.requestsExit() || _gameManager.requestsExit() || _inputManager.requestsExit();
@@ -75,7 +78,6 @@ public class Engine {
     private final RenderManager   _renderManager   = RenderManager.Get();
     private final GameManager     _gameManager     = GameManager.Get();
     private final InputManager    _inputManager    = InputManager.Get();
-    private final ResourceManager _resourceManager = ResourceManager.Get();
-
+    private final PhysicManager   _physicManager   = PhysicManager.Get();
     
 }

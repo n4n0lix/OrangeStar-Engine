@@ -1,6 +1,5 @@
 package de.orangestar.engine.logic.component;
 
-import de.orangestar.engine.logic.GameManager;
 import de.orangestar.engine.values.Transform;
 
 public class UnitLogicComponent extends LogicComponent {
@@ -40,19 +39,7 @@ public class UnitLogicComponent extends LogicComponent {
     @Override
     public void onUpdate() {
         _lastTransform = _transform;
-
-        _transform.position.x += _velocityX * GameManager.DELTA_TIME;
-        _transform.position.y += _velocityY * GameManager.DELTA_TIME;
-        _transform.position.z += _velocityZ * GameManager.DELTA_TIME;
-        
-        _velocityX = 0.0f;
-        _velocityY = 0.0f;
-        _velocityZ = 0.0f;
     }
-    
-    public float _velocityX = 0.0f;
-    public float _velocityY = 0.0f;
-    public float _velocityZ = 0.0f;
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                              Private                               */

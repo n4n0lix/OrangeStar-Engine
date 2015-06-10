@@ -1,14 +1,25 @@
 package de.orangestar.engine.render;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.nio.ByteBuffer;
+
+
+
+
+
+
+import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+
 import de.orangestar.engine.debug.DebugManager;
+import de.orangestar.engine.debug.EngineException;
 import de.orangestar.engine.render.shader.Shader;
 
 public class Texture {
@@ -16,6 +27,22 @@ public class Texture {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               PUBLIC                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    
+    public Texture(String path) {
+        this(path, false);
+    }
+    
+    public Texture(String path, boolean linearFiltering) {
+        this(new File(path), linearFiltering);
+    }
+    
+    public Texture(File file) {
+        this(file, false);
+    }
+    
+    public Texture(File file, boolean linearFiltering) {
+        this(loadImage(file), linearFiltering);
+    }
     
     /**
      * Creates a texture by a given image.
@@ -130,6 +157,13 @@ public class Texture {
     /*                           PRIVATE STATIC                           */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+    private static BufferedImage loadImage(File file) {
+        try {
+            return ImageIO.read(file);
+        } catch (IOException e) {
+            throw new EngineException("Couldn't load file: " + file.getName());
+        }
+    }
     
     /**
      * Writes the color data of a buffered image into a ByteBuffer and returns it.

@@ -3,9 +3,9 @@ package de.orangestar.game.gameobjects;
 import de.orangestar.engine.logic.component.UnitLogicComponent;
 import de.orangestar.engine.values.Vector3f;
 
-public class WorldMap_Logic extends UnitLogicComponent {
+public class WorldMapLogicComponent extends UnitLogicComponent {
 
-    public WorldMap_Logic() {
+    public WorldMapLogicComponent() {
         // "Zoom" by 2x
         getTransform().scale(2f);
     }

@@ -1,19 +1,25 @@
 package de.orangestar.game.gameobjects;
 
 import de.orangestar.engine.GameObject;
+import de.orangestar.engine.input.component.InputComponent;
+import de.orangestar.engine.logic.component.UnitLogicComponent;
+import de.orangestar.engine.physic.component.UnitPhysicComponent;
+import de.orangestar.engine.render.component.UnitRenderComponent;
 
 public class WorldMap extends GameObject {
 
     public WorldMap() {       
         // Setup and link components
-        WorldMap_Logic logic   = new WorldMap_Logic();
-        WorldMap_Input input   = new WorldMap_Input(logic);
-        WorldMap_Render render = new WorldMap_Render(logic);
+        UnitLogicComponent  logic   = new WorldMapLogicComponent();
+        UnitPhysicComponent physic  = new UnitPhysicComponent(logic);
+        InputComponent      input   = new WorldMapInputComponent(physic);
+        UnitRenderComponent render  = new WorldMapRenderComponent(logic);
 
         // Set the components
-        setLogicModule(logic);
-        setInputModule(input);
-        setRenderModule(render);
+        setLogicComponent(logic);
+        setPhysicComponent(physic);
+        setInputComponent(input);
+        setRenderComponent(render);
     }
 
 }

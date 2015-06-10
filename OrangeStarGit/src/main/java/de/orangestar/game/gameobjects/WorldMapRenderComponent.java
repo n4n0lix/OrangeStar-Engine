@@ -1,27 +1,27 @@
 package de.orangestar.game.gameobjects;
 
+import de.orangestar.engine.logic.component.UnitLogicComponent;
 import de.orangestar.engine.render.GLWindow;
 import de.orangestar.engine.render.RenderManager;
+import de.orangestar.engine.render.Texture;
 import de.orangestar.engine.render.actor.TileMap;
 import de.orangestar.engine.render.component.UnitRenderComponent;
-import de.orangestar.engine.resources.ResourceManager;
-import de.orangestar.engine.values.Transform;
 import de.orangestar.engine.values.Vector3f;
 
-public class WorldMap_Render extends UnitRenderComponent {
+public class WorldMapRenderComponent extends UnitRenderComponent {
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
-    public WorldMap_Render(WorldMap_Logic logic) {
+    public WorldMapRenderComponent(UnitLogicComponent logic) {
         super(logic);
         
         _window = RenderManager.Get().getMainWindow();
         _renderWidth = _window.getRenderWidth();
         _renderHeight = _window.getRenderHeight();
 
-        _actorGround = new TileMap(ResourceManager.Get().getTexture("textures/WorldTileSetDummy_16x16.png"), 16, 16);
+        _actorGround = new TileMap(new Texture("textures/WorldTileSetDummy_16x16.png"), 16, 16);
         
         setLayer(0);
         updateSize();

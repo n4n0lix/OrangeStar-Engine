@@ -4,6 +4,7 @@ import de.orangestar.engine.AbstractManager;
 import de.orangestar.engine.GameObject;
 import de.orangestar.engine.World;
 import de.orangestar.engine.input.InputManager;
+import de.orangestar.engine.physic.PhysicManager;
 import de.orangestar.engine.render.RenderManager;
 import de.orangestar.engine.values.Transform;
 import de.orangestar.game.MainGameStateDummy;
@@ -62,14 +63,18 @@ public class GameManager extends AbstractManager {
                 gamestate.onUpdate();
             }
         
+            // 1.2# Handle new input
             InputManager.Get().update();
             
-            // 1.2# Update the world
+            // 1.3# Update the world
             for(GameObject obj : World.Get()) {
                 if (obj.getLogicModule() != null) {
                     obj.getLogicModule().onUpdate();
                 }
             }
+            
+            // 1.4# Calculate physics
+            PhysicManager.Get().update();
             
             lag -= GameManager.TICK_TIME;
         }
@@ -100,7 +105,7 @@ public class GameManager extends AbstractManager {
     private GameState gamestate;
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-	/*                              SINGLETON                             */
+	/*                              Singleton                             */
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 	/**

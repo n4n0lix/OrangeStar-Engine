@@ -2,8 +2,8 @@ package de.orangestar.engine;
 
 import de.orangestar.engine.input.component.InputComponent;
 import de.orangestar.engine.logic.component.LogicComponent;
+import de.orangestar.engine.physic.component.PhysicComponent;
 import de.orangestar.engine.render.component.RenderComponent;
-import de.orangestar.engine.values.Transform;
 
 /**
  * Represents an object in the game world. This can be a player, an enemy, 
@@ -21,7 +21,7 @@ public class GameObject {
         return _moduleLogic;
     }
 
-    public void 	       setLogicModule(LogicComponent moduleLogic) {
+    public void 	       setLogicComponent(LogicComponent moduleLogic) {
         if (_moduleLogic != null) {
             _moduleLogic.setGameObject(null);
         }
@@ -37,7 +37,7 @@ public class GameObject {
         return _moduleRender;
     }
 
-    public void 	       setRenderModule(RenderComponent moduleRender) {
+    public void 	       setRenderComponent(RenderComponent moduleRender) {
         if (_moduleRender != null) {
             _moduleRender.setGameObject(null);
         }
@@ -49,12 +49,20 @@ public class GameObject {
         }
     }
 
-    public InputComponent getInputModule() {
+    public InputComponent  getInputModule() {
         return _moduleInput;
     }
 
-    public void setInputModule(InputComponent moduleInput) {
+    public void 	       setInputComponent(InputComponent moduleInput) {
         _moduleInput = moduleInput;
+    }
+    
+    public PhysicComponent getPhysicModule() {
+        return _modulePhysic;
+    }
+
+    public void            setPhysicComponent(PhysicComponent modulePhysic) {
+        _modulePhysic = modulePhysic;
     }
     
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -64,6 +72,6 @@ public class GameObject {
     private InputComponent     _moduleInput;
     private LogicComponent     _moduleLogic;
     private RenderComponent    _moduleRender;
-
+    private PhysicComponent    _modulePhysic;
 
 }
