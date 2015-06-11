@@ -31,7 +31,7 @@ public class ModernTileMap extends TileMap {
     
     @Override
     public void setData(int[][] data) {
-    	
+    	super.setData(data);
     }
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
