@@ -1,6 +1,6 @@
 package de.orangestar.game.gameobjects;
 
-import de.orangestar.engine.logic.component.UnitLogicComponent;
+import de.orangestar.engine.GameObject;
 import de.orangestar.engine.render.GLWindow;
 import de.orangestar.engine.render.RenderManager;
 import de.orangestar.engine.render.Texture;
@@ -14,8 +14,8 @@ public class WorldMapRenderComponent extends UnitRenderComponent {
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
-    public WorldMapRenderComponent(UnitLogicComponent logic) {
-        super(logic);
+    public WorldMapRenderComponent(GameObject obj) {
+        super(obj);
         
         _window = RenderManager.Get().getMainWindow();
         _renderWidth = _window.getRenderWidth();
@@ -44,16 +44,14 @@ public class WorldMapRenderComponent extends UnitRenderComponent {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
     private void updateSize() {
-        Vector3f unitScale = getUnitLogicComponent().getTransform().scale;
+        Vector3f unitScale = getGameObject().getLocalTransform().scale;
         
         float scaleX = unitScale.x;
         float scaleY = unitScale.y;
         
         int mapWidth =  (int)(_renderWidth  / scaleX / _actorGround.getTileWidth()) + 1;
         int mapHeight = (int)(_renderHeight / scaleY / _actorGround.getTileHeight()) + 1;
-        
-        System.out.println(mapWidth + "/" + mapHeight);
-        
+
         _actorGround.setData(new int[mapWidth+1][mapHeight+1]);
     }
 

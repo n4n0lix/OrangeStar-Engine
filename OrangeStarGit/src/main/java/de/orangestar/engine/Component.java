@@ -2,7 +2,7 @@ package de.orangestar.engine;
 
 
 /**
- * Base class for gameobject modules.
+ * Base class for Components.
  * 
  * @author Basti
  */
@@ -12,6 +12,10 @@ public abstract class Component {
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
         
+	public Component(GameObject obj) {
+		setGameObject(obj);
+	}
+	
     /**
      * Returns the associated gameobject.
      * @return A gameobject

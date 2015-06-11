@@ -7,8 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.orangestar.engine.debug.DebugManager;
-import de.orangestar.engine.debug.EngineException;
-import de.orangestar.engine.input.Key.KeyState;
 
 /**
  * A keyboard that contains multiple {@link Key}s.

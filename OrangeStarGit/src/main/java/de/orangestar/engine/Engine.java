@@ -9,7 +9,7 @@ import org.lwjgl.opengl.GL11;
 import de.orangestar.engine.debug.DebugManager;
 import de.orangestar.engine.input.InputManager;
 import de.orangestar.engine.logic.GameManager;
-import de.orangestar.engine.physic.PhysicManager;
+import de.orangestar.engine.physics.PhysicsManager;
 import de.orangestar.engine.render.GLWindow;
 import de.orangestar.engine.render.RenderManager;
 
@@ -78,6 +78,6 @@ public class Engine {
     private final RenderManager   _renderManager   = RenderManager.Get();
     private final GameManager     _gameManager     = GameManager.Get();
     private final InputManager    _inputManager    = InputManager.Get();
-    private final PhysicManager   _physicManager   = PhysicManager.Get();
+    private final PhysicsManager   _physicManager   = PhysicsManager.Get();
     
 }

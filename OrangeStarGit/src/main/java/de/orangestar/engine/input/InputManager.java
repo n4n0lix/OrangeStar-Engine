@@ -8,7 +8,6 @@ import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import de.orangestar.engine.AbstractManager;
 import de.orangestar.engine.GameObject;
 import de.orangestar.engine.World;
-import de.orangestar.engine.input.Key.KeyState;
 import de.orangestar.engine.render.RenderManager;
 
 /**

@@ -16,7 +16,11 @@ import de.orangestar.engine.values.Transform;
  */
 public abstract class RenderComponent extends Component {
 
-    /**
+    public RenderComponent(GameObject obj) {
+		super(obj);
+	}
+
+	/**
      * Used to compare the rendering priority of two actors.
      * 
      * @author Basti

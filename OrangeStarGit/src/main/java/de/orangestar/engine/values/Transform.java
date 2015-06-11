@@ -29,7 +29,7 @@ public class Transform {
         return new Transform(
                     position.add(transform.position),
                     scale.mul(transform.scale),
-                    rotation.mul(transform.rotation)
+                    rotation //TODO: Point around Point rotation
                 );
     }
     

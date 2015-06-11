@@ -1,6 +1,6 @@
 package de.orangestar.engine.render.component;
 
-import de.orangestar.engine.logic.component.UnitLogicComponent;
+import de.orangestar.engine.GameObject;
 import de.orangestar.engine.render.RenderManager;
 import de.orangestar.engine.render.actor.Actor;
 import de.orangestar.engine.values.Transform;
@@ -11,8 +11,8 @@ public class UnitRenderComponent extends RenderComponent {
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-    public UnitRenderComponent(UnitLogicComponent logic) {
-        _logic = logic;
+    public UnitRenderComponent(GameObject obj) {
+    	super(obj);
     }
     
     public void setActor(Actor actor) {
@@ -25,13 +25,9 @@ public class UnitRenderComponent extends RenderComponent {
             return;
         }
         
-        if (_logic == null) {
-            return;
-        }
-        
         // Get the current and last transform
-        Transform currentT = _logic.getTransform();
-        Transform lastT    = _logic.getLastTransform();
+        Transform currentT = getGameObject().getGlobalTransform();
+        Transform lastT    = getGameObject().getGlobalLastTransform();
         
         if (currentT == null || lastT == null) {
             return;
@@ -42,20 +38,11 @@ public class UnitRenderComponent extends RenderComponent {
 
         _actor.render(predictedT);
     }
-    
-    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    /*                             Protected                              */
-    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    
-    protected UnitLogicComponent getUnitLogicComponent() {
-        return _logic;
-    }
-    
+
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                              Private                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
     private Actor _actor;
-    private UnitLogicComponent _logic;
 
 }

@@ -1,7 +1,5 @@
 package de.orangestar.engine.render.shader;
 
-import java.nio.FloatBuffer;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL33;

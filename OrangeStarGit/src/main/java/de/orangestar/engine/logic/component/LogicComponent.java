@@ -1,6 +1,7 @@
 package de.orangestar.engine.logic.component;
 
 import de.orangestar.engine.Component;
+import de.orangestar.engine.GameObject;
 import de.orangestar.engine.logic.GameManager;
 import de.orangestar.engine.values.Transform;
 
@@ -12,11 +13,15 @@ import de.orangestar.engine.values.Transform;
  * @author Basti
  */
 public abstract class LogicComponent extends Component {
-    
-    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+    public LogicComponent(GameObject obj) {
+		super(obj);
+	}
+	
     /**
      * Implement logic updating code here. (Called every tick by the {@link GameManager})
      */

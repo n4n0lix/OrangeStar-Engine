@@ -1,10 +1,10 @@
-package de.orangestar.engine.physic;
+package de.orangestar.engine.physics;
 
 import de.orangestar.engine.AbstractManager;
 import de.orangestar.engine.GameObject;
 import de.orangestar.engine.World;
 
-public class PhysicManager extends AbstractManager {
+public class PhysicsManager extends AbstractManager {
 
     @Override
     public void start() {
@@ -34,16 +34,16 @@ public class PhysicManager extends AbstractManager {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
     /**
-     * Returns the active instance of {@link PhysicManager}
+     * Returns the active instance of {@link PhysicsManager}
      * @return A physic manager
      */
-    public static PhysicManager Get() {
+    public static PhysicsManager Get() {
         if (INSTANCE == null) {
-            INSTANCE = new PhysicManager();
+            INSTANCE = new PhysicsManager();
         }
 
         return INSTANCE;
     }
 
-    private static PhysicManager INSTANCE = null;
+    private static PhysicsManager INSTANCE = null;
 }

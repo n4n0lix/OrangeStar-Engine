@@ -2,9 +2,6 @@ package de.orangestar.engine.values;
 
 import java.nio.FloatBuffer;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-
 public class Vertex {
 
     public static final int PositionComponentsCount  = Vector3f.ComponentsCount;

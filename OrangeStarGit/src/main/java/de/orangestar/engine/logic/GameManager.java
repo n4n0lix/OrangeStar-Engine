@@ -4,9 +4,8 @@ import de.orangestar.engine.AbstractManager;
 import de.orangestar.engine.GameObject;
 import de.orangestar.engine.World;
 import de.orangestar.engine.input.InputManager;
-import de.orangestar.engine.physic.PhysicManager;
+import de.orangestar.engine.physics.PhysicsManager;
 import de.orangestar.engine.render.RenderManager;
-import de.orangestar.engine.values.Transform;
 import de.orangestar.game.MainGameStateDummy;
 
 /**
@@ -74,7 +73,7 @@ public class GameManager extends AbstractManager {
             }
             
             // 1.4# Calculate physics
-            PhysicManager.Get().update();
+            PhysicsManager.Get().update();
             
             lag -= GameManager.TICK_TIME;
         }

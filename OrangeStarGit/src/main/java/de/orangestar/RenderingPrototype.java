@@ -278,10 +278,7 @@ public class RenderingPrototype {
         shader = GL20.glCreateProgram();
         GL20.glAttachShader(shader, idVertexShader);
         GL20.glAttachShader(shader, idFragmentShader);
-        
-        GL20.glBindAttribLocation(shader, 0, "vs_position");
-        GL20.glBindAttribLocation(shader, 1, "vs_color");
-  
+          
         GL20.glLinkProgram(shader);
         if (GL20.glGetProgrami(shader, GL20.GL_LINK_STATUS) == GL11.GL_FALSE) {
             System.out.println("Shader linking failed: " + GL20.glGetProgramInfoLog(shader));
