@@ -8,19 +8,15 @@ import de.orangestar.engine.render.component.UnitRenderComponent;
 
 public class Player extends GameObject {
 
-    public Player() {   
-    	getLocalTransform().scale(2f);
-    	
+    public Player() {      	
         // Setup and link components
         UnitLogicComponent   logic  = new PlayerLogicComponent(this);
         UnitPhysicsComponent physic = new UnitPhysicsComponent(this);
-        InputComponent       input  = new PlayerInputComponent(this, physic);
         UnitRenderComponent  render = new PlayerRenderComponent(this);
         
         // Set the components
         setLogicComponent(logic);
         setPhysicComponent(physic);
-        setInputComponent(input);
         setRenderComponent(render);
     }
 

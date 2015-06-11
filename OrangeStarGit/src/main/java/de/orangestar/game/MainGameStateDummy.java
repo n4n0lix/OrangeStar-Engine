@@ -13,8 +13,11 @@ public class MainGameStateDummy extends GameState {
     @Override
     public void onStateStart() {
         // Gameobjects
-        World.Get().addGameObject(new Player());
-        World.Get().addGameObject(new WorldMap());
+    	
+    	worldMap.addChild(player);
+    	
+        World.Get().addGameObject(player);
+        World.Get().addGameObject(worldMap);
     }
 
     @Override
@@ -27,4 +30,7 @@ public class MainGameStateDummy extends GameState {
 
     }
         
+    
+    private Player player = new Player();
+    private WorldMap worldMap = new WorldMap();
 }
