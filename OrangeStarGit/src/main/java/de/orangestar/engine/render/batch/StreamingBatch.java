@@ -111,7 +111,7 @@ public class StreamingBatch extends Batch {
      * 
      * @require hasEnoughSpace(vertices)
      */
-    public void addVertexData(Vertex[] vertices) {
+    public void addVertexData(Vertex... vertices) {
         addVertexData(Arrays.asList(vertices));
     }
     

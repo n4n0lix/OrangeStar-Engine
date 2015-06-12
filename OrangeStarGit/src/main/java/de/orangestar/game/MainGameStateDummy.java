@@ -14,9 +14,9 @@ public class MainGameStateDummy extends GameState {
     public void onStateStart() {
         // Gameobjects
     	
-    	worldMap.addChild(player);
+    	//worldMap.addChild(player);
     	
-        World.Get().addGameObject(player);
+        //World.Get().addGameObject(player);
         World.Get().addGameObject(worldMap);
     }
 

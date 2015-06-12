@@ -71,8 +71,8 @@ public class TileMap extends Actor {
                 int subimageID  = data[i][p];
                 int subimageX   = subimageID % _tilesPerRow;
                 int subimageY   = subimageID / _tilesPerColumn;
-                float uvSubimageWidth    = 1f / _textureWidth  * _tileWidth;
-                float uvSubimageHeight    = 1f / _textureHeight * _tileHeight;
+                float uvSubimageWidth  = 1f / _textureWidth  * _tileWidth;
+                float uvSubimageHeight = 1f / _textureHeight * _tileHeight;
                 
                 vertices.addAll( Arrays.asList(generateQuad( i * _tileWidth, 
                                                              p * _tileHeight, 

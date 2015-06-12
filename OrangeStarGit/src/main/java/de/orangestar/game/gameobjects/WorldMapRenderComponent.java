@@ -56,11 +56,11 @@ public class WorldMapRenderComponent extends UnitRenderComponent {
         int[][] result = new int[mapWidth+1][mapHeight+1];
         result[1][1] = 5;
         
-        _actorGround.setData(result);
+        _actorGround.setData(null);
     }
 
     private GLWindow _window;
-    private TileMap  _actorGround;
+    private ModernTileMap  _actorGround;
     private int      _renderWidth, _renderHeight;
 
 }
