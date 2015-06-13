@@ -78,9 +78,9 @@ public class ModernTileMap extends Actor {
         grass.subtextureIds.addAll(Arrays.asList( 4, 5, 6, 7, 12, 13, 14, 15));
         
         data = new Surface[][] {
-                new Surface[] { dirt,  dirt,  dirt, },
-                new Surface[] { dirt,  grass, dirt, },
-                new Surface[] { dirt,  dirt,  dirt, }
+                new Surface[] { grass,  dirt,  grass, },
+                new Surface[] { dirt,  dirt, dirt, },
+                new Surface[] { grass,  dirt,  grass, }
         };
         
         // Render Ground Layer
@@ -90,6 +90,7 @@ public class ModernTileMap extends Actor {
         float texcoordHeight    = 1f / _textureHeight * _tileHeight;
         
         List<Vertex> vertices = new ArrayList<>(data.length * data[0].length * 4);
+        _vertices = new ArrayList<>(data.length * data[0].length * 9);
         
         for(int x = 0; x < data.length; x++) {
             for(int y = 0; y < data[0].length; y++) {
@@ -109,46 +110,53 @@ public class ModernTileMap extends Actor {
                                      texcoordWidth, 
                                      texcoordHeight)));
                 
-                if(x == 0) {
-                	if(y == 0){ // top left corner
+                if(data[x][y].layer > 0) {
+                	if(x == 0) {
+                		if(y == 0){ // top left corner
+                			botRightTiles(texcoordWidth, texcoordHeight);
+                		} else if(y == data[0].length -1) { // bottom left corner
+                			topRightTiles(texcoordWidth, texcoordHeight);
+                		} else { // left
+                			botRightTiles(texcoordWidth, texcoordHeight);
+                			topRightTiles(texcoordWidth, texcoordHeight);
+                		}
+                	} else if(y == 0) {
+                		if(x == data.length -1) { // top right corner
+                			botLeftTiles(texcoordWidth, texcoordHeight);
+                		} else { // top
+                			botLeftTiles(texcoordWidth, texcoordHeight);
+                			botRightTiles(texcoordWidth, texcoordHeight);
+                		}
+                	} else if(x == data.length -1) {
+                		if(y == data[x].length -1) { // bottom right corner
+                			topLeftTiles(texcoordWidth, texcoordHeight);
+                		} else { // right
+                			topLeftTiles(texcoordWidth, texcoordHeight);
+                			botLeftTiles(texcoordWidth, texcoordHeight);
+                		}
+                	} else if(y == data[x].length -1) { // bottom
+                		topLeftTiles(texcoordWidth, texcoordHeight);
+                		topRightTiles(texcoordWidth, texcoordHeight);
+                	} else { // everything in the middle
                 		
-                	} else if(y == data[0].length -1) { // bottom left corner
-                		
-                	} else { // left
-                		
+                		generateAlphaTiles(texcoordWidth, texcoordHeight);
                 	}
-                } else if(y == 0) {
-                	if(x == data.length -1) { // top right corner
-                		
-                	} else { // top
-                		
-                	}
-                	
-                } else if(x == data.length -1) {
-                	if(y == data[x].length -1) { // bottom right corner
-                		
-                	} else { // right
-                		
-                	}
-                } else if(y == data[x].length -1) { // bottom
-                	
-                } else { // everything in the middle
-                	
                 }
+                
             }
         }
         
         _batch.addVertexData(vertices);
+        _batch.addVertexData(_vertices);
         
         // Add alpha tiles
 
-        generateAlphaTiles(texcoordWidth, texcoordHeight);
     }
 
     public void generateAlphaTiles(float texcoordWidth, float texcoordHeight) {
     	
-    	_batch.addVertexData(
-    			generate9Quad(
+    	_vertices.addAll(
+                Arrays.asList(generate9Quad(
     					0, 
     					0, 
     					_tileWidth, 
@@ -157,10 +165,10 @@ public class ModernTileMap extends Actor {
     					0 * texcoordHeight, 
     					texcoordWidth, 
     					texcoordHeight, 
-    					new float[] { 0, 0, 0, 0, 0, 0, 0, 0, 1 }));
+    					new float[] { 0, 0, 0, 0, 0, 0, 0, 0, 1 })));
     	
-    	_batch.addVertexData(
-    			generate9Quad(
+    	_vertices.addAll(
+                Arrays.asList(generate9Quad(
     					16, 
     					0, 
     					_tileWidth, 
@@ -169,10 +177,10 @@ public class ModernTileMap extends Actor {
     					0 * texcoordHeight, 
     					texcoordWidth, 
     					texcoordHeight, 
-    					new float[] { 0, 0, 0, 0, 0, 0, 1, 1, 1 }));
+    					new float[] { 0, 0, 0, 0, 0, 0, 1, 1, 1 })));
     	
-    	_batch.addVertexData(
-    			generate9Quad(
+    	_vertices.addAll(
+                Arrays.asList(generate9Quad(
     					32, 
     					0, 
     					_tileWidth, 
@@ -181,10 +189,10 @@ public class ModernTileMap extends Actor {
     					0 * texcoordHeight, 
     					texcoordWidth, 
     					texcoordHeight, 
-    					new float[] { 0, 0, 0, 0, 0, 0, 1, 0, 0 }));
+    					new float[] { 0, 0, 0, 0, 0, 0, 1, 0, 0 })));
     	
-    	_batch.addVertexData(
-    			generate9Quad(
+    	_vertices.addAll(
+                Arrays.asList(generate9Quad(
     					32, 
     					16, 
     					_tileWidth, 
@@ -193,10 +201,10 @@ public class ModernTileMap extends Actor {
     					0 * texcoordHeight, 
     					texcoordWidth, 
     					texcoordHeight, 
-    					new float[] { 1, 0, 0, 1, 0, 0, 1, 0, 0 }));
+    					new float[] { 1, 0, 0, 1, 0, 0, 1, 0, 0 })));
     	
-    	_batch.addVertexData(
-    			generate9Quad(
+    	_vertices.addAll(
+                Arrays.asList(generate9Quad(
     					32, 
     					32, 
     					_tileWidth, 
@@ -205,10 +213,10 @@ public class ModernTileMap extends Actor {
     					0 * texcoordHeight, 
     					texcoordWidth, 
     					texcoordHeight, 
-    					new float[] { 1, 0, 0, 0, 0, 0, 0, 0, 0 }));
+    					new float[] { 1, 0, 0, 0, 0, 0, 0, 0, 0 })));
     	
-    	_batch.addVertexData(
-    			generate9Quad(
+    	_vertices.addAll(
+                Arrays.asList(generate9Quad(
     					16, 
     					32, 
     					_tileWidth, 
@@ -217,10 +225,10 @@ public class ModernTileMap extends Actor {
     					0 * texcoordHeight, 
     					texcoordWidth, 
     					texcoordHeight, 
-    					new float[] { 1, 1, 1, 0, 0, 0, 0, 0, 0 }));
+    					new float[] { 1, 1, 1, 0, 0, 0, 0, 0, 0 })));
     	
-    	_batch.addVertexData(
-    			generate9Quad(
+    	_vertices.addAll(
+                Arrays.asList(generate9Quad(
     					0, 
     					32, 
     					_tileWidth, 
@@ -229,10 +237,10 @@ public class ModernTileMap extends Actor {
     					0 * texcoordHeight, 
     					texcoordWidth, 
     					texcoordHeight, 
-    					new float[] { 0, 0, 1, 0, 0, 0, 0, 0, 0 }));
+    					new float[] { 0, 0, 1, 0, 0, 0, 0, 0, 0 })));
     	
-    	_batch.addVertexData(
-    			generate9Quad(
+    	_vertices.addAll(
+                Arrays.asList(generate9Quad(
     					0, 
     					16, 
     					_tileWidth, 
@@ -241,7 +249,7 @@ public class ModernTileMap extends Actor {
     					0 * texcoordHeight, 
     					texcoordWidth, 
     					texcoordHeight, 
-    					new float[] { 0, 0, 1, 0, 0, 1, 0, 0, 1 }));
+    					new float[] { 0, 0, 1, 0, 0, 1, 0, 0, 1 })));
     }
     
 //    _batch.addVertexData(generate4Quad(
@@ -255,7 +263,162 @@ public class ModernTileMap extends Actor {
 //                    texcoordHeight, 
 //                    alphaValues));
     
-
+    private void botRightTiles(float texcoordWidth, float texcoordHeight) {
+    	
+    	_vertices.addAll(
+                Arrays.asList(generate9Quad(
+    					16, 
+    					0, 
+    					_tileWidth, 
+    					_tileHeight, 
+    					4 * texcoordWidth, 
+    					0 * texcoordHeight, 
+    					texcoordWidth, 
+    					texcoordHeight, 
+    					new float[] { 1, 0, 0, 1, 0, 0, 1, 0, 0 })));
+    	
+    	_vertices.addAll(
+                Arrays.asList(generate9Quad(
+    					16, 
+    					16, 
+    					_tileWidth, 
+    					_tileHeight, 
+    					4 * texcoordWidth, 
+    					0 * texcoordHeight, 
+    					texcoordWidth, 
+    					texcoordHeight, 
+    					new float[] { 1, 0, 0, 0, 0, 0, 0, 0, 0 })));
+    	
+    	_vertices.addAll(
+                Arrays.asList(generate9Quad(
+    					0, 
+    					16, 
+    					_tileWidth, 
+    					_tileHeight, 
+    					4 * texcoordWidth, 
+    					0 * texcoordHeight, 
+    					texcoordWidth, 
+    					texcoordHeight, 
+    					new float[] { 1, 1, 1, 0, 0, 0, 0, 0, 0 })));
+    	
+    }
+    private void botLeftTiles(float texcoordWidth, float texcoordHeight) {
+    	
+    	_vertices.addAll(
+                Arrays.asList(generate9Quad(
+    					16, 
+    					0, 
+    					_tileWidth, 
+    					_tileHeight, 
+    					4 * texcoordWidth, 
+    					0 * texcoordHeight, 
+    					texcoordWidth, 
+    					texcoordHeight, 
+    					new float[] { 0, 0, 1, 0, 0, 1, 0, 0, 1 })));
+    	
+    	_vertices.addAll(
+                Arrays.asList(generate9Quad(
+    					16, 
+    					16, 
+    					_tileWidth, 
+    					_tileHeight, 
+    					4 * texcoordWidth, 
+    					0 * texcoordHeight, 
+    					texcoordWidth, 
+    					texcoordHeight, 
+    					new float[] { 0, 0, 1, 0, 0, 0, 0, 0, 0 })));
+    	
+    	_vertices.addAll(
+                Arrays.asList(generate9Quad(
+    					32, 
+    					16, 
+    					_tileWidth, 
+    					_tileHeight, 
+    					4 * texcoordWidth, 
+    					0 * texcoordHeight, 
+    					texcoordWidth, 
+    					texcoordHeight, 
+    					new float[] { 1, 1, 1, 0, 0, 0, 0, 0, 0 })));
+    }
+    private void topRightTiles(float texcoordWidth, float texcoordHeight) {
+    	
+    	_vertices.addAll(
+                Arrays.asList(generate9Quad(
+    					16, 
+    					32, 
+    					_tileWidth, 
+    					_tileHeight, 
+    					4 * texcoordWidth, 
+    					0 * texcoordHeight, 
+    					texcoordWidth, 
+    					texcoordHeight, 
+    					new float[] { 1, 0, 0, 1, 0, 0, 1, 0, 0 })));
+    	
+    	_vertices.addAll(
+                Arrays.asList(generate9Quad(
+    					16, 
+    					16, 
+    					_tileWidth, 
+    					_tileHeight, 
+    					4 * texcoordWidth, 
+    					0 * texcoordHeight, 
+    					texcoordWidth, 
+    					texcoordHeight, 
+    					new float[] { 0, 0, 0, 0, 0, 0, 1, 0, 0 })));
+    	
+    	_vertices.addAll(
+                Arrays.asList(generate9Quad(
+    					0, 
+    					16, 
+    					_tileWidth, 
+    					_tileHeight, 
+    					4 * texcoordWidth, 
+    					0 * texcoordHeight, 
+    					texcoordWidth, 
+    					texcoordHeight, 
+    					new float[] { 0, 0, 0, 0, 0, 0, 1, 1, 1 })));
+	
+    }
+    private void topLeftTiles(float texcoordWidth, float texcoordHeight) {
+    	
+    	_vertices.addAll(
+                Arrays.asList(generate9Quad(
+    					32, 
+    					16, 
+    					_tileWidth, 
+    					_tileHeight, 
+    					4 * texcoordWidth, 
+    					0 * texcoordHeight, 
+    					texcoordWidth, 
+    					texcoordHeight, 
+    					new float[] { 0, 0, 0, 0, 0, 0, 1, 1, 1 })));
+    	
+    	_vertices.addAll(
+                Arrays.asList(generate9Quad(
+    					16, 
+    					16, 
+    					_tileWidth, 
+    					_tileHeight, 
+    					4 * texcoordWidth, 
+    					0 * texcoordHeight, 
+    					texcoordWidth, 
+    					texcoordHeight, 
+    					new float[] { 0, 0, 0, 0, 0, 0, 0, 0, 1 })));
+    	
+    	_vertices.addAll(
+                Arrays.asList(generate9Quad(
+    					16, 
+    					32, 
+    					_tileWidth, 
+    					_tileHeight, 
+    					4 * texcoordWidth, 
+    					0 * texcoordHeight, 
+    					texcoordWidth, 
+    					texcoordHeight, 
+    					new float[] { 0, 0, 1, 0, 0, 1, 0, 0, 1 })));
+	
+    }
+    
     @Override
     public void onRender() {
         _batch.render(PrimitiveType.TRIANGLES);
@@ -266,6 +429,7 @@ public class ModernTileMap extends Actor {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
     private StreamingBatch  _batch;
+    private List<Vertex>	_vertices;
     
     private int _tileWidth;
     private int _tileHeight;
