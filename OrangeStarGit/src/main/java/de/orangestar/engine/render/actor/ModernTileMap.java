@@ -78,9 +78,12 @@ public class ModernTileMap extends Actor {
         grass.subtextureIds.addAll(Arrays.asList( 4, 5, 6, 7, 12, 13, 14, 15));
         
         data = new Surface[][] {
-                new Surface[] { dirt,  grass,  dirt, },
-                new Surface[] { grass,  dirt,  grass, },
-                new Surface[] { dirt,  grass,  dirt, }
+                new Surface[] { grass,  dirt,  grass, dirt, grass, dirt, grass},
+                new Surface[] { grass,  dirt,  grass, dirt, dirt, grass, grass},
+                new Surface[] { dirt,  grass,  dirt, dirt, grass, dirt, grass},
+                new Surface[] { grass,  dirt,  grass, dirt, grass, dirt, grass},
+                new Surface[] { grass,  dirt,  grass, dirt, dirt, grass, grass},
+                new Surface[] { dirt,  grass,  dirt, dirt, grass, dirt, grass}
         };
         
         // Render Ground Layer
@@ -114,59 +117,59 @@ public class ModernTileMap extends Actor {
                 if(data[x][y].layer > 0) {
                 	if(x == 0) {
                 		if(y == 0){ // top left corner
-                			botRightTile(texcoordWidth, texcoordHeight, x, y);
-                			rightTile(texcoordWidth, texcoordHeight, x, y);
-                			botTile(texcoordWidth, texcoordHeight, x, y);
+                			botRightTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                			rightTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                			botTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
                 		} else if(y == data[0].length -1) { // bottom left corner
-                			topRightTile(texcoordWidth, texcoordHeight, x, y);
-                			rightTile(texcoordWidth, texcoordHeight, x, y);
-                			topTile(texcoordWidth, texcoordHeight, x, y);
+                			topRightTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                			rightTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                			topTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
                 		} else { // left
-                			botRightTile(texcoordWidth, texcoordHeight, x, y);
-                			topRightTile(texcoordWidth, texcoordHeight, x, y);
-                			topTile(texcoordWidth, texcoordHeight, x, y);
-                			rightTile(texcoordWidth, texcoordHeight, x, y);
-                			botTile(texcoordWidth, texcoordHeight, x, y);
+                			botRightTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                			topRightTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                			topTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                			rightTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                			botTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
                 		}
                 	} else if(y == 0) {
                 		if(x == data.length -1) { // top right corner
-                			botLeftTile(texcoordWidth, texcoordHeight, x, y);
-                			botTile(texcoordWidth, texcoordHeight, x, y);
-                			leftTile(texcoordWidth, texcoordHeight, x, y);
+                			botLeftTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                			botTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                			leftTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
                 		} else { // top
-                			botLeftTile(texcoordWidth, texcoordHeight, x, y);
-                			botRightTile(texcoordWidth, texcoordHeight, x, y);
-                			botTile(texcoordWidth, texcoordHeight, x, y);
-                			leftTile(texcoordWidth, texcoordHeight, x, y);
-                			rightTile(texcoordWidth, texcoordHeight, x, y);
+                			botLeftTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                			botRightTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                			botTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                			leftTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                			rightTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
                 		}
                 	} else if(x == data.length -1) {
                 		if(y == data[x].length -1) { // bottom right corner
-                			topLeftTile(texcoordWidth, texcoordHeight, x, y);
-                			topTile(texcoordWidth, texcoordHeight, x, y);
-                			leftTile(texcoordWidth, texcoordHeight, x, y);
+                			topLeftTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                			topTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                			leftTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
                 		} else { // right
-                			topLeftTile(texcoordWidth, texcoordHeight, x, y);
-                			botLeftTile(texcoordWidth, texcoordHeight, x, y);
-                			leftTile(texcoordWidth, texcoordHeight, x, y);
-                			botTile(texcoordWidth, texcoordHeight, x, y);
-                			topTile(texcoordWidth, texcoordHeight, x, y);
+                			topLeftTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                			botLeftTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                			leftTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                			botTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                			topTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
                 		}
                 	} else if(y == data[x].length -1) { // bottom
-                		topLeftTile(texcoordWidth, texcoordHeight, x, y);
-                		topRightTile(texcoordWidth, texcoordHeight, x, y);
-                		topTile(texcoordWidth, texcoordHeight, x, y);
-                		leftTile(texcoordWidth, texcoordHeight, x, y);
-                		rightTile(texcoordWidth, texcoordHeight, x, y);
+                		topLeftTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                		topRightTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                		topTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                		leftTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                		rightTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
                 	} else { // everything in the middle
-                		topLeftTile(texcoordWidth, texcoordHeight, x, y);
-            			botLeftTile(texcoordWidth, texcoordHeight, x, y);
-            			botRightTile(texcoordWidth, texcoordHeight, x, y);
-            			topRightTile(texcoordWidth, texcoordHeight, x, y);
-            			topTile(texcoordWidth, texcoordHeight, x, y);
-                		leftTile(texcoordWidth, texcoordHeight, x, y);
-                		rightTile(texcoordWidth, texcoordHeight, x, y);
-                		botTile(texcoordWidth, texcoordHeight, x, y);
+                		topLeftTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+            			botLeftTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+            			botRightTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+            			topRightTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+            			topTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                		leftTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                		rightTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
+                		botTile(texcoordWidth, texcoordHeight, x, y, texcoordX, texcoordY);
                 		// generateAlphaTiles(texcoordWidth, texcoordHeight, x, y);
                 	}
                 }
@@ -281,7 +284,7 @@ public class ModernTileMap extends Actor {
     
 
     
-    private void botRightTile(float texcoordWidth, float texcoordHeight, int x, int y) {
+    private void botRightTile(float texcoordWidth, float texcoordHeight, int x, int y, int texcoordX, int texcoordY) {
     	
     	_vertices.addAll(
                 Arrays.asList(generate9Quad(
@@ -289,15 +292,15 @@ public class ModernTileMap extends Actor {
     					y * _tileHeight + 16, 
     					_tileWidth, 
     					_tileHeight, 
-    					4 * texcoordWidth, 
-    					0 * texcoordHeight, 
+    					texcoordX * texcoordWidth, 
+    					texcoordY * texcoordHeight, 
     					texcoordWidth, 
     					texcoordHeight, 
     					new float[] { 1, 0, 0, 0, 0, 0, 0, 0, 0 })));
     	
     	
     }
-    private void botLeftTile(float texcoordWidth, float texcoordHeight, int x, int y) {
+    private void botLeftTile(float texcoordWidth, float texcoordHeight, int x, int y, int texcoordX, int texcoordY) {
     	
     	_vertices.addAll(
                 Arrays.asList(generate9Quad(
@@ -305,14 +308,14 @@ public class ModernTileMap extends Actor {
     					y * _tileHeight + 16, 
     					_tileWidth, 
     					_tileHeight, 
-    					4 * texcoordWidth, 
-    					0 * texcoordHeight, 
+    					texcoordX * texcoordWidth, 
+    					texcoordY * texcoordHeight, 
     					texcoordWidth, 
     					texcoordHeight, 
     					new float[] { 0, 0, 1, 0, 0, 0, 0, 0, 0 })));
     	
     }
-    private void topRightTile(float texcoordWidth, float texcoordHeight, int x, int y) {
+    private void topRightTile(float texcoordWidth, float texcoordHeight, int x, int y, int texcoordX, int texcoordY) {
     	
     	
     	_vertices.addAll(
@@ -321,15 +324,15 @@ public class ModernTileMap extends Actor {
     					y * _tileHeight - 16, 
     					_tileWidth, 
     					_tileHeight, 
-    					4 * texcoordWidth, 
-    					0 * texcoordHeight, 
+    					texcoordX * texcoordWidth, 
+    					texcoordY * texcoordHeight, 
     					texcoordWidth, 
     					texcoordHeight, 
     					new float[] { 0, 0, 0, 0, 0, 0, 1, 0, 0 })));
     	
 	
     }
-    private void topLeftTile(float texcoordWidth, float texcoordHeight, int x, int y) {
+    private void topLeftTile(float texcoordWidth, float texcoordHeight, int x, int y, int texcoordX, int texcoordY) {
     	
     	
     	_vertices.addAll(
@@ -338,14 +341,14 @@ public class ModernTileMap extends Actor {
     					y * _tileHeight - 16, 
     					_tileWidth, 
     					_tileHeight, 
-    					4 * texcoordWidth, 
-    					0 * texcoordHeight, 
+    					texcoordX * texcoordWidth, 
+    					texcoordY * texcoordHeight,  
     					texcoordWidth, 
     					texcoordHeight, 
     					new float[] { 0, 0, 0, 0, 0, 0, 0, 0, 1 })));
     	
     }
-    private void topTile(float texcoordWidth, float texcoordHeight, int x, int y) {
+    private void topTile(float texcoordWidth, float texcoordHeight, int x, int y, int texcoordX, int texcoordY) {
     	
     	_vertices.addAll(
                 Arrays.asList(generate9Quad(
@@ -353,14 +356,14 @@ public class ModernTileMap extends Actor {
     					y * _tileHeight - 16, 
     					_tileWidth, 
     					_tileHeight, 
-    					4 * texcoordWidth, 
-    					0 * texcoordHeight, 
+    					texcoordX * texcoordWidth, 
+    					texcoordY * texcoordHeight,  
     					texcoordWidth, 
     					texcoordHeight, 
     					new float[] { 0, 0, 0, 0, 0, 0, 1, 1, 1 })));
     	
     }
-    private void botTile(float texcoordWidth, float texcoordHeight, int x, int y) {
+    private void botTile(float texcoordWidth, float texcoordHeight, int x, int y, int texcoordX, int texcoordY) {
     	
     	_vertices.addAll(
                 Arrays.asList(generate9Quad(
@@ -368,14 +371,14 @@ public class ModernTileMap extends Actor {
     					y * _tileHeight + 16, 
     					_tileWidth, 
     					_tileHeight, 
-    					4 * texcoordWidth, 
-    					0 * texcoordHeight, 
+    					texcoordX * texcoordWidth, 
+    					texcoordY * texcoordHeight, 
     					texcoordWidth, 
     					texcoordHeight, 
     					new float[] { 1, 1, 1, 0, 0, 0, 0, 0, 0 })));
     	
     }
-    private void leftTile(float texcoordWidth, float texcoordHeight, int x, int y) {
+    private void leftTile(float texcoordWidth, float texcoordHeight, int x, int y, int texcoordX, int texcoordY) {
     	
     	_vertices.addAll(
                 Arrays.asList(generate9Quad(
@@ -383,14 +386,14 @@ public class ModernTileMap extends Actor {
     					y * _tileHeight, 
     					_tileWidth, 
     					_tileHeight, 
-    					4 * texcoordWidth, 
-    					0 * texcoordHeight, 
+    					texcoordX * texcoordWidth, 
+    					texcoordY * texcoordHeight,  
     					texcoordWidth, 
     					texcoordHeight, 
     					new float[] { 0, 0, 1, 0, 0, 1, 0, 0, 1 })));
     	
     }
-    private void rightTile(float texcoordWidth, float texcoordHeight, int x, int y) {
+    private void rightTile(float texcoordWidth, float texcoordHeight, int x, int y, int texcoordX, int texcoordY) {
     	
     	_vertices.addAll(
                 Arrays.asList(generate9Quad(
@@ -398,8 +401,8 @@ public class ModernTileMap extends Actor {
     					y * _tileHeight, 
     					_tileWidth, 
     					_tileHeight, 
-    					4 * texcoordWidth, 
-    					0 * texcoordHeight, 
+    					texcoordX * texcoordWidth, 
+    					texcoordY * texcoordHeight,  
     					texcoordWidth, 
     					texcoordHeight, 
     					new float[] { 1, 0, 0, 1, 0, 0, 1, 0, 0 })));
