@@ -1,5 +1,7 @@
 package de.orangestar.engine.tools.random;
 
+import java.util.Random;
+
 public abstract class NoiseGenerator {
     
     public static double[][] translate(double[][] input, double inputMin, double inputMax, double outputMin, double outputMax) {
@@ -21,4 +23,7 @@ public abstract class NoiseGenerator {
     
     public abstract double[][] generate2DMap(int width, int height, long seed);
     
+    public double[][] generate2DMap(int width, int height) {
+        return generate2DMap(width, height, new Random().nextLong());
+    }
 }

@@ -9,7 +9,7 @@ import de.orangestar.engine.render.component.UnitRenderComponent;
 public class WorldMap extends GameObject {
 
     public WorldMap() {     
-        getLocalTransform().scale(4f);
+        getLocalTransform().scale(2f);
         
         // Setup and link components
         UnitLogicComponent   logic   = new WorldMapLogicComponent(this);
