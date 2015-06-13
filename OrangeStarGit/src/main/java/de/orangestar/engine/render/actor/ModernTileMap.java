@@ -108,6 +108,31 @@ public class ModernTileMap extends Actor {
                                      texcoordY * texcoordHeight, 
                                      texcoordWidth, 
                                      texcoordHeight)));
+                
+                if(x == 0) {
+                	if(y == 0){ // top left corner
+                		
+                	} else if(y == data[0].length -1) { // bottom left corner
+                		
+                	} else { // left
+                		
+                	}
+                } else if(y == 0) {
+                	if(x == data.length -1) { // top right corner
+                		
+                	} else { // top
+                		
+                	}
+                	
+                } else if(x == data.length) {
+                	if(y == data[x].length) { // bottom right corner
+                		
+                	} else { // right
+                		
+                	}
+                } else { // bottom
+                	
+                }
             }
         }
         
@@ -115,114 +140,118 @@ public class ModernTileMap extends Actor {
         
         // Add alpha tiles
 
-        
-        _batch.addVertexData(
-                generate4Quad(
-                        0, 
-                        0, 
-                        _tileWidth, 
-                        _tileHeight, 
-                        4 * texcoordWidth, 
-                        0 * texcoordHeight, 
-                        texcoordWidth, 
-                        texcoordHeight, 
-                        new float[] { 0, 0, 0, 0, 0, 0, 0, 0, 1 }));
-        
-        _batch.addVertexData(
-                generate4Quad(
-                        16, 
-                        0, 
-                        _tileWidth, 
-                        _tileHeight, 
-                        4 * texcoordWidth, 
-                        0 * texcoordHeight, 
-                        texcoordWidth, 
-                        texcoordHeight, 
-                        new float[] { 0, 0, 0, 0, 0, 0, 1, 1, 1 }));
-        
-        _batch.addVertexData(
-                generate4Quad(
-                        32, 
-                        0, 
-                        _tileWidth, 
-                        _tileHeight, 
-                        4 * texcoordWidth, 
-                        0 * texcoordHeight, 
-                        texcoordWidth, 
-                        texcoordHeight, 
-                        new float[] { 0, 0, 0, 0, 0, 0, 1, 0, 0 }));
-        
-        _batch.addVertexData(
-                generate4Quad(
-                        32, 
-                        16, 
-                        _tileWidth, 
-                        _tileHeight, 
-                        4 * texcoordWidth, 
-                        0 * texcoordHeight, 
-                        texcoordWidth, 
-                        texcoordHeight, 
-                        new float[] { 1, 0, 0, 1, 0, 0, 1, 0, 0 }));
-        
-        _batch.addVertexData(
-                generate4Quad(
-                        32, 
-                        32, 
-                        _tileWidth, 
-                        _tileHeight, 
-                        4 * texcoordWidth, 
-                        0 * texcoordHeight, 
-                        texcoordWidth, 
-                        texcoordHeight, 
-                        new float[] { 1, 0, 0, 0, 0, 0, 0, 0, 0 }));
-        
-        _batch.addVertexData(
-                generate4Quad(
-                        16, 
-                        32, 
-                        _tileWidth, 
-                        _tileHeight, 
-                        4 * texcoordWidth, 
-                        0 * texcoordHeight, 
-                        texcoordWidth, 
-                        texcoordHeight, 
-                        new float[] { 1, 1, 1, 0, 0, 0, 0, 0, 0 }));
-        
-        _batch.addVertexData(
-                generate4Quad(
-                        0, 
-                        32, 
-                        _tileWidth, 
-                        _tileHeight, 
-                        4 * texcoordWidth, 
-                        0 * texcoordHeight, 
-                        texcoordWidth, 
-                        texcoordHeight, 
-                        new float[] { 0, 0, 1, 0, 0, 0, 0, 0, 0 }));
-        
-        _batch.addVertexData(
-                generate4Quad(
-                        0, 
-                        16, 
-                        _tileWidth, 
-                        _tileHeight, 
-                        4 * texcoordWidth, 
-                        0 * texcoordHeight, 
-                        texcoordWidth, 
-                        texcoordHeight, 
-                        new float[] { 0, 0, 1, 0, 0, 1, 0, 0, 1 }));
-        
-//        _batch.addVertexData(generate4Quad(
-//                        0, 
-//                        0, 
-//                        _tileWidth, 
-//                        _tileHeight, 
-//                        4 * texcoordWidth, 
-//                        0 * texcoordHeight, 
-//                        texcoordWidth, 
-//                        texcoordHeight, 
-//                        alphaValues));
+        generateAlphaTiles(texcoordWidth, texcoordHeight);
     }
+
+    public void generateAlphaTiles(float texcoordWidth, float texcoordHeight) {
+    	
+    	_batch.addVertexData(
+    			generate9Quad(
+    					0, 
+    					0, 
+    					_tileWidth, 
+    					_tileHeight, 
+    					4 * texcoordWidth, 
+    					0 * texcoordHeight, 
+    					texcoordWidth, 
+    					texcoordHeight, 
+    					new float[] { 0, 0, 0, 0, 0, 0, 0, 0, 1 }));
+    	
+    	_batch.addVertexData(
+    			generate9Quad(
+    					16, 
+    					0, 
+    					_tileWidth, 
+    					_tileHeight, 
+    					4 * texcoordWidth, 
+    					0 * texcoordHeight, 
+    					texcoordWidth, 
+    					texcoordHeight, 
+    					new float[] { 0, 0, 0, 0, 0, 0, 1, 1, 1 }));
+    	
+    	_batch.addVertexData(
+    			generate9Quad(
+    					32, 
+    					0, 
+    					_tileWidth, 
+    					_tileHeight, 
+    					4 * texcoordWidth, 
+    					0 * texcoordHeight, 
+    					texcoordWidth, 
+    					texcoordHeight, 
+    					new float[] { 0, 0, 0, 0, 0, 0, 1, 0, 0 }));
+    	
+    	_batch.addVertexData(
+    			generate9Quad(
+    					32, 
+    					16, 
+    					_tileWidth, 
+    					_tileHeight, 
+    					4 * texcoordWidth, 
+    					0 * texcoordHeight, 
+    					texcoordWidth, 
+    					texcoordHeight, 
+    					new float[] { 1, 0, 0, 1, 0, 0, 1, 0, 0 }));
+    	
+    	_batch.addVertexData(
+    			generate9Quad(
+    					32, 
+    					32, 
+    					_tileWidth, 
+    					_tileHeight, 
+    					4 * texcoordWidth, 
+    					0 * texcoordHeight, 
+    					texcoordWidth, 
+    					texcoordHeight, 
+    					new float[] { 1, 0, 0, 0, 0, 0, 0, 0, 0 }));
+    	
+    	_batch.addVertexData(
+    			generate9Quad(
+    					16, 
+    					32, 
+    					_tileWidth, 
+    					_tileHeight, 
+    					4 * texcoordWidth, 
+    					0 * texcoordHeight, 
+    					texcoordWidth, 
+    					texcoordHeight, 
+    					new float[] { 1, 1, 1, 0, 0, 0, 0, 0, 0 }));
+    	
+    	_batch.addVertexData(
+    			generate9Quad(
+    					0, 
+    					32, 
+    					_tileWidth, 
+    					_tileHeight, 
+    					4 * texcoordWidth, 
+    					0 * texcoordHeight, 
+    					texcoordWidth, 
+    					texcoordHeight, 
+    					new float[] { 0, 0, 1, 0, 0, 0, 0, 0, 0 }));
+    	
+    	_batch.addVertexData(
+    			generate9Quad(
+    					0, 
+    					16, 
+    					_tileWidth, 
+    					_tileHeight, 
+    					4 * texcoordWidth, 
+    					0 * texcoordHeight, 
+    					texcoordWidth, 
+    					texcoordHeight, 
+    					new float[] { 0, 0, 1, 0, 0, 1, 0, 0, 1 }));
+    }
+    
+//    _batch.addVertexData(generate4Quad(
+//                    0, 
+//                    0, 
+//                    _tileWidth, 
+//                    _tileHeight, 
+//                    4 * texcoordWidth, 
+//                    0 * texcoordHeight, 
+//                    texcoordWidth, 
+//                    texcoordHeight, 
+//                    alphaValues));
     
 
     @Override
