@@ -78,9 +78,9 @@ public class ModernTileMap extends Actor {
         grass.subtextureIds.addAll(Arrays.asList( 4, 5, 6, 7, 12, 13, 14, 15));
         
         data = new Surface[][] {
+                new Surface[] { dirt,  grass,  dirt, },
                 new Surface[] { grass,  dirt,  grass, },
-                new Surface[] { dirt,  dirt, dirt, },
-                new Surface[] { grass,  dirt,  grass, }
+                new Surface[] { dirt,  grass,  dirt, }
         };
         
         // Render Ground Layer
@@ -110,36 +110,64 @@ public class ModernTileMap extends Actor {
                                      texcoordWidth, 
                                      texcoordHeight)));
                 
+             // Add alpha tiles
                 if(data[x][y].layer > 0) {
                 	if(x == 0) {
                 		if(y == 0){ // top left corner
-                			botRightTiles(texcoordWidth, texcoordHeight);
+                			botRightTile(texcoordWidth, texcoordHeight, x, y);
+                			rightTile(texcoordWidth, texcoordHeight, x, y);
+                			botTile(texcoordWidth, texcoordHeight, x, y);
                 		} else if(y == data[0].length -1) { // bottom left corner
-                			topRightTiles(texcoordWidth, texcoordHeight);
+                			topRightTile(texcoordWidth, texcoordHeight, x, y);
+                			rightTile(texcoordWidth, texcoordHeight, x, y);
+                			topTile(texcoordWidth, texcoordHeight, x, y);
                 		} else { // left
-                			botRightTiles(texcoordWidth, texcoordHeight);
-                			topRightTiles(texcoordWidth, texcoordHeight);
+                			botRightTile(texcoordWidth, texcoordHeight, x, y);
+                			topRightTile(texcoordWidth, texcoordHeight, x, y);
+                			topTile(texcoordWidth, texcoordHeight, x, y);
+                			rightTile(texcoordWidth, texcoordHeight, x, y);
+                			botTile(texcoordWidth, texcoordHeight, x, y);
                 		}
                 	} else if(y == 0) {
                 		if(x == data.length -1) { // top right corner
-                			botLeftTiles(texcoordWidth, texcoordHeight);
+                			botLeftTile(texcoordWidth, texcoordHeight, x, y);
+                			botTile(texcoordWidth, texcoordHeight, x, y);
+                			leftTile(texcoordWidth, texcoordHeight, x, y);
                 		} else { // top
-                			botLeftTiles(texcoordWidth, texcoordHeight);
-                			botRightTiles(texcoordWidth, texcoordHeight);
+                			botLeftTile(texcoordWidth, texcoordHeight, x, y);
+                			botRightTile(texcoordWidth, texcoordHeight, x, y);
+                			botTile(texcoordWidth, texcoordHeight, x, y);
+                			leftTile(texcoordWidth, texcoordHeight, x, y);
+                			rightTile(texcoordWidth, texcoordHeight, x, y);
                 		}
                 	} else if(x == data.length -1) {
                 		if(y == data[x].length -1) { // bottom right corner
-                			topLeftTiles(texcoordWidth, texcoordHeight);
+                			topLeftTile(texcoordWidth, texcoordHeight, x, y);
+                			topTile(texcoordWidth, texcoordHeight, x, y);
+                			leftTile(texcoordWidth, texcoordHeight, x, y);
                 		} else { // right
-                			topLeftTiles(texcoordWidth, texcoordHeight);
-                			botLeftTiles(texcoordWidth, texcoordHeight);
+                			topLeftTile(texcoordWidth, texcoordHeight, x, y);
+                			botLeftTile(texcoordWidth, texcoordHeight, x, y);
+                			leftTile(texcoordWidth, texcoordHeight, x, y);
+                			botTile(texcoordWidth, texcoordHeight, x, y);
+                			topTile(texcoordWidth, texcoordHeight, x, y);
                 		}
                 	} else if(y == data[x].length -1) { // bottom
-                		topLeftTiles(texcoordWidth, texcoordHeight);
-                		topRightTiles(texcoordWidth, texcoordHeight);
+                		topLeftTile(texcoordWidth, texcoordHeight, x, y);
+                		topRightTile(texcoordWidth, texcoordHeight, x, y);
+                		topTile(texcoordWidth, texcoordHeight, x, y);
+                		leftTile(texcoordWidth, texcoordHeight, x, y);
+                		rightTile(texcoordWidth, texcoordHeight, x, y);
                 	} else { // everything in the middle
-                		
-                		generateAlphaTiles(texcoordWidth, texcoordHeight);
+                		topLeftTile(texcoordWidth, texcoordHeight, x, y);
+            			botLeftTile(texcoordWidth, texcoordHeight, x, y);
+            			botRightTile(texcoordWidth, texcoordHeight, x, y);
+            			topRightTile(texcoordWidth, texcoordHeight, x, y);
+            			topTile(texcoordWidth, texcoordHeight, x, y);
+                		leftTile(texcoordWidth, texcoordHeight, x, y);
+                		rightTile(texcoordWidth, texcoordHeight, x, y);
+                		botTile(texcoordWidth, texcoordHeight, x, y);
+                		// generateAlphaTiles(texcoordWidth, texcoordHeight, x, y);
                 	}
                 }
                 
@@ -149,11 +177,10 @@ public class ModernTileMap extends Actor {
         _batch.addVertexData(vertices);
         _batch.addVertexData(_vertices);
         
-        // Add alpha tiles
 
     }
 
-    public void generateAlphaTiles(float texcoordWidth, float texcoordHeight) {
+    public void generateAlphaTiles(float texcoordWidth, float texcoordHeight, int x, int y) { // no longer needed I think
     	
     	_vertices.addAll(
                 Arrays.asList(generate9Quad(
@@ -252,35 +279,14 @@ public class ModernTileMap extends Actor {
     					new float[] { 0, 0, 1, 0, 0, 1, 0, 0, 1 })));
     }
     
-//    _batch.addVertexData(generate4Quad(
-//                    0, 
-//                    0, 
-//                    _tileWidth, 
-//                    _tileHeight, 
-//                    4 * texcoordWidth, 
-//                    0 * texcoordHeight, 
-//                    texcoordWidth, 
-//                    texcoordHeight, 
-//                    alphaValues));
+
     
-    private void botRightTiles(float texcoordWidth, float texcoordHeight) {
+    private void botRightTile(float texcoordWidth, float texcoordHeight, int x, int y) {
     	
     	_vertices.addAll(
                 Arrays.asList(generate9Quad(
-    					16, 
-    					0, 
-    					_tileWidth, 
-    					_tileHeight, 
-    					4 * texcoordWidth, 
-    					0 * texcoordHeight, 
-    					texcoordWidth, 
-    					texcoordHeight, 
-    					new float[] { 1, 0, 0, 1, 0, 0, 1, 0, 0 })));
-    	
-    	_vertices.addAll(
-                Arrays.asList(generate9Quad(
-    					16, 
-    					16, 
+                		x * _tileWidth + 16, 
+    					y * _tileHeight + 16, 
     					_tileWidth, 
     					_tileHeight, 
     					4 * texcoordWidth, 
@@ -289,37 +295,14 @@ public class ModernTileMap extends Actor {
     					texcoordHeight, 
     					new float[] { 1, 0, 0, 0, 0, 0, 0, 0, 0 })));
     	
-    	_vertices.addAll(
-                Arrays.asList(generate9Quad(
-    					0, 
-    					16, 
-    					_tileWidth, 
-    					_tileHeight, 
-    					4 * texcoordWidth, 
-    					0 * texcoordHeight, 
-    					texcoordWidth, 
-    					texcoordHeight, 
-    					new float[] { 1, 1, 1, 0, 0, 0, 0, 0, 0 })));
     	
     }
-    private void botLeftTiles(float texcoordWidth, float texcoordHeight) {
+    private void botLeftTile(float texcoordWidth, float texcoordHeight, int x, int y) {
     	
     	_vertices.addAll(
                 Arrays.asList(generate9Quad(
-    					16, 
-    					0, 
-    					_tileWidth, 
-    					_tileHeight, 
-    					4 * texcoordWidth, 
-    					0 * texcoordHeight, 
-    					texcoordWidth, 
-    					texcoordHeight, 
-    					new float[] { 0, 0, 1, 0, 0, 1, 0, 0, 1 })));
-    	
-    	_vertices.addAll(
-                Arrays.asList(generate9Quad(
-    					16, 
-    					16, 
+                		x * _tileWidth - 16, 
+    					y * _tileHeight + 16, 
     					_tileWidth, 
     					_tileHeight, 
     					4 * texcoordWidth, 
@@ -328,36 +311,14 @@ public class ModernTileMap extends Actor {
     					texcoordHeight, 
     					new float[] { 0, 0, 1, 0, 0, 0, 0, 0, 0 })));
     	
-    	_vertices.addAll(
-                Arrays.asList(generate9Quad(
-    					32, 
-    					16, 
-    					_tileWidth, 
-    					_tileHeight, 
-    					4 * texcoordWidth, 
-    					0 * texcoordHeight, 
-    					texcoordWidth, 
-    					texcoordHeight, 
-    					new float[] { 1, 1, 1, 0, 0, 0, 0, 0, 0 })));
     }
-    private void topRightTiles(float texcoordWidth, float texcoordHeight) {
+    private void topRightTile(float texcoordWidth, float texcoordHeight, int x, int y) {
+    	
     	
     	_vertices.addAll(
                 Arrays.asList(generate9Quad(
-    					16, 
-    					32, 
-    					_tileWidth, 
-    					_tileHeight, 
-    					4 * texcoordWidth, 
-    					0 * texcoordHeight, 
-    					texcoordWidth, 
-    					texcoordHeight, 
-    					new float[] { 1, 0, 0, 1, 0, 0, 1, 0, 0 })));
-    	
-    	_vertices.addAll(
-                Arrays.asList(generate9Quad(
-    					16, 
-    					16, 
+                		x * _tileWidth + 16, 
+    					y * _tileHeight - 16, 
     					_tileWidth, 
     					_tileHeight, 
     					4 * texcoordWidth, 
@@ -366,37 +327,15 @@ public class ModernTileMap extends Actor {
     					texcoordHeight, 
     					new float[] { 0, 0, 0, 0, 0, 0, 1, 0, 0 })));
     	
-    	_vertices.addAll(
-                Arrays.asList(generate9Quad(
-    					0, 
-    					16, 
-    					_tileWidth, 
-    					_tileHeight, 
-    					4 * texcoordWidth, 
-    					0 * texcoordHeight, 
-    					texcoordWidth, 
-    					texcoordHeight, 
-    					new float[] { 0, 0, 0, 0, 0, 0, 1, 1, 1 })));
 	
     }
-    private void topLeftTiles(float texcoordWidth, float texcoordHeight) {
+    private void topLeftTile(float texcoordWidth, float texcoordHeight, int x, int y) {
+    	
     	
     	_vertices.addAll(
                 Arrays.asList(generate9Quad(
-    					32, 
-    					16, 
-    					_tileWidth, 
-    					_tileHeight, 
-    					4 * texcoordWidth, 
-    					0 * texcoordHeight, 
-    					texcoordWidth, 
-    					texcoordHeight, 
-    					new float[] { 0, 0, 0, 0, 0, 0, 1, 1, 1 })));
-    	
-    	_vertices.addAll(
-                Arrays.asList(generate9Quad(
-    					16, 
-    					16, 
+                		x * _tileWidth - 16, 
+    					y * _tileHeight - 16, 
     					_tileWidth, 
     					_tileHeight, 
     					4 * texcoordWidth, 
@@ -405,10 +344,43 @@ public class ModernTileMap extends Actor {
     					texcoordHeight, 
     					new float[] { 0, 0, 0, 0, 0, 0, 0, 0, 1 })));
     	
+    }
+    private void topTile(float texcoordWidth, float texcoordHeight, int x, int y) {
+    	
     	_vertices.addAll(
                 Arrays.asList(generate9Quad(
-    					16, 
-    					32, 
+    					x * _tileWidth, 
+    					y * _tileHeight - 16, 
+    					_tileWidth, 
+    					_tileHeight, 
+    					4 * texcoordWidth, 
+    					0 * texcoordHeight, 
+    					texcoordWidth, 
+    					texcoordHeight, 
+    					new float[] { 0, 0, 0, 0, 0, 0, 1, 1, 1 })));
+    	
+    }
+    private void botTile(float texcoordWidth, float texcoordHeight, int x, int y) {
+    	
+    	_vertices.addAll(
+                Arrays.asList(generate9Quad(
+                		x * _tileWidth, 
+    					y * _tileHeight + 16, 
+    					_tileWidth, 
+    					_tileHeight, 
+    					4 * texcoordWidth, 
+    					0 * texcoordHeight, 
+    					texcoordWidth, 
+    					texcoordHeight, 
+    					new float[] { 1, 1, 1, 0, 0, 0, 0, 0, 0 })));
+    	
+    }
+    private void leftTile(float texcoordWidth, float texcoordHeight, int x, int y) {
+    	
+    	_vertices.addAll(
+                Arrays.asList(generate9Quad(
+                		x * _tileWidth - 16, 
+    					y * _tileHeight, 
     					_tileWidth, 
     					_tileHeight, 
     					4 * texcoordWidth, 
@@ -416,7 +388,21 @@ public class ModernTileMap extends Actor {
     					texcoordWidth, 
     					texcoordHeight, 
     					new float[] { 0, 0, 1, 0, 0, 1, 0, 0, 1 })));
-	
+    	
+    }
+    private void rightTile(float texcoordWidth, float texcoordHeight, int x, int y) {
+    	
+    	_vertices.addAll(
+                Arrays.asList(generate9Quad(
+                		x * _tileWidth + 16, 
+    					y * _tileHeight, 
+    					_tileWidth, 
+    					_tileHeight, 
+    					4 * texcoordWidth, 
+    					0 * texcoordHeight, 
+    					texcoordWidth, 
+    					texcoordHeight, 
+    					new float[] { 1, 0, 0, 1, 0, 0, 1, 0, 0 })));
     }
     
     @Override
