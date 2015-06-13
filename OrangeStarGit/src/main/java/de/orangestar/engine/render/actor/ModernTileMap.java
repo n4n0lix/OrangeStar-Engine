@@ -124,13 +124,15 @@ public class ModernTileMap extends Actor {
                 		
                 	}
                 	
-                } else if(x == data.length) {
-                	if(y == data[x].length) { // bottom right corner
+                } else if(x == data.length -1) {
+                	if(y == data[x].length -1) { // bottom right corner
                 		
                 	} else { // right
                 		
                 	}
-                } else { // bottom
+                } else if(y == data[x].length -1) { // bottom
+                	
+                } else { // everything in the middle
                 	
                 }
             }
