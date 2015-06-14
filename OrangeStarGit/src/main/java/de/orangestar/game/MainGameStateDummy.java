@@ -1,36 +1,30 @@
 package de.orangestar.game;
 
 import de.orangestar.engine.World;
-import de.orangestar.engine.input.InputManager;
-import de.orangestar.engine.input.Key.KeyState;
-import de.orangestar.engine.input.Keyboard;
 import de.orangestar.engine.logic.GameState;
 import de.orangestar.game.gameobjects.Player;
-import de.orangestar.game.gameobjects.WorldMap;
+import de.orangestar.game.gameobjects.map.Map;
 
 public class MainGameStateDummy extends GameState {
     
     @Override
     public void onStateStart() {
-        // Gameobjects
+        World.Get().addGameObject(map);
+    	map.addChild(player);
     	
-    	//worldMap.addChild(player);
-    	
-        //World.Get().addGameObject(player);
-        World.Get().addGameObject(worldMap);
+        World.Get().addGameObject(player);
     }
 
     @Override
     public void onUpdate() {
-
+        
     }
 
     @Override
     public void onStateEnd() {
 
     }
-        
-    
+
     private Player player = new Player();
-    private WorldMap worldMap = new WorldMap();
+    private Map map = new Map();
 }

@@ -19,7 +19,7 @@ import de.orangestar.engine.values.Vertex;
 
 /**
  * A modern tileset with alpha-blending usage to create transitions between
- * surfaces.
+ * different surfaces.
  * 
  * @author Basti
  *
@@ -47,16 +47,23 @@ public class ModernTileMap extends Actor {
             return _solid;
         }
 
-        public void setSolid(boolean _solid) {
-            this._solid = _solid;
+        public Surface solid() {
+            this._solid = true;
+            return this;
+        }
+        
+        public Surface nonsolid() {
+            this._solid = false;
+            return this;
         }
 
         public int getLayer() {
             return _layer;
         }
         
-        public void setLayer(int layer) {
+        public Surface layer(int layer) {
             this._layer = layer;
+            return this;
         }
         
         public Integer getRandomTileId() {
@@ -67,8 +74,9 @@ public class ModernTileMap extends Actor {
             return Collections.unmodifiableList(_tileIds);
         }
 
-        public void addTileIds(Integer... tileIds) {
+        public Surface tileIds(Integer... tileIds) {
             this._tileIds.addAll(Arrays.asList(tileIds));
+            return this;
         }
 
         private boolean       _solid;
@@ -103,6 +111,7 @@ public class ModernTileMap extends Actor {
         _tilesPerRow    = _textureWidth  / _tileWidth;
         _tilesPerColumn = _textureHeight / _tileHeight;
         
+        // Calculate the texcoord size per tile
         _texcoordWidth = 1f / _textureWidth  * _tileWidth;
         _texcoordHeight = 1f / _textureHeight * _tileHeight;
         
