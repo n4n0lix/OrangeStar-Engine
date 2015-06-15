@@ -13,6 +13,7 @@ import de.orangestar.engine.render.Texture;
 import de.orangestar.engine.render.batch.StreamingBatch;
 import de.orangestar.engine.render.shader.Shader;
 import de.orangestar.engine.values.Color4f;
+import de.orangestar.engine.values.Matrix4f;
 import de.orangestar.engine.values.Vector2f;
 import de.orangestar.engine.values.Vector3f;
 import de.orangestar.engine.values.Vertex;
@@ -89,7 +90,7 @@ public class ModernTileMap extends Actor {
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
-    public ModernTileMap(Texture texture, int tileWidth, int tileHeight) {
+    public ModernTileMap(Texture texture, int textureTileWidth, int textureTileHeight, float tileWidth, float tileHeight) {
         Material material = new Material.Builder()
                                             .texture(texture)
                                             .shader(Shader.StreamingBatchShader)
@@ -100,31 +101,34 @@ public class ModernTileMap extends Actor {
         _textureWidth  = _batch.getMaterial().getTexture().getWidth();
         _textureHeight = _batch.getMaterial().getTexture().getHeight();
         
-        setTileSize(tileWidth, tileHeight);
+        _tileWidth = tileWidth;
+        _tileHeight = tileHeight;
+        
+        setTextureTileSize(textureTileWidth, textureTileHeight);
     }
     
-    public void setTileSize(int width, int height) {
-        _tileWidth = width;
-        _tileHeight = height;
+    public void setTextureTileSize(int width, int height) {
+        _textureTileWidth = width;
+        _textureTileHeight = height;
         
         // Calculate number of tiles per row and per column
-        _tilesPerRow    = _textureWidth  / _tileWidth;
-        _tilesPerColumn = _textureHeight / _tileHeight;
+        _tilesPerRow    = _textureWidth  / _textureTileWidth;
+        _tilesPerColumn = _textureHeight / _textureTileWidth;
         
         // Calculate the texcoord size per tile
-        _texcoordWidth = 1f / _textureWidth  * _tileWidth;
-        _texcoordHeight = 1f / _textureHeight * _tileHeight;
+        _texcoordWidth = 1f / _textureWidth  * _textureTileWidth;
+        _texcoordHeight = 1f / _textureHeight * _textureTileWidth;
         
         // Update geometry
         setData(_data);
     }
     
-    public int getTileWidth() {
-       return _tileWidth;
+    public int getTextureTileWidth() {
+       return _textureTileWidth;
     }
     
-    public int getTileHeight() {
-        return _tileHeight;
+    public int getTextureTileHeight() {
+        return _textureTileHeight;
     }
     
     public void setData(Surface[][] data) {
@@ -148,8 +152,12 @@ public class ModernTileMap extends Actor {
     }
 
     @Override
-    public void onRender() {
+    public void onRender() {        
         _batch.render(PrimitiveType.TRIANGLES);
+    }
+    
+    public void onDestroy() {
+        _batch.destroy();
     }
     
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -247,7 +255,7 @@ public class ModernTileMap extends Actor {
                     
                     // Generate vertices
                     vertices.addAll(Arrays.asList(
-                            generate9Quad(
+                            generate5Quad(
                                     surface.getRandomTileId(),
                                     x * _tileWidth,
                                     y * _tileHeight, 
@@ -470,15 +478,131 @@ public class ModernTileMap extends Actor {
         return alphaCache;
     }
     
-    /**
-     * Generates a tile/quad by a given tile id, that consists of 9 vertices and alpha values
-     * @param tileId The tile id
-     * @param x The x component of the upper left corner
-     * @param y Thex y component of the upper left corner
-     * @param alphaValues The alpha values for all vertices (float[9])
-     * @return An array that contains the quad as vertices
-     */
-    private Vertex[] generate9Quad(int tileId, float x, float y, float[] alphaValues) {
+//    /**
+//     * Generates a tile/quad by a given tile id, that consists of 9 vertices and alpha values
+//     * @param tileId The tile id
+//     * @param x The x component of the upper left corner
+//     * @param y Thex y component of the upper left corner
+//     * @param alphaValues The alpha values for all vertices (float[9])
+//     * @return An array that contains the quad as vertices
+//     */
+//    private Vertex[] generate9Quad(int tileId, float x, float y, float[] alphaValues) {
+//
+//        int tileIdX = tileId % _tilesPerColumn;
+//        int tileIdY = tileId / _tilesPerRow;
+//        
+//        float texcoordX = tileIdX * _texcoordWidth;
+//        float texcoordY = tileIdY * _texcoordHeight;
+//        
+//        // Setup positions
+//        float width_2   = _tileWidth * 0.5f;
+//        float height_2  = _tileHeight * 0.5f;
+//
+//        float xTopLeft  = x,                yTopLeft    = y;
+//        float xTop      = x + width_2,      yTop        = y;
+//        float xTopRight = x + _tileWidth,   yTopRight   = y;
+//
+//        float xMidLeft  = x,                yMidLeft    = y + height_2;
+//        float xMid      = x + width_2,      yMid        = y + height_2;
+//        float xMidRight = x + _tileWidth,   yMidRight   = y + height_2;
+//
+//        float xBotLeft  = x,                yBotLeft    = y + _tileHeight;
+//        float xBot      = x + width_2,      yBot        = y + _tileHeight;
+//        float xBotRight = x + _tileWidth,   yBotRight   = y + _tileHeight;
+//
+//        // Setup uv
+//        float texcoordWidth_2    = _texcoordWidth * 0.5f;
+//        float texcoordHeight_2   = _texcoordHeight * 0.5f;
+//
+//        Vector2f texcoordTopLeft  = new Vector2f(texcoordX,                   texcoordY);
+//        Vector2f texcoordTop      = new Vector2f(texcoordX + texcoordWidth_2, texcoordY);
+//        Vector2f texcoordTopRight = new Vector2f(texcoordX + _texcoordWidth,  texcoordY);
+//        
+//        Vector2f texcoordMidLeft  = new Vector2f(texcoordX,                   texcoordY + texcoordHeight_2);
+//        Vector2f texcoordMid      = new Vector2f(texcoordX + texcoordWidth_2, texcoordY + texcoordHeight_2);
+//        Vector2f texcoordMidRight = new Vector2f(texcoordX + _texcoordWidth,  texcoordY + texcoordHeight_2);
+//        
+//        Vector2f texcoordBotLeft  = new Vector2f(texcoordX,                   texcoordY + _texcoordHeight);
+//        Vector2f texcoordBot      = new Vector2f(texcoordX + texcoordWidth_2, texcoordY + _texcoordHeight);
+//        Vector2f texcoordBotRight = new Vector2f(texcoordX + _texcoordWidth,  texcoordY + _texcoordHeight);
+//        
+//        Vertex vTopLeft = new Vertex(
+//                    new Vector3f(xTopLeft, yTopLeft),
+//                    new Color4f(0.5f, alphaValues[0]), 
+//                    texcoordTopLeft
+//                );
+//        
+//        Vertex vTop = new Vertex(
+//                    new Vector3f(xTop, yTop),
+//                    new Color4f(0.5f,alphaValues[1]),
+//                    texcoordTop
+//                );
+//        
+//        Vertex vTopRight = new Vertex(
+//                    new Vector3f(xTopRight, yTopRight),
+//                    new Color4f(0.5f, alphaValues[2]),
+//                    texcoordTopRight
+//                );
+//
+//        Vertex vMidLeft = new Vertex(
+//                    new Vector3f(xMidLeft, yMidLeft),
+//                    new Color4f(0.5f, alphaValues[3]),
+//                    texcoordMidLeft
+//                );
+//        
+//        Vertex vMid = new Vertex(
+//                    new Vector3f(xMid, yMid),
+//                    new Color4f(0.5f, alphaValues[4]),
+//                    texcoordMid
+//                );
+//        
+//        Vertex vMidRight = new Vertex(
+//                    new Vector3f(xMidRight, yMidRight),
+//                    new Color4f(0.5f, alphaValues[5]),
+//                    texcoordMidRight
+//                );
+//
+//        Vertex vBotLeft = new Vertex(
+//                    new Vector3f(xBotLeft, yBotLeft),
+//                    new Color4f(0.5f, alphaValues[6]),
+//                    texcoordBotLeft
+//                );
+//        
+//        Vertex vBot = new Vertex(
+//                    new Vector3f(xBot, yBot),
+//                    new Color4f(0.5f, alphaValues[7]),
+//                    texcoordBot
+//                );
+//        
+//        Vertex vBotRight = new Vertex(
+//                    new Vector3f(xBotRight, yBotRight), 
+//                    new Color4f(0.5f, alphaValues[8]),
+//                    texcoordBotRight
+//                );
+//
+//        return new Vertex[] {
+//                // Upper Top Left
+//                vTopLeft, vTop, vMidLeft,
+//                // Lower Top Left
+//                vMidLeft, vTop, vMid, 
+//
+//                // Upper Top Right
+//                vMid, vTopRight, vMidRight,
+//                // Lower Top Right
+//                vMid, vTop, vTopRight,
+//
+//                // Upper Bot Left
+//                vMid, vMidLeft, vBot,
+//                // Lower Bot Left
+//                vBotLeft, vBot, vMidLeft,
+//
+//                // Upper Bot Right
+//                vMid, vBot, vMidRight,
+//                // Lower Bot Right
+//                vBot, vBotRight, vMidRight };
+//    }
+    
+    private Vertex[] generate5Quad(int tileId, float x, float y, float[] alphaValues) {
 
         int tileIdX = tileId % _tilesPerColumn;
         int tileIdY = tileId / _tilesPerRow;
@@ -491,15 +615,11 @@ public class ModernTileMap extends Actor {
         float height_2  = _tileHeight * 0.5f;
 
         float xTopLeft  = x,                yTopLeft    = y;
-        float xTop      = x + width_2,      yTop        = y;
         float xTopRight = x + _tileWidth,   yTopRight   = y;
 
-        float xMidLeft  = x,                yMidLeft    = y + height_2;
         float xMid      = x + width_2,      yMid        = y + height_2;
-        float xMidRight = x + _tileWidth,   yMidRight   = y + height_2;
 
         float xBotLeft  = x,                yBotLeft    = y + _tileHeight;
-        float xBot      = x + width_2,      yBot        = y + _tileHeight;
         float xBotRight = x + _tileWidth,   yBotRight   = y + _tileHeight;
 
         // Setup uv
@@ -507,15 +627,11 @@ public class ModernTileMap extends Actor {
         float texcoordHeight_2   = _texcoordHeight * 0.5f;
 
         Vector2f texcoordTopLeft  = new Vector2f(texcoordX,                   texcoordY);
-        Vector2f texcoordTop      = new Vector2f(texcoordX + texcoordWidth_2, texcoordY);
         Vector2f texcoordTopRight = new Vector2f(texcoordX + _texcoordWidth,  texcoordY);
         
-        Vector2f texcoordMidLeft  = new Vector2f(texcoordX,                   texcoordY + texcoordHeight_2);
         Vector2f texcoordMid      = new Vector2f(texcoordX + texcoordWidth_2, texcoordY + texcoordHeight_2);
-        Vector2f texcoordMidRight = new Vector2f(texcoordX + _texcoordWidth,  texcoordY + texcoordHeight_2);
         
         Vector2f texcoordBotLeft  = new Vector2f(texcoordX,                   texcoordY + _texcoordHeight);
-        Vector2f texcoordBot      = new Vector2f(texcoordX + texcoordWidth_2, texcoordY + _texcoordHeight);
         Vector2f texcoordBotRight = new Vector2f(texcoordX + _texcoordWidth,  texcoordY + _texcoordHeight);
         
         Vertex vTopLeft = new Vertex(
@@ -524,46 +640,22 @@ public class ModernTileMap extends Actor {
                     texcoordTopLeft
                 );
         
-        Vertex vTop = new Vertex(
-                    new Vector3f(xTop, yTop),
-                    new Color4f(0.5f,alphaValues[1]),
-                    texcoordTop
-                );
-        
         Vertex vTopRight = new Vertex(
                     new Vector3f(xTopRight, yTopRight),
                     new Color4f(0.5f, alphaValues[2]),
                     texcoordTopRight
                 );
 
-        Vertex vMidLeft = new Vertex(
-                    new Vector3f(xMidLeft, yMidLeft),
-                    new Color4f(0.5f, alphaValues[3]),
-                    texcoordMidLeft
-                );
-        
         Vertex vMid = new Vertex(
                     new Vector3f(xMid, yMid),
                     new Color4f(0.5f, alphaValues[4]),
                     texcoordMid
-                );
-        
-        Vertex vMidRight = new Vertex(
-                    new Vector3f(xMidRight, yMidRight),
-                    new Color4f(0.5f, alphaValues[5]),
-                    texcoordMidRight
                 );
 
         Vertex vBotLeft = new Vertex(
                     new Vector3f(xBotLeft, yBotLeft),
                     new Color4f(0.5f, alphaValues[6]),
                     texcoordBotLeft
-                );
-        
-        Vertex vBot = new Vertex(
-                    new Vector3f(xBot, yBot),
-                    new Color4f(0.5f, alphaValues[7]),
-                    texcoordBot
                 );
         
         Vertex vBotRight = new Vertex(
@@ -573,25 +665,18 @@ public class ModernTileMap extends Actor {
                 );
 
         return new Vertex[] {
-                // Upper Top Left
-                vTopLeft, vTop, vMidLeft,
-                // Lower Top Left
-                vMidLeft, vTop, vMid, 
+                // Top Triangle
+                vTopLeft, vMid, vTopRight,
+                
+                // Left Triangle
+                vTopLeft, vBotLeft, vMid, 
 
-                // Upper Top Right
-                vMid, vTopRight, vMidRight,
-                // Lower Top Right
-                vMid, vTop, vTopRight,
-
-                // Upper Bot Left
-                vMid, vMidLeft, vBot,
-                // Lower Bot Left
-                vBotLeft, vBot, vMidLeft,
-
-                // Upper Bot Right
-                vMid, vBot, vMidRight,
-                // Lower Bot Right
-                vBot, vBotRight, vMidRight };
+                // Bottom Triangle
+                vBotLeft, vBotRight, vMid,
+                
+                // Right Triangle
+                vBotRight, vTopRight, vMid
+            };
     }
     
     /**
@@ -621,8 +706,11 @@ public class ModernTileMap extends Actor {
     private StreamingBatch  _batch;
     private Surface[][]     _data;
     
-    private int _tileWidth;
-    private int _tileHeight;
+    private float _tileWidth;
+    private float _tileHeight;
+    
+    private int _textureTileWidth;
+    private int _textureTileHeight;
     
     private int _tilesPerColumn;
     private int _tilesPerRow;

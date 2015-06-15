@@ -149,6 +149,6 @@ public class Quaternion4f {
     
     @Override
     public String toString() {
-        return super.toString() + "[ " + x + ", " + y  + ", " + z + ", " + w + " ]";
+        return "[ " + x + ", " + y  + ", " + z + ", " + w + " ]";
     }
 }

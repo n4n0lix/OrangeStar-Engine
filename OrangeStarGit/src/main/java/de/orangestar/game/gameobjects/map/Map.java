@@ -13,12 +13,18 @@ public class Map extends GameObject {
     
     public Map() {  
         // Initialize Test Data
-        MapChunk chunk_0_0 = new MapChunk();
-        chunk_0_0.setData( generateTestData() );
+
 
         // Setup and link components
         MapLogicComponent   logic   = new MapLogicComponent(this);
-        logic.addChunk(0, 0, chunk_0_0);
+        for(int x = -8; x < 8; x++) {
+            for(int y = -8; y < 8; y++) {
+                MapChunk chunk = new MapChunk(x, y);
+                chunk.setData(generateTestData());
+                logic.addChunk(x, y, chunk);
+            }
+        }
+        
         
         UnitPhysicsComponent     physics = new UnitPhysicsComponent(this);
         MapInputComponent   input   = new MapInputComponent(this, physics);
@@ -29,9 +35,9 @@ public class Map extends GameObject {
         setPhysicComponent(physics);
         setInputComponent(input);
         setRenderComponent(render);
-        
 
     }
+
     
     private static MapSurface[][] generateTestData() {
 
@@ -52,4 +58,5 @@ public class Map extends GameObject {
 
         return data;
     }
+
 }

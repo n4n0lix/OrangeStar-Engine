@@ -4,11 +4,20 @@ import de.orangestar.engine.GameObject;
 import de.orangestar.engine.render.GLWindow;
 import de.orangestar.engine.render.RenderManager;
 import de.orangestar.engine.render.Texture;
+import de.orangestar.engine.render.actor.Actor;
 import de.orangestar.engine.render.actor.ModernTileMap;
 import de.orangestar.engine.render.actor.ModernTileMap.Surface;
 import de.orangestar.engine.render.component.UnitRenderComponent;
+import de.orangestar.engine.values.Matrix4f;
+import de.orangestar.engine.values.Quaternion4f;
+import de.orangestar.engine.values.Transform;
 import de.orangestar.engine.values.Vector3f;
 
+/**
+ * The {@link de.orangestar.engine.render.component.RenderComponent} implementation of the {@link Map}.
+ * 
+ * @author Basti
+ */
 public class MapRenderComponent extends UnitRenderComponent {
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -20,24 +29,32 @@ public class MapRenderComponent extends UnitRenderComponent {
         _logic = logic;
         
         _window = RenderManager.Get().getMainWindow();
-        _renderWidth = -1;
-        _renderHeight = -1;
+        _tmpRenderWidth = -1;
+        _tmpRenderHeight = -1;
 
-//        _actorGround = new ModernTileMap(new Texture("textures/WorldTileSetDummy_16x16.png"), 16, 16);
-        _actorGround = new ModernTileMap(new Texture("textures/prisonarchitect.png"), 50, 50);
-        
+        _tilemapTileWidth  = 50f;
+        _tilemapTileHeight = 50f;
+
         setLayer(0);
-        setActor(_actorGround);
     }
 
     public void onRender() {
         // Check if render window has changed in size
-        if (_renderWidth != _window.getRenderWidth() || _renderHeight != _window.getRenderHeight()) {
-            _renderWidth = _window.getRenderWidth();
-            _renderHeight = _window.getRenderHeight();
+        if (_tmpRenderWidth != _window.getRenderWidth() || _tmpRenderHeight != _window.getRenderHeight()) {
+            _tmpRenderWidth = _window.getRenderWidth();
+            _tmpRenderHeight = _window.getRenderHeight();
 
-            updateSize();
+            updateData();
         }
+        
+        // If a chunk went out of sight
+        if (_tmpChunkScrollX != _logic.globalChunkScrollX || _tmpChunkScrollY != _logic.globalChunkScrollY) {
+            _tmpChunkScrollX = _logic.globalChunkScrollX;
+            _tmpChunkScrollY = _logic.globalChunkScrollY;
+            
+            updateData();
+        }
+        
 
         super.onRender();
     } 
@@ -46,21 +63,70 @@ public class MapRenderComponent extends UnitRenderComponent {
     /*                              Private                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
-    private void updateSize() {
+    private void updateData() {
+        // CLEAR DATA
+        if (_tilemaps != null && _tilemaps.length > 0 && _tilemaps[0].length > 0) {
+            for(int x = 0; x < _tilemaps.length; x++) {
+                for(int y = 0; y < _tilemaps[0].length; y++) {
+                    _tilemaps[x][y].onDestroy();
+                }
+            }
+        }
+        
+        // UPDATE DATA
         Vector3f unitScale = getGameObject().getLocalTransform().scale;
         
         float scaleX = unitScale.x;
         float scaleY = unitScale.y;
         
-        int mapWidth =  (int)(_renderWidth  / scaleX / _actorGround.getTileWidth()) + 1;
-        int mapHeight = (int)(_renderHeight / scaleY / _actorGround.getTileHeight()) + 1;
+        float pxTilemapWidth = _tilemapTileWidth * MapChunk.CHUNK_SIZE;
+        float pxTilemapHeight = _tilemapTileHeight * MapChunk.CHUNK_SIZE;
+        
+        int mapsX =  (int)(_tmpRenderWidth  / scaleX / pxTilemapWidth) + 2;
+        int mapsY = (int)(_tmpRenderHeight / scaleY / pxTilemapHeight) + 2;
 
-        Map world = (Map) getGameObject();
-        _actorGround.setData(readChunk(world, 0, 0));
+        _tilemaps = new ModernTileMap[mapsX][mapsY];
+        Actor proxyActor = new Actor() {
+            @Override
+            public void onRender() { }
+
+            @Override
+            public void onDestroy() { }
+        };
+        
+        for(int x = 0; x < mapsX; x++) {
+            for(int y = 0; y < mapsY; y++) {
+                
+                MapChunk chunk = _logic.getChunk(x, y);
+                
+                if (chunk == null) {
+                    continue;
+                }
+                
+                _tilemaps[x][y] = new ModernTileMap(TILESET, 50, 50, _tilemapTileWidth, _tilemapTileHeight);
+                _tilemaps[x][y].setTransform(
+                        new Transform(
+                                new Vector3f(x * pxTilemapWidth - pxTilemapWidth, y * pxTilemapHeight - pxTilemapHeight),
+                                Vector3f.one(),
+                                Quaternion4f.identity()
+                                )
+                        );
+                
+                _tilemaps[x][y].setData(readChunk(chunk));
+                proxyActor.addChild(_tilemaps[x][y]);
+            }
+        }
+        setActor(proxyActor);
     }
     
-    private Surface[][] readChunk(Map world, int x, int y) {
-        MapChunk chunk = _logic.getChunk(x, y);
+    /**
+     * Reads a map chunk and converts it into renderable data.
+     * @param map The map
+     * @param x The x coordinate of the chunk
+     * @param y The y coordinate of the chunk
+     * @return A 2D ModernTileSet.Surface array
+     */
+    private Surface[][] readChunk(MapChunk chunk) {
         MapSurface[][] data = chunk.getData();
         
         Surface[][] result = new Surface[data.length][data[0].length];
@@ -69,6 +135,7 @@ public class MapRenderComponent extends UnitRenderComponent {
             for(int yi = 0; yi < data[0].length; yi++) {
                 MapSurface current = data[xi][yi];
                 
+                // Convert MapSurface -> ModernTileMapSurface
                 if (current == MapSurface.DIRT) {
                     result[xi][yi] = DIRT;
                 } else if (current == MapSurface.GRASS) {
@@ -85,13 +152,19 @@ public class MapRenderComponent extends UnitRenderComponent {
 
     private MapLogicComponent _logic;
     
-    private GLWindow        _window;
-    private ModernTileMap   _actorGround;
-    private int             _renderWidth, _renderHeight;
+    private GLWindow            _window;
+    private ModernTileMap[][]   _tilemaps;    
+    private float               _tilemapTileWidth;
+    private float               _tilemapTileHeight;
+    
+    private int                 _tmpRenderWidth,  _tmpRenderHeight;
+    private int                 _tmpChunkScrollX, _tmpChunkScrollY;
     
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                           Private Static                           */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    
+    private static Texture TILESET = new Texture("textures/prisonarchitect.png");
     
     private static Surface WATER = new Surface()
                                         .nonsolid()

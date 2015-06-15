@@ -57,7 +57,7 @@ public abstract class RenderComponent extends Component {
      * Renders this rendermodule. (Called every frame from the {@link RenderManager})
      */
     public abstract void onRender();
-    
+
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                              Private                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

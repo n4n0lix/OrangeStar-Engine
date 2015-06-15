@@ -25,7 +25,9 @@ public class MapChunk {
     /**
      * Public-Constructor
      */
-    public MapChunk() {
+    public MapChunk(int x, int y) {
+        _x = x;
+        _y = y;
         _data = new MapSurface[CHUNK_SIZE][CHUNK_SIZE];
     }
     
@@ -55,6 +57,7 @@ public class MapChunk {
      * @param data The data
      */
     public void setData(MapSurface[][] data) {
+        // 
         if (data.length != CHUNK_SIZE || data[0].length != CHUNK_SIZE) {
             DebugManager.Get().info(MapSurface.class, "Chunk data has wrong dimensions!");
             return;

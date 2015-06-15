@@ -38,12 +38,15 @@ public abstract class Batch {
      */
     public abstract boolean isEmpty();
     
+    public abstract void onDestroy();
+    
     /**
      * Destroys this batch and therefore make it unusable.
      * 
      * @ensures isDestroyed()
      */
     public void destroy() {
+        onDestroy();
         _isDestroyed = true;
     }
     

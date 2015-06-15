@@ -123,7 +123,7 @@ public class Transform {
     
     @Override
     public String toString() {
-        return super.toString() + "{ POS: " + position + " | SCA: " + scale + " | ROT: " + rotation + " }";
+        return "{ POS: " + position + " | SCA: " + scale + " | ROT: " + rotation + " }";
     }
     
     public Vector3f position;

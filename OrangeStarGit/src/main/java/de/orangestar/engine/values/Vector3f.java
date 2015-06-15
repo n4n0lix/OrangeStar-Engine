@@ -162,7 +162,7 @@ public class Vector3f {
     
     @Override
     public String toString() {
-        return super.toString() + "[" + x + ", " + y + ", " + z + " ]";
+        return "[" + x + ", " + y + ", " + z + " ]";
     }
 
     public float x;

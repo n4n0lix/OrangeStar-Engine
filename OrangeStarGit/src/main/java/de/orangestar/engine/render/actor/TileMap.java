@@ -91,7 +91,9 @@ public class TileMap extends Actor {
     
     @Override
     public void onRender() {
-        _batch.render(PrimitiveType.TRIANGLES);
+        if (!_batch.isDestroyed()) {
+            _batch.render(PrimitiveType.TRIANGLES);
+        }
     }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -122,6 +124,11 @@ public class TileMap extends Actor {
                 new Vertex(new Vector3f(          x, y + height, 0.0f), new Color4f(0.5f), new Vector2f(uv_x,            uv_y + uv_height)),
                 new Vertex(new Vector3f(  x + width, y + height, 0.0f), new Color4f(0.5f), new Vector2f(uv_x + uv_width, uv_y + uv_height)),
           };
+    }
+
+    @Override
+    public void onDestroy() {
+        _batch.destroy();
     }  
     
 }

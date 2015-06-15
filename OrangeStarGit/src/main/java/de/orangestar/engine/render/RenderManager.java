@@ -46,7 +46,7 @@ public class RenderManager extends AbstractManager {
         GLContext.createFromCurrent();
         
         // Setup settings of context
-        setVSync(false);
+        setVSync(true);
         
         // Enable Alpha Blending
         GL11.glEnable(GL11.GL_BLEND);
@@ -109,7 +109,7 @@ public class RenderManager extends AbstractManager {
 	 * This enables or disables vsync.
 	 */
 	public void setVSync(boolean vSync) {
-	    glfwSwapInterval(vSync ? 2 : 1);	    
+	    glfwSwapInterval(vSync ? 1 : 0);	    
 	}
 	
 	/**
@@ -154,6 +154,10 @@ public class RenderManager extends AbstractManager {
     public void setProjectionMatrix(Matrix4f matrix) {
         _projection = matrix;
         _wvpHasChanged = true;
+    }
+    
+    public Matrix4f getProjectionMatrix() {
+        return _projection;
     }
     
     public void setExtrapolation(float extrapolation) {

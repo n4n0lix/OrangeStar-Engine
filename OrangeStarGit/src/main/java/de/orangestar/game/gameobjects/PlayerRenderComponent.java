@@ -1,9 +1,12 @@
 package de.orangestar.game.gameobjects;
 
 import de.orangestar.engine.GameObject;
+import de.orangestar.engine.render.GLWindow;
+import de.orangestar.engine.render.RenderManager;
 import de.orangestar.engine.render.Texture;
 import de.orangestar.engine.render.actor.Image;
 import de.orangestar.engine.render.component.UnitRenderComponent;
+import de.orangestar.engine.values.Matrix4f;
 
 public class PlayerRenderComponent extends UnitRenderComponent {
 
@@ -14,6 +17,11 @@ public class PlayerRenderComponent extends UnitRenderComponent {
         
         setActor(actor);
         setLayer(10);
+    }
+    
+    @Override
+    public void onRender() {
+        super.onRender();
     }
 
     

@@ -18,7 +18,7 @@ public class UnitRenderComponent extends RenderComponent {
     public void setActor(Actor actor) {
         _actor = actor;
     }
-    
+
     @Override
     public void onRender() {
         if (_actor == null)  {

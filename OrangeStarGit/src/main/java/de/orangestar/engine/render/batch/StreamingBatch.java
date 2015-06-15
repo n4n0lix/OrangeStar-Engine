@@ -10,6 +10,8 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL32;
+import org.lwjgl.opengl.GL33;
 
 import de.orangestar.engine.debug.DebugManager;
 import de.orangestar.engine.render.Material;
@@ -127,6 +129,7 @@ public class StreamingBatch extends Batch {
         }
         
         _vertices.addAll(vertices);
+        _hasChanged = true;
     }
     
     /**
@@ -201,6 +204,12 @@ public class StreamingBatch extends Batch {
         _indices.clear();
     }
     
+    @Override
+    public void onDestroy() {
+        GL15.glDeleteBuffers(_idVertexBuffer);
+        GL30.glDeleteVertexArrays(_idVAO);
+    }
+    
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                              Package                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -239,25 +248,31 @@ public class StreamingBatch extends Batch {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
     private void sendVerticesToGPU() {
-        // 1# Create buffer
-        FloatBuffer floatBuffer = BufferUtils.createByteBuffer(_vertices.size() * Vertex.ByteSize).asFloatBuffer();
-        for(Vertex vertex : _vertices) {
-            vertex.writeToFloatBuffer(floatBuffer);
-        }
-        floatBuffer.flip();      
+        if (_hasChanged) {
+            // 1# Create buffer
+            FloatBuffer floatBuffer = BufferUtils.createByteBuffer(_vertices.size() * Vertex.ByteSize).asFloatBuffer();
+            for(Vertex vertex : _vertices) {
+                vertex.writeToFloatBuffer(floatBuffer);
+            }
+            floatBuffer.flip();      
 
-        // 2# Send data to GPU
-        GL30.glBindVertexArray(_idVAO);
-        
-            GL15.glBindBuffer( GL15.GL_ARRAY_BUFFER, _idVertexBuffer);
-            GL15.glBufferSubData( GL15.GL_ARRAY_BUFFER, 0, floatBuffer);
-            GL15.glBindBuffer( GL15.GL_ARRAY_BUFFER, 0);
-        
-        GL30.glBindVertexArray(0);
+            // 2# Send data to GPU
+            GL30.glBindVertexArray(_idVAO);
+            
+                GL15.glBindBuffer( GL15.GL_ARRAY_BUFFER, _idVertexBuffer);
+                GL15.glBufferSubData( GL15.GL_ARRAY_BUFFER, 0, floatBuffer);
+                GL15.glBindBuffer( GL15.GL_ARRAY_BUFFER, 0);
+            
+            GL30.glBindVertexArray(0);
+            
+            _hasChanged = false;
+        }
     }
     
     private List<Vertex> _vertices;
     private List<Integer> _indices;
+    
+    private boolean _hasChanged;
     
     private int _idVAO;
     private int _idVertexBuffer;
