@@ -1,6 +1,5 @@
 package de.orangestar.engine.tools.pathfinding;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,60 +16,51 @@ public class AStarSearch implements Pathfinding{
 		setDestination(destX, destY);
 		int posX = startX;
 		int posY = startY;
+		int previousX = posX;
+		int previousY = posY;
 		List<Pair<Integer, Integer>> path = new LinkedList<>();
-		int estimatedDistance = estimate(startX, startY);
+		// int estimatedDistance = estimate(startX, startY);
 		int distance = estimate(startX, startY);
 		path.add(new Pair<>(startX, startY));
 		
 		while(posX != _destX && posY != _destY) {
-			List<Pair<Integer, Integer>> field = new ArrayList<>();
-			for(int i = 0; i < 2; i++) {
-				if(_area[posX-1+i][posY-1] == true && estimatedDistance + distance > estimate(posX-1+i, posY-1) + distance) {
-					estimatedDistance = estimate(posX-1+i, posY-1);
-					Pair<Integer, Integer> p = new Pair<>(posX-1+i, posY-1);
+			boolean next = false;
+			Pair<Integer, Integer> p = Pair.New(-1, -1); // create new Pair, setting correct value later
+			_area[posX][posY] = false; // mark current node
+			for(int i = 0; i < 3; i++) {
+				int minDist =  Integer.MAX_VALUE; // look for minimum distance
+				if(_area[posX-1+i][posY-1] == true && estimate(posX-1+i, posY-1) + distance +1 <= minDist) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX-1+i, posY-1);
+					p = new Pair<>(posX-1+i, posY-1);
 				}
-				if(_area[posX-1+i][posY] == true && estimatedDistance + distance > estimate(posX-1+i, posY) + distance) {
-					estimatedDistance = estimate(posX-1+i, posY);
-					Pair<Integer, Integer> p = new Pair<>(posX-1+i, posY);
+				if(_area[posX-1+i][posY] == true && estimate(posX-1+i, posY) + distance +1 <= minDist) {
+					minDist = estimate(posX-1+i, posY);
+					p = new Pair<>(posX-1+i, posY);
 				}
-				if(_area[posX-1+i][posY+1] == true && estimatedDistance + distance > estimate(posX-1+i, posY+1) + distance) {
-					estimatedDistance = estimate(posX-1+i, posY+1);
-					Pair<Integer, Integer> p = new Pair<>(posX-1+i, posY+1);
+				if(_area[posX-1+i][posY+1] == true && estimate(posX-1+i, posY+1) + distance +1 <= minDist) {
+					minDist = estimate(posX-1+i, posY+1) + distance;
+					p = new Pair<>(posX-1+i, posY+1);
 				}
-				if(i == 2) {
+				if(minDist == Integer.MAX_VALUE && i == 2) { //if no minimum is found, then go to previous node back
 					Pair<Integer, Integer> deadEnd = path.remove(path.size()-1);
 					_area[deadEnd.x][deadEnd.y] = false;
+					next = true;
+					distance--;
+					posX = previousX;
+					posY = previousY;
 				}
 			}
-			if(_area[posX-1][posY] == true && estimate(posX-1, posY) < estimatedDistance) {
-				path.add(new Pair<>(posX-1, posY));
-				estimatedDistance = estimate(posX-1, posY);
-			} else if(_area[posX-1][posY-1] == true && estimate(posX-1, posY-1) < estimatedDistance) {
-				path.add(new Pair<>(posX-1, posY-1));
-				estimatedDistance = estimate(posX-1, posY-1);
-			} else if(_area[posX][posY-1] == true && estimate(posX, posY-1) < estimatedDistance) {
-				path.add(new Pair<>(posX, posY-1));
-				estimatedDistance = estimate(posX, posY-1);
-			} else if(_area[posX+1][posY-1] == true && estimate(posX+1, posY-1) < estimatedDistance) {
-				path.add(new Pair<>(posX+1, posY-1));
-				estimatedDistance = estimate(posX+1, posY-1);
-			} else if(_area[posX+1][posY] == true && estimate(posX+1, posY) < estimatedDistance) {
-				path.add(new Pair<>(posX+1, posY));
-				estimatedDistance = estimate(posX+1, posY);
-			} else if(_area[posX+1][posY+1] == true && estimate(posX+1, posY+1) < estimatedDistance) {
-				path.add(new Pair<>(posX+1, posY+1));
-				estimatedDistance = estimate(posX+1, posY+1);
-			} else if(_area[posX][posY+1] == true && estimate(posX, posY+1) < estimatedDistance) {
-				path.add(new Pair<>(posX, posY+1));
-				estimatedDistance = estimate(posX, posY+1);
-			} else if(_area[posX-1][posY+1] == true && estimate(posX-1, posY+1) < estimatedDistance) {
-				path.add(new Pair<>(posX-1, posY+1));
-				estimatedDistance = estimate(posX-1, posY+1);
-			} else {
-				Pair<Integer, Integer> deadEnd = path.remove(path.size()-1);
-				_area[deadEnd.x][deadEnd.y] = false;
-				// System.out.println("You shall not path....finding!");
+			if(!next) {
+				if(p.x != -1 && p.y != -1) { // if node is found set posX and posY to this node and add distance (just +1 at the moment, because every node has the same cost)
+					path.add(p);
+					distance++;
+					previousX = posX;
+					previousY = posY;
+					posX = p.x;
+					posY = p.y;
+				}
 			}
+			
 			
 		}
 		return path;
