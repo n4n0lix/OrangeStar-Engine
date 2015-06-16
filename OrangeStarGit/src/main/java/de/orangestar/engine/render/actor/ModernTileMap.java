@@ -718,16 +718,20 @@ public class ModernTileMap extends Actor {
         int tileIdX = tileId % _tilesPerColumn;
         int tileIdY = tileId / _tilesPerRow;
         
-        float texcoordX = tileIdX * _texcoordWidth;
-        float texcoordY = tileIdY * _texcoordHeight;
+        // Resize the texcoord rectangle to prevent texture/tile clamp issues
+        float fixedTexCoordWidth  = _texcoordWidth - 0.002f;
+        float fixedTexCoordHeight = _texcoordHeight - 0.002f;
         
+        float fixedTexcoordX      = tileIdX * _texcoordWidth + 0.001f;
+        float fixedTexcoordY      = tileIdY * _texcoordHeight + 0.001f;
+
         return new Vertex[] {
-                new Vertex(new Vector3f(               x,               y, 0.0f), new Color4f(0.5f), new Vector2f(texcoordX,                  texcoordY)),
-                new Vertex(new Vector3f(  x + _tileWidth,               y, 0.0f), new Color4f(0.5f), new Vector2f(texcoordX + _texcoordWidth, texcoordY)),  
-                new Vertex(new Vector3f(               x, y + _tileHeight, 0.0f), new Color4f(0.5f), new Vector2f(texcoordX,                  texcoordY + _texcoordHeight)),
-                new Vertex(new Vector3f(  x + _tileWidth,               y, 0.0f), new Color4f(0.5f), new Vector2f(texcoordX + _texcoordWidth, texcoordY)),  
-                new Vertex(new Vector3f(               x, y + _tileHeight, 0.0f), new Color4f(0.5f), new Vector2f(texcoordX,                  texcoordY + _texcoordHeight)),
-                new Vertex(new Vector3f(  x + _tileWidth, y + _tileHeight, 0.0f), new Color4f(0.5f), new Vector2f(texcoordX + _texcoordWidth, texcoordY + _texcoordHeight)),
+                new Vertex(new Vector3f(               x,               y, 0.0f), new Color4f(0.5f), new Vector2f(fixedTexcoordX,                  fixedTexcoordY)),
+                new Vertex(new Vector3f(  x + _tileWidth,               y, 0.0f), new Color4f(0.5f), new Vector2f(fixedTexcoordX + fixedTexCoordWidth, fixedTexcoordY)),  
+                new Vertex(new Vector3f(               x, y + _tileHeight, 0.0f), new Color4f(0.5f), new Vector2f(fixedTexcoordX,                  fixedTexcoordY + fixedTexCoordHeight)),
+                new Vertex(new Vector3f(  x + _tileWidth,               y, 0.0f), new Color4f(0.5f), new Vector2f(fixedTexcoordX + fixedTexCoordWidth, fixedTexcoordY)),  
+                new Vertex(new Vector3f(               x, y + _tileHeight, 0.0f), new Color4f(0.5f), new Vector2f(fixedTexcoordX,                  fixedTexcoordY + fixedTexCoordHeight)),
+                new Vertex(new Vector3f(  x + _tileWidth, y + _tileHeight, 0.0f), new Color4f(0.5f), new Vector2f(fixedTexcoordX + fixedTexCoordWidth, fixedTexcoordY + fixedTexCoordHeight)),
           };
     }  
     /**

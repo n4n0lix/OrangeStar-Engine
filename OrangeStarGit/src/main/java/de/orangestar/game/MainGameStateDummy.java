@@ -76,5 +76,5 @@ public class MainGameStateDummy extends GameState {
     private Player player = new Player();
     private Map map = new Map();
 
-    private float _zoom = 1.0f;
+    private float _zoom = 1f;
 }

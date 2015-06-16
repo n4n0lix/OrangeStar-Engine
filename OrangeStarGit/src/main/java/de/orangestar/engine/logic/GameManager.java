@@ -36,7 +36,7 @@ public class GameManager extends AbstractManager {
 
     @Override
     public void update() {
-        tickcurrent  = System.currentTimeMillis();
+        tickcurrent  = System.nanoTime() / 1000000;//System.currentTimeMillis();
         tickduration = tickcurrent - tickprevious;
         tickprevious = tickcurrent;
         lag          += tickduration;
@@ -79,7 +79,7 @@ public class GameManager extends AbstractManager {
         }
         
         // 3# Tell the RenderManager how far in between of two ticks we are to extrapolate the rendering
-        RenderManager.Get().setExtrapolation( 1f + (float) lag / (float) GameManager.TICK_TIME );
+        RenderManager.Get().setExtrapolation( 0f + (float) lag / (float) GameManager.TICK_TIME );
     }
 
     @Override
@@ -96,8 +96,8 @@ public class GameManager extends AbstractManager {
     /*                              Private                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	
-    private long tickcurrent  = System.currentTimeMillis();
-    private long tickprevious = System.currentTimeMillis();
+    private long tickcurrent  = System.nanoTime() / 1000000;
+    private long tickprevious = System.nanoTime() / 1000000;
     private long tickduration = 0;
     private long lag = 0;
     

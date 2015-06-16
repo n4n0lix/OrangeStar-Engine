@@ -60,9 +60,7 @@ public class RenderManager extends AbstractManager {
         GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         GL11.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         GL11.glViewport(0, 0, _mainWindow.getRenderWidth(), _mainWindow.getRenderHeight());
-        
-        setWorldMatrix(Matrix4f.one());
-        
+
         // Use a priority queue to sort all rendermodules by its rendering priority
         PriorityQueue<RenderComponent> renderingQueue = new PriorityQueue<>(10, new RenderComponent.RenderingPriorityComparer());
         

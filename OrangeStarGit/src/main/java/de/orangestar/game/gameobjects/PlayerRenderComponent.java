@@ -13,7 +13,7 @@ public class PlayerRenderComponent extends UnitRenderComponent {
     public PlayerRenderComponent(GameObject obj) {
         super(obj);
         
-        Image actor = new Image(new Texture("textures/PlayerDummy_16x16.png"));
+        Image actor = new Image(new Texture("textures/PlayerDummy_16x16.png", true));
         
         setActor(actor);
         setLayer(10);
