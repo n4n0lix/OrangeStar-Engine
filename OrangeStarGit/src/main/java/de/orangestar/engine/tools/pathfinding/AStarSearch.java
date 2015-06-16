@@ -19,16 +19,15 @@ public class AStarSearch implements Pathfinding{
 		int previousX = posX;
 		int previousY = posY;
 		List<Pair<Integer, Integer>> path = new LinkedList<>();
-		// int estimatedDistance = estimate(startX, startY);
-		int distance = estimate(startX, startY);
+		int distance = 0;
 		path.add(new Pair<>(startX, startY));
 		
 		while(posX != _destX && posY != _destY) {
 			boolean next = false;
 			Pair<Integer, Integer> p = Pair.New(-1, -1); // create new Pair, setting correct value later
 			_area[posX][posY] = false; // mark current node
+			double minDist =  Integer.MAX_VALUE; // look for minimum distance
 			for(int i = 0; i < 3; i++) {
-				int minDist =  Integer.MAX_VALUE; // look for minimum distance
 				if(_area[posX-1+i][posY-1] == true && estimate(posX-1+i, posY-1) + distance +1 <= minDist) { // save minimum distance if distance is lower, also create new Pair that we need later.
 					minDist = estimate(posX-1+i, posY-1);
 					p = new Pair<>(posX-1+i, posY-1);
@@ -71,8 +70,8 @@ public class AStarSearch implements Pathfinding{
 		_destY = y;
 	}
 	
-	public int estimate(int posX, int posY) {
-		 return Math.abs(posX - _destX) + Math.abs(posY - _destY);
+	public double estimate(int posX, int posY) {
+		 return Math.sqrt(( Math.pow(2-4, 2) + Math.pow(4 - 6, 2)));
 	}
 	
 	private boolean[][] _area;
