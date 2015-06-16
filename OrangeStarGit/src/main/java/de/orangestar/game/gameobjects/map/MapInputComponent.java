@@ -3,8 +3,15 @@ package de.orangestar.game.gameobjects.map;
 import de.orangestar.engine.GameObject;
 import de.orangestar.engine.input.InputManager;
 import de.orangestar.engine.input.Keyboard;
+import de.orangestar.engine.input.Mouse;
 import de.orangestar.engine.input.component.InputComponent;
+import de.orangestar.engine.logic.GameManager;
 import de.orangestar.engine.physics.component.UnitPhysicsComponent;
+import de.orangestar.engine.render.GLWindow;
+import de.orangestar.engine.render.RenderManager;
+import de.orangestar.engine.values.Matrix4f;
+import de.orangestar.engine.values.Transform;
+import de.orangestar.engine.values.Vector3f;
 
 public class MapInputComponent extends InputComponent {
 
@@ -12,8 +19,8 @@ public class MapInputComponent extends InputComponent {
     /*                            Public Static                           */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
-    public static float SCROLL_SPEED = 128f;
-    
+    public static float SCROLL_SPEED = 256f;
+
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -29,6 +36,7 @@ public class MapInputComponent extends InputComponent {
     public void onUpdate() {
         float speed = SCROLL_SPEED;
         
+        // MOVE MAP
         if (_keyboard.ShiftLeft.isDown()) {
             speed *= 4f;
         }
@@ -53,8 +61,9 @@ public class MapInputComponent extends InputComponent {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                              Private                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    
+
     private Keyboard _keyboard;
+    private Mouse _mouse;
     private UnitPhysicsComponent _physicsComponent;
 
 }

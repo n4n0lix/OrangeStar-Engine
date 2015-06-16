@@ -5,6 +5,7 @@ import de.orangestar.engine.render.GLWindow;
 import de.orangestar.engine.render.RenderManager;
 import de.orangestar.engine.render.Texture;
 import de.orangestar.engine.render.actor.Actor;
+import de.orangestar.engine.render.actor.Actor.AnchorType;
 import de.orangestar.engine.render.actor.ModernTileMap;
 import de.orangestar.engine.render.actor.ModernTileMap.Surface;
 import de.orangestar.engine.render.component.UnitRenderComponent;
@@ -65,27 +66,32 @@ public class MapRenderComponent extends UnitRenderComponent {
     
     private void updateData() {
         // CLEAR DATA
-        if (_tilemaps != null && _tilemaps.length > 0 && _tilemaps[0].length > 0) {
-            for(int x = 0; x < _tilemaps.length; x++) {
-                for(int y = 0; y < _tilemaps[0].length; y++) {
-                    _tilemaps[x][y].onDestroy();
-                }
-            }
+//        if (_tilemaps != null && _tilemaps.length > 0 && _tilemaps[0].length > 0) {
+//            for(int x = 0; x < _tilemaps.length; x++) {
+//                for(int y = 0; y < _tilemaps[0].length; y++) {
+//                    _tilemaps[x][y].onDestroy();
+//                }
+//            }
+//        }
+        //
+        
+        if (_tilemaps != null && _tilemaps.length > 0 && _tilemaps[0].length > 0 && _tilemaps[0][0] != null) {
+            _tilemaps[0][0].onDestroy();
         }
         
-        // UPDATE DATA
+        // CREATE DATA
         Vector3f unitScale = getGameObject().getLocalTransform().scale;
         
         float scaleX = unitScale.x;
         float scaleY = unitScale.y;
         
-        float pxTilemapWidth = _tilemapTileWidth * MapChunk.CHUNK_SIZE;
-        float pxTilemapHeight = _tilemapTileHeight * MapChunk.CHUNK_SIZE;
+        float pxTilemapWidth  = _tilemapTileWidth  * scaleX * MapChunk.CHUNK_SIZE;
+        float pxTilemapHeight = _tilemapTileHeight * scaleY * MapChunk.CHUNK_SIZE;
         
-        int mapsX =  (int)(_tmpRenderWidth  / scaleX / pxTilemapWidth) + 2;
-        int mapsY = (int)(_tmpRenderHeight / scaleY / pxTilemapHeight) + 2;
-
-        _tilemaps = new ModernTileMap[mapsX][mapsY];
+        int x = 0;
+        int y = 0;
+        
+        _tilemaps = new ModernTileMap[1][1];
         Actor proxyActor = new Actor() {
             @Override
             public void onRender() { }
@@ -94,28 +100,23 @@ public class MapRenderComponent extends UnitRenderComponent {
             public void onDestroy() { }
         };
         
-        for(int x = 0; x < mapsX; x++) {
-            for(int y = 0; y < mapsY; y++) {
-                
-                MapChunk chunk = _logic.getChunk(x, y);
-                
-                if (chunk == null) {
-                    continue;
-                }
-                
-                _tilemaps[x][y] = new ModernTileMap(TILESET, 50, 50, _tilemapTileWidth, _tilemapTileHeight);
-                _tilemaps[x][y].setTransform(
-                        new Transform(
-                                new Vector3f(x * pxTilemapWidth - pxTilemapWidth, y * pxTilemapHeight - pxTilemapHeight),
-                                Vector3f.one(),
-                                Quaternion4f.identity()
-                                )
-                        );
-                
-                _tilemaps[x][y].setData(readChunk(chunk));
-                proxyActor.addChild(_tilemaps[x][y]);
-            }
+        MapChunk chunk = _logic.getChunk(x, y);
+        
+        if (chunk != null) {
+            ModernTileMap tilemap = new ModernTileMap(TILESET, 50, 50, _tilemapTileWidth, _tilemapTileHeight);
+            tilemap.setAnchorType(AnchorType.MID);
+            tilemap.setTransform(
+                    new Transform(
+                            new Vector3f(x * pxTilemapWidth, y * pxTilemapHeight),
+                            Vector3f.one(),
+                            Quaternion4f.identity()
+                            )
+                    );
+            
+            tilemap.setData(readChunk(chunk));
+            proxyActor.addChild(tilemap);
         }
+
         setActor(proxyActor);
     }
     
@@ -165,6 +166,7 @@ public class MapRenderComponent extends UnitRenderComponent {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
     private static Texture TILESET = new Texture("textures/prisonarchitect.png");
+//    private static Texture TILESET = new Texture("textures/WorldTileSetDummy_16x16.png");
     
     private static Surface WATER = new Surface()
                                         .nonsolid()

@@ -173,7 +173,10 @@ public class StreamingBatch extends Batch {
     
     @Override
     public void render(PrimitiveType type) {  
-        sendVerticesToGPU();
+        if (_hasChanged) {
+            sendVerticesToGPU();
+            _hasChanged = false;
+        }
         
         boolean isIndexedRendering = !_indices.isEmpty();
 
@@ -248,25 +251,21 @@ public class StreamingBatch extends Batch {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
     private void sendVerticesToGPU() {
-        if (_hasChanged) {
-            // 1# Create buffer
-            FloatBuffer floatBuffer = BufferUtils.createByteBuffer(_vertices.size() * Vertex.ByteSize).asFloatBuffer();
-            for(Vertex vertex : _vertices) {
-                vertex.writeToFloatBuffer(floatBuffer);
-            }
-            floatBuffer.flip();      
-
-            // 2# Send data to GPU
-            GL30.glBindVertexArray(_idVAO);
-            
-                GL15.glBindBuffer( GL15.GL_ARRAY_BUFFER, _idVertexBuffer);
-                GL15.glBufferSubData( GL15.GL_ARRAY_BUFFER, 0, floatBuffer);
-                GL15.glBindBuffer( GL15.GL_ARRAY_BUFFER, 0);
-            
-            GL30.glBindVertexArray(0);
-            
-            _hasChanged = false;
+        // 1# Create buffer
+        FloatBuffer floatBuffer = BufferUtils.createByteBuffer(_vertices.size() * Vertex.ByteSize).asFloatBuffer();
+        for(Vertex vertex : _vertices) {
+            vertex.writeToFloatBuffer(floatBuffer);
         }
+        floatBuffer.flip();      
+
+        // 2# Send data to GPU
+        GL30.glBindVertexArray(_idVAO);
+        
+            GL15.glBindBuffer( GL15.GL_ARRAY_BUFFER, _idVertexBuffer);
+            GL15.glBufferSubData( GL15.GL_ARRAY_BUFFER, 0, floatBuffer);
+            GL15.glBindBuffer( GL15.GL_ARRAY_BUFFER, 0);
+        
+        GL30.glBindVertexArray(0);
     }
     
     private List<Vertex> _vertices;

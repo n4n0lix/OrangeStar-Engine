@@ -17,6 +17,7 @@ import de.orangestar.engine.World;
 import de.orangestar.engine.render.component.RenderComponent;
 import de.orangestar.engine.values.Matrix4f;
 import de.orangestar.engine.values.Matrix4f.Order;
+import de.orangestar.engine.values.Vector3f;
 
 /**
  * Manager who organizes the visualisation of the game world onto the output display.
@@ -50,7 +51,7 @@ public class RenderManager extends AbstractManager {
         
         // Enable Alpha Blending
         GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
+        GL11.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 
     @Override
@@ -58,17 +59,10 @@ public class RenderManager extends AbstractManager {
         // Clear the screen with black
         GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         GL11.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
-        // Adjust the viewport (to match the current window size etc)
-        final float width  = _mainWindow.getRenderWidth();
-        final float height = _mainWindow.getRenderHeight();
         GL11.glViewport(0, 0, _mainWindow.getRenderWidth(), _mainWindow.getRenderHeight());
-
         
-        setWorldMatrix(Matrix4f.One);
-        setViewMatrix(Matrix4f.One);
-        setProjectionMatrix(Matrix4f.ortho2D( 0, width, height, 0)); // Setup basic 2D orthographical view
-
+        setWorldMatrix(Matrix4f.one());
+        
         // Use a priority queue to sort all rendermodules by its rendering priority
         PriorityQueue<RenderComponent> renderingQueue = new PriorityQueue<>(10, new RenderComponent.RenderingPriorityComparer());
         
@@ -112,6 +106,16 @@ public class RenderManager extends AbstractManager {
 	    glfwSwapInterval(vSync ? 1 : 0);	    
 	}
 	
+	public void setWireframe(boolean wireframe) {
+	    if (wireframe) {
+	        GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_LINE);
+            GL11.glPolygonMode(GL11.GL_BACK, GL11.GL_LINE);
+	    } else {
+	        GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_FILL);
+	        GL11.glPolygonMode(GL11.GL_BACK, GL11.GL_FILL); 
+	    }
+	}
+	
 	/**
 	 * Returns the ByteBuffer that contains the WVP matrix.
 	 */
@@ -145,6 +149,10 @@ public class RenderManager extends AbstractManager {
     public void setViewMatrix(Matrix4f matrix) {
         _view = matrix;
         _wvpHasChanged = true;
+    }
+    
+    public Matrix4f getViewMatrix() {
+        return _view;
     }
     
     /**
@@ -181,9 +189,9 @@ public class RenderManager extends AbstractManager {
     private float       _extrapolation;
     
     private boolean     _wvpHasChanged;
-    private Matrix4f    _world;
-    private Matrix4f    _view;
-    private Matrix4f    _projection;
+    private Matrix4f    _world = Matrix4f.one();
+    private Matrix4f    _view = Matrix4f.one();
+    private Matrix4f    _projection = Matrix4f.one();
     private Matrix4f    _world_view_projection;
     private ByteBuffer  _wvpBuffer;
 	

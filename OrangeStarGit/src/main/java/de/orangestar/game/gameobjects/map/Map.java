@@ -13,7 +13,7 @@ public class Map extends GameObject {
     
     public Map() {  
         // Initialize Test Data
-
+        getLocalTransform().scale(1f);
 
         // Setup and link components
         MapLogicComponent   logic   = new MapLogicComponent(this);

@@ -11,6 +11,12 @@ import de.orangestar.engine.values.Transform;
 
 public abstract class Actor {
 
+    public enum AnchorType {
+        TOP_LEFT, TOP, TOP_RIGHT,
+        MID_LEFT, MID, MID_RIGHT,
+        BOT_LEFT, BOT, BOT_RIGHT;
+    }
+    
 //    public static class Animation {
 //        
 //        public static final String Idle    = "anim_idle";
@@ -107,6 +113,14 @@ public abstract class Actor {
         _transform = transform;
     }
     
+    public AnchorType getAnchorType() {
+        return _anchor;
+    }
+    
+    public void setAnchorType(AnchorType anchor) {
+        _anchor = anchor;
+    }
+    
     /**
      * Renders this actor and then all it's children.
      * @param parentTransform
@@ -135,6 +149,7 @@ public abstract class Actor {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
     private boolean     _isVisible;
+    private AnchorType  _anchor;
 
     private Transform   _transform;
     private Actor       _parent;

@@ -15,20 +15,25 @@ public class Matrix4f {
     
     public static final int ComponentsCount = 16;
     public static final int ByteSize = 16 * Float.BYTES;
+        
+    public static final Matrix4f zero() {
+        return new Matrix4f(
+            0.0f, 0.0f, 0.0f, 0.0f,
+            0.0f, 0.0f, 0.0f, 0.0f,
+            0.0f, 0.0f, 0.0f, 0.0f,
+            0.0f, 0.0f, 0.0f, 0.0f
+            );
+    }
     
-    public static final Matrix4f Zero = new Matrix4f(
-                    0.0f, 0.0f, 0.0f, 0.0f,
-                    0.0f, 0.0f, 0.0f, 0.0f,
-                    0.0f, 0.0f, 0.0f, 0.0f,
-                    0.0f, 0.0f, 0.0f, 0.0f
-                    );
-
-    public static final Matrix4f One = new Matrix4f(
+    public static final Matrix4f one() {
+        return new Matrix4f(
             1.0f, 0.0f, 0.0f, 0.0f,
             0.0f, 1.0f, 0.0f, 0.0f,
             0.0f, 0.0f, 1.0f, 0.0f,
             0.0f, 0.0f, 0.0f, 1.0f
             );
+    }
+
 
     public void writeTo(ByteBuffer buffer) {
         writeTo(buffer, Order.COLUMN_MAJOR);
@@ -168,7 +173,7 @@ public class Matrix4f {
     
     public static Matrix4f ortho(float left, float right, float bottom, float top, float znear, float zfar) {
         if (left == right || bottom == top || znear == zfar)
-            return One;
+            return one();
 
         float width = right - left;
         float invheight = top - bottom;
@@ -185,7 +190,7 @@ public class Matrix4f {
     public static Matrix4f orthoLHCentered(float left, float right, float bottom, float top, float znear, float zfar) {
         float zRange = 1.0f / (zfar - znear);
         
-        Matrix4f result = new Matrix4f(Matrix4f.One);
+        Matrix4f result = new Matrix4f(Matrix4f.one());
         result.m00 = 2.0f / (right - left);
         result.m11 = 2.0f / (top - bottom);
         result.m22 = zRange;
@@ -201,6 +206,29 @@ public class Matrix4f {
         float halfHeight = height * 0.5f;
 
         return orthoLHCentered(-halfWidth, halfWidth, -halfHeight, halfHeight, znear, zfar);
+    }
+    
+    public static Matrix4f lookAtLH(Vector3f eye, Vector3f target, Vector3f up ) {
+        Matrix4f result;
+        
+        Vector3f xaxis;
+        Vector3f yaxis;
+        Vector3f zaxis;
+        
+        zaxis = target.sub(eye).normalized();
+        xaxis = up.cross(zaxis).normalized();
+        yaxis = zaxis.cross(xaxis);
+        
+        result = Matrix4f.one();
+        result.m00 = xaxis.x; result.m01 = yaxis.x; result.m02 = zaxis.x; 
+        result.m10 = xaxis.y; result.m11 = yaxis.y; result.m12 = zaxis.y;
+        result.m20 = xaxis.z; result.m21 = yaxis.z; result.m22 = zaxis.z;
+
+        result.m30 = -xaxis.dot(eye);
+        result.m31 = -yaxis.dot(eye);
+        result.m32 = -zaxis.dot(eye);
+        
+        return result;
     }
 
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
