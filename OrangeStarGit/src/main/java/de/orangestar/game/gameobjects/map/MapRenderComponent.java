@@ -56,6 +56,9 @@ public class MapRenderComponent extends UnitRenderComponent {
             updateData();
         }
         
+        int chunksX = (int) Math.ceil(_tmpRenderWidth  / (_tilemapTileWidth  * MapChunk.CHUNK_SIZE)) + 1;
+        int chunksY = (int) Math.ceil(_tmpRenderHeight / (_tilemapTileHeight * MapChunk.CHUNK_SIZE)) + 1;
+        System.out.println( chunksX + "/" + chunksY);
 
         super.onRender();
     } 
@@ -75,8 +78,14 @@ public class MapRenderComponent extends UnitRenderComponent {
 //        }
         //
         
-        if (_tilemaps != null && _tilemaps.length > 0 && _tilemaps[0].length > 0 && _tilemaps[0][0] != null) {
-            _tilemaps[0][0].onDestroy();
+        if (_tilemaps != null) {
+            for(ModernTileMap[] maps : _tilemaps) {
+                for(ModernTileMap map : maps) {
+                    if (map != null) {
+                        map.onDestroy();
+                    }
+                }
+            }
         }
         
         // CREATE DATA

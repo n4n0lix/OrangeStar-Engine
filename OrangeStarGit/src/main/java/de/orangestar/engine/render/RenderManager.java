@@ -14,6 +14,7 @@ import org.lwjgl.opengl.GLContext;
 import de.orangestar.engine.AbstractManager;
 import de.orangestar.engine.GameObject;
 import de.orangestar.engine.World;
+import de.orangestar.engine.render.camera.Camera;
 import de.orangestar.engine.render.component.RenderComponent;
 import de.orangestar.engine.values.Matrix4f;
 import de.orangestar.engine.values.Matrix4f.Order;
@@ -61,6 +62,8 @@ public class RenderManager extends AbstractManager {
         GL11.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         GL11.glViewport(0, 0, _mainWindow.getRenderWidth(), _mainWindow.getRenderHeight());
 
+        _camera.updateView();
+        
         // Use a priority queue to sort all rendermodules by its rendering priority
         PriorityQueue<RenderComponent> renderingQueue = new PriorityQueue<>(10, new RenderComponent.RenderingPriorityComparer());
         
@@ -95,6 +98,14 @@ public class RenderManager extends AbstractManager {
 	 */
 	public GLWindow getMainWindow() {
 	    return _mainWindow;
+	}
+	
+	public Camera getCamera() {
+	    return _camera;
+	}
+	
+	public void setActiveCamera(Camera camera) {
+	    _camera = camera;
 	}
 	
 	/**
@@ -183,6 +194,7 @@ public class RenderManager extends AbstractManager {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	
 	private GLWindow _mainWindow;
+	private Camera   _camera;
 
     private float       _extrapolation;
     

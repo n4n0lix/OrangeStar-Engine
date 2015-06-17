@@ -27,17 +27,19 @@ public class Map extends GameObject {
         
         
         UnitPhysicsComponent     physics = new UnitPhysicsComponent(this);
-        MapInputComponent   input   = new MapInputComponent(this, physics);
         MapRenderComponent  render  = new MapRenderComponent(this, logic);
 
         // Set the components
         setLogicComponent(logic);
         setPhysicComponent(physics);
-        setInputComponent(input);
         setRenderComponent(render);
 
     }
 
+    
+    public UnitPhysicsComponent getPhysicsModule() {
+        return (UnitPhysicsComponent) super.getPhysicsModule();
+    }
     
     private static MapSurface[][] generateTestData() {
 

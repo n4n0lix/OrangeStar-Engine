@@ -68,7 +68,7 @@ public class GameObject {
         _moduleInput = moduleInput;
     }
     
-    public PhysicsComponent getPhysicModule() {
+    public PhysicsComponent getPhysicsModule() {
         return _modulePhysic;
     }
 

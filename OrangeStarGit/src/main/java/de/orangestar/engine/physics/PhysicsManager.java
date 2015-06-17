@@ -15,8 +15,8 @@ public class PhysicsManager extends AbstractManager {
     public void update() {
         // 1# Move objects in world
         for(GameObject obj : World.Get()) {
-            if (obj.getPhysicModule() != null) {
-                obj.getPhysicModule().onUpdate();
+            if (obj.getPhysicsModule() != null) {
+                obj.getPhysicsModule().onUpdate();
             }
         }
         
