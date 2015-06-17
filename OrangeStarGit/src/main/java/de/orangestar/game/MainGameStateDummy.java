@@ -101,6 +101,14 @@ public class MainGameStateDummy extends GameState {
 
         _zoom *= 1f + -mouse.getScrollOffset() * ZOOM_SPEED * GameManager.DELTA_TIME;
         
+        if (_zoom < 0.25f) {
+            _zoom = 0.25f;
+        }
+        
+        if (_zoom > 2f) {
+            _zoom = 2f;
+        }
+        
         // Apply Zoom
         GLWindow window = RenderManager.Get().getMainWindow();
         
