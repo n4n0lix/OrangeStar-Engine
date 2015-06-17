@@ -44,5 +44,10 @@ public class Pair<K, V> {
         return true;
     }
     
+    @Override
+    public String toString() {
+    	return "[" + x + "," + y + "]";
+    }
+    
 
 }

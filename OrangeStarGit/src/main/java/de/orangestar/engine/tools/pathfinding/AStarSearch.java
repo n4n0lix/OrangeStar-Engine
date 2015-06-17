@@ -21,32 +21,235 @@ public class AStarSearch implements Pathfinding{
 		List<Pair<Integer, Integer>> path = new LinkedList<>();
 		int distance = 0;
 		path.add(new Pair<>(startX, startY));
+		System.out.println(Math.pow(3,2));
 		
-		while(posX != _destX && posY != _destY) {
+		while((posX != _destX && posY != _destY) || distance < 0) {
 			boolean next = false;
 			Pair<Integer, Integer> p = Pair.New(-1, -1); // create new Pair, setting correct value later
 			_area[posX][posY] = false; // mark current node
 			double minDist =  Integer.MAX_VALUE; // look for minimum distance
-			for(int i = 0; i < 3; i++) {
-				if(_area[posX-1+i][posY-1] == true && estimate(posX-1+i, posY-1) + distance +1 <= minDist) { // save minimum distance if distance is lower, also create new Pair that we need later.
-					minDist = estimate(posX-1+i, posY-1);
-					p = new Pair<>(posX-1+i, posY-1);
+			if(posX == 0 && posY == 0) {
+				if(_area[posX+1][posY] == true && estimate(posX+1, posY) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX+1, posY);
+					p = new Pair<>(posX+1, posY);
 				}
-				if(_area[posX-1+i][posY] == true && estimate(posX-1+i, posY) + distance +1 <= minDist) {
-					minDist = estimate(posX-1+i, posY);
-					p = new Pair<>(posX-1+i, posY);
+				if(_area[posX+1][posY+1] == true && estimate(posX+1, posY+1) + distance +1 <= minDist+ distance +1) {
+					minDist = estimate(posX+1, posY+1);
+					p = new Pair<>(posX+1, posY+1);
 				}
-				if(_area[posX-1+i][posY+1] == true && estimate(posX-1+i, posY+1) + distance +1 <= minDist) {
-					minDist = estimate(posX-1+i, posY+1) + distance;
-					p = new Pair<>(posX-1+i, posY+1);
+				if(_area[posX][posY+1] == true && estimate(posX, posY+1) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX, posY+1);
+					p = new Pair<>(posX, posY+1);
 				}
-				if(minDist == Integer.MAX_VALUE && i == 2) { //if no minimum is found, then go to previous node back
+				if(minDist == Integer.MAX_VALUE) { //if no minimum is found, then go to previous node back
 					Pair<Integer, Integer> deadEnd = path.remove(path.size()-1);
 					_area[deadEnd.x][deadEnd.y] = false;
 					next = true;
 					distance--;
 					posX = previousX;
 					posY = previousY;
+				}
+			}else if(posX == 0 && posY == _area[posX].length-1) {
+				if(_area[posX+1][posY] == true && estimate(posX+1, posY) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX+1, posY);
+					p = new Pair<>(posX+1, posY);
+				}
+				if(_area[posX+1][posY-1] == true && estimate(posX+1, posY-1) + distance +1 <= minDist+ distance +1) {
+					minDist = estimate(posX+1, posY-1);
+					p = new Pair<>(posX+1, posY-1);
+				}
+				if(_area[posX][posY-1] == true && estimate(posX, posY-1) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX, posY-1);
+					p = new Pair<>(posX, posY-1);
+				}
+				if(minDist == Integer.MAX_VALUE) { //if no minimum is found, then go to previous node back
+					Pair<Integer, Integer> deadEnd = path.remove(path.size()-1);
+					_area[deadEnd.x][deadEnd.y] = false;
+					next = true;
+					distance--;
+					posX = previousX;
+					posY = previousY;
+				}
+			}else if(posX == 0) {
+				if(_area[posX+1][posY] == true && estimate(posX+1, posY) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX+1, posY);
+					p = new Pair<>(posX+1, posY);
+				}
+				if(_area[posX+1][posY+1] == true && estimate(posX+1, posY+1) + distance +1 <= minDist+ distance +1) {
+					minDist = estimate(posX+1, posY+1);
+					p = new Pair<>(posX+1, posY+1);
+				}
+				if(_area[posX+1][posY-1] == true && estimate(posX+1, posY-1) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX+1, posY-1);
+					p = new Pair<>(posX+1, posY-1);
+				}
+				if(_area[posX][posY-1] == true && estimate(posX, posY-1) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX, posY-1);
+					p = new Pair<>(posX, posY-1);
+				}
+				if(_area[posX][posY+1] == true && estimate(posX, posY+1) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX, posY+1);
+					p = new Pair<>(posX, posY+1);
+				}
+				if(minDist == Integer.MAX_VALUE) { //if no minimum is found, then go to previous node back
+					Pair<Integer, Integer> deadEnd = path.remove(path.size()-1);
+					_area[deadEnd.x][deadEnd.y] = false;
+					next = true;
+					distance--;
+					posX = previousX;
+					posY = previousY;
+				}
+			}else if(posX == _area.length -1 && posY == 0) {
+				if(_area[posX-1][posY] == true && estimate(posX-1, posY) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX-1, posY);
+					p = new Pair<>(posX-1, posY);
+				}
+				if(_area[posX-1][posY+1] == true && estimate(posX-1, posY+1) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX-1, posY+1);
+					p = new Pair<>(posX-1, posY+1);
+				}
+				if(_area[posX][posY+1] == true && estimate(posX, posY+1) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX, posY+1);
+					p = new Pair<>(posX, posY+1);
+				}
+				if(minDist == Integer.MAX_VALUE) { //if no minimum is found, then go to previous node back
+					Pair<Integer, Integer> deadEnd = path.remove(path.size()-1);
+					_area[deadEnd.x][deadEnd.y] = false;
+					next = true;
+					distance--;
+					posX = previousX;
+					posY = previousY;
+				}
+			}else if(posX == _area.length -1 && posY == _area[posX].length -1) {
+				if(_area[posX-1][posY] == true && estimate(posX-1, posY) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX-1, posY);
+					p = new Pair<>(posX-1, posY);
+				}
+				if(_area[posX-1][posY-1] == true && estimate(posX-1, posY-1) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX-1, posY-1);
+					p = new Pair<>(posX-1, posY-1);
+				}
+				if(_area[posX][posY-1] == true && estimate(posX, posY-1) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX, posY-1);
+					p = new Pair<>(posX, posY-1);
+				}
+				if(minDist == Integer.MAX_VALUE) { //if no minimum is found, then go to previous node back
+					Pair<Integer, Integer> deadEnd = path.remove(path.size()-1);
+					_area[deadEnd.x][deadEnd.y] = false;
+					next = true;
+					distance--;
+					posX = previousX;
+					posY = previousY;
+				}
+			}else if(posX == _area.length -1) {
+				if(_area[posX-1][posY] == true && estimate(posX-1, posY) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX-1, posY);
+					p = new Pair<>(posX-1, posY);
+				}
+				if(_area[posX-1][posY+1] == true && estimate(posX-1, posY+1) + distance +1 <= minDist+ distance +1) {
+					minDist = estimate(posX-1, posY+1);
+					p = new Pair<>(posX-1, posY+1);
+				}
+				if(_area[posX-1][posY-1] == true && estimate(posX-1, posY-1) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX-1, posY-1);
+					p = new Pair<>(posX-1, posY-1);
+				}
+				if(_area[posX][posY-1] == true && estimate(posX, posY-1) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX, posY-1);
+					p = new Pair<>(posX, posY-1);
+				}
+				if(_area[posX][posY+1] == true && estimate(posX, posY+1) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX, posY+1);
+					p = new Pair<>(posX, posY+1);
+				}
+				if(minDist == Integer.MAX_VALUE) { //if no minimum is found, then go to previous node back
+					Pair<Integer, Integer> deadEnd = path.remove(path.size()-1);
+					_area[deadEnd.x][deadEnd.y] = false;
+					next = true;
+					distance--;
+					posX = previousX;
+					posY = previousY;
+				}
+			}else if(posY == 0) {
+				if(_area[posX+1][posY] == true && estimate(posX+1, posY) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX+1, posY);
+					p = new Pair<>(posX+1, posY);
+				}
+				if(_area[posX+1][posY+1] == true && estimate(posX+1, posY+1) + distance +1 <= minDist+ distance +1) {
+					minDist = estimate(posX+1, posY+1);
+					p = new Pair<>(posX+1, posY+1);
+				}
+				if(_area[posX-1][posY] == true && estimate(posX-1, posY) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX-1, posY);
+					p = new Pair<>(posX-1, posY);
+				}
+				if(_area[posX][posY+1] == true && estimate(posX, posY+1) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX, posY+1);
+					p = new Pair<>(posX, posY+1);
+				}
+				if(_area[posX-1][posY+1] == true && estimate(posX-1, posY+1) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX-1, posY+1);
+					p = new Pair<>(posX-1, posY+1);
+				}
+				if(minDist == Integer.MAX_VALUE) { //if no minimum is found, then go to previous node back
+					Pair<Integer, Integer> deadEnd = path.remove(path.size()-1);
+					_area[deadEnd.x][deadEnd.y] = false;
+					next = true;
+					distance--;
+					posX = previousX;
+					posY = previousY;
+				}
+			}else if(posY == _area.length -1) {
+				if(_area[posX+1][posY] == true && estimate(posX+1, posY) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX+1, posY);
+					p = new Pair<>(posX+1, posY);
+				}
+				if(_area[posX+1][posY-1] == true && estimate(posX+1, posY-1) + distance +1 <= minDist+ distance +1) {
+					minDist = estimate(posX+1, posY-1);
+					p = new Pair<>(posX+1, posY-1);
+				}
+				if(_area[posX-1][posY] == true && estimate(posX-1, posY) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX-1, posY);
+					p = new Pair<>(posX-1, posY);
+				}
+				if(_area[posX][posY-1] == true && estimate(posX, posY-1) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX, posY-1);
+					p = new Pair<>(posX, posY-1);
+				}
+				if(_area[posX-1][posY-1] == true && estimate(posX-1, posY-1) + distance +1 <= minDist+ distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+					minDist = estimate(posX-1, posY-1);
+					p = new Pair<>(posX-1, posY-1);
+				}
+				if(minDist == Integer.MAX_VALUE) { //if no minimum is found, then go to previous node back
+					Pair<Integer, Integer> deadEnd = path.remove(path.size()-1);
+					_area[deadEnd.x][deadEnd.y] = false;
+					next = true;
+					distance--;
+					posX = previousX;
+					posY = previousY;
+				}
+			}else {
+				for(int i = 0; i < 3; i++) {
+					if(_area[posX-1+i][posY-1] == true && estimate(posX-1+i, posY-1) + distance +1 <= minDist + distance +1) { // save minimum distance if distance is lower, also create new Pair that we need later.
+						minDist = estimate(posX-1+i, posY-1);
+						p = new Pair<>(posX-1+i, posY-1);
+					}
+					if(_area[posX-1+i][posY] == true && estimate(posX-1+i, posY) + distance +1 <= minDist + distance +1) {
+						minDist = estimate(posX-1+i, posY);
+						p = new Pair<>(posX-1+i, posY);
+					}
+					if(_area[posX-1+i][posY+1] == true && estimate(posX-1+i, posY+1) + distance +1 <= minDist + distance +1) {
+						minDist = estimate(posX-1+i, posY+1);
+						p = new Pair<>(posX-1+i, posY+1);
+					}
+					if(minDist == Integer.MAX_VALUE && i == 2) { //if no minimum is found, then go to previous node back
+						Pair<Integer, Integer> deadEnd = path.remove(path.size()-1);
+						_area[deadEnd.x][deadEnd.y] = false;
+						next = true;
+						distance--;
+						posX = previousX;
+						posY = previousY;
+					}
 				}
 			}
 			if(!next) {
@@ -71,7 +274,7 @@ public class AStarSearch implements Pathfinding{
 	}
 	
 	public double estimate(int posX, int posY) {
-		 return Math.sqrt(( Math.pow(2-4, 2) + Math.pow(4 - 6, 2)));
+		 return Math.sqrt(( Math.pow(_destX - posX, 2) + Math.pow(_destY - posY, 2)));
 	}
 	
 	private boolean[][] _area;
