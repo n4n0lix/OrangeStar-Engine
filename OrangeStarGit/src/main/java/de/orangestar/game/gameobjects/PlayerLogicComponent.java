@@ -40,10 +40,10 @@ public class PlayerLogicComponent extends UnitLogicComponent {
         }
         
         _pathFinder = new AStarSearch();
-        _currentPath = _pathFinder.findPath(world, x, y, 8, 5);
+        _currentPath = new LinkedList<>(_pathFinder.findPath(world, x, y, 8, 5));
         
         for(int i = 0; i < _currentPath.size(); i++) {
-            System.out.println(_currentPath.get(i));
+            System.out.println(_currentPath.peek());
         }
 	}
 
@@ -62,7 +62,7 @@ public class PlayerLogicComponent extends UnitLogicComponent {
         Vector3f position = getGameObject().getLocalTransform().position;
 
         int x = (int) position.x / MapChunk.TILE_SIZE;
-        int y = (int) position.x / MapChunk.TILE_SIZE;
+        int y = (int) position.y / MapChunk.TILE_SIZE;
         
         // Check if we arrived our current target location
         if (_currentTarget != null && x == _currentTarget.x && y == _currentTarget.y) {
@@ -73,7 +73,7 @@ public class PlayerLogicComponent extends UnitLogicComponent {
         // Try to get a new target location if we haven't one
         if (_currentTarget == null && !_currentPath.isEmpty()) {
             _index++;
-            _currentTarget = _currentPath.get(_index);
+            _currentTarget = _currentPath.poll();
             DebugManager.Get().debug(PlayerLogicComponent.class, "Player AI new target location (" + _currentTarget.x + "/" + _currentTarget.y + ")");
         }
         
@@ -101,7 +101,7 @@ public class PlayerLogicComponent extends UnitLogicComponent {
 	
     private Pathfinding                    _pathFinder;
 	private Pair<Integer,Integer>          _currentTarget;
-	private List<Pair<Integer,Integer>>   _currentPath;
+	private Queue<Pair<Integer,Integer>>   _currentPath;
 
 	private UnitPhysicsComponent _physics;
 }
