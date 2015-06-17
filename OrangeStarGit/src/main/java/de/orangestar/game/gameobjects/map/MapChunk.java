@@ -16,7 +16,9 @@ public class MapChunk {
     /**
      * The chunk size (width and height)
      */
-    public static final int CHUNK_SIZE = 32;
+    public static final int     CHUNK_SIZE = 32;
+    
+    public static final int     TILE_SIZE = 16;
     
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */

@@ -9,10 +9,6 @@ public class UnitLogicComponent extends LogicComponent {
 		super(obj);
 	}
 
-	
-	
-
-
 	@Override
 	public void onUpdate() {
 		getGameObject().setGlobalLastTransform(Transform.duplicate(getGameObject().getGlobalTransform()));

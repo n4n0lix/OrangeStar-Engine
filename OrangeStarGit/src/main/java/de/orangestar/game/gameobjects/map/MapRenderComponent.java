@@ -33,9 +33,6 @@ public class MapRenderComponent extends UnitRenderComponent {
         _tmpRenderWidth = -1;
         _tmpRenderHeight = -1;
 
-        _tilemapTileWidth  = 50f;
-        _tilemapTileHeight = 50f;
-
         setLayer(0);
     }
 
@@ -56,8 +53,8 @@ public class MapRenderComponent extends UnitRenderComponent {
             updateData();
         }
         
-        int chunksX = (int) Math.ceil(_tmpRenderWidth  / (_tilemapTileWidth  * MapChunk.CHUNK_SIZE)) + 1;
-        int chunksY = (int) Math.ceil(_tmpRenderHeight / (_tilemapTileHeight * MapChunk.CHUNK_SIZE)) + 1;
+        int chunksX = (int) Math.ceil(_tmpRenderWidth  / (MapChunk.TILE_SIZE * MapChunk.CHUNK_SIZE)) + 1;
+        int chunksY = (int) Math.ceil(_tmpRenderHeight / (MapChunk.TILE_SIZE * MapChunk.CHUNK_SIZE)) + 1;
         // System.out.println( chunksX + "/" + chunksY);
 
         super.onRender();
@@ -94,8 +91,8 @@ public class MapRenderComponent extends UnitRenderComponent {
         float scaleX = unitScale.x;
         float scaleY = unitScale.y;
         
-        float pxTilemapWidth  = _tilemapTileWidth  * scaleX * MapChunk.CHUNK_SIZE;
-        float pxTilemapHeight = _tilemapTileHeight * scaleY * MapChunk.CHUNK_SIZE;
+        float pxTilemapWidth  = MapChunk.TILE_SIZE * scaleX * MapChunk.CHUNK_SIZE;
+        float pxTilemapHeight = MapChunk.TILE_SIZE * scaleY * MapChunk.CHUNK_SIZE;
         
         int x = 0;
         int y = 0;
@@ -112,7 +109,7 @@ public class MapRenderComponent extends UnitRenderComponent {
         MapChunk chunk = _logic.getChunk(x, y);
         
         if (chunk != null) {
-            ModernTileMap tilemap = new ModernTileMap(TILESET, 50, 50, _tilemapTileWidth, _tilemapTileHeight);
+            ModernTileMap tilemap = new ModernTileMap(TILESET, 16, 16, MapChunk.TILE_SIZE, MapChunk.TILE_SIZE);
             tilemap.setAnchorType(AnchorType.MID);
             tilemap.setTransform(
                     new Transform(
@@ -164,8 +161,6 @@ public class MapRenderComponent extends UnitRenderComponent {
     
     private GLWindow            _window;
     private ModernTileMap[][]   _tilemaps;    
-    private float               _tilemapTileWidth;
-    private float               _tilemapTileHeight;
     
     private int                 _tmpRenderWidth,  _tmpRenderHeight;
     private int                 _tmpChunkScrollX, _tmpChunkScrollY;
@@ -174,8 +169,8 @@ public class MapRenderComponent extends UnitRenderComponent {
     /*                           Private Static                           */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
-    private static Texture TILESET = new Texture("textures/prisonarchitect.png");
-//    private static Texture TILESET = new Texture("textures/WorldTileSetDummy_16x16.png");
+//    private static Texture TILESET = new Texture("textures/prisonarchitect.png");
+    private static Texture TILESET = new Texture("textures/WorldTileSetDummy_16x16.png");
     
     private static Surface WATER = new Surface()
                                         .nonsolid()

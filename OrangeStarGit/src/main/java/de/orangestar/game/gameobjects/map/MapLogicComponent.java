@@ -26,23 +26,23 @@ public class MapLogicComponent extends UnitLogicComponent {
         
         Transform localTransform = getGameObject().getLocalTransform();
         
-        if ( localTransform.position.x < MapChunk.CHUNK_SIZE * 50f ) {
-            localTransform.position.x += MapChunk.CHUNK_SIZE * 50f;
+        if ( localTransform.position.x < MapChunk.CHUNK_SIZE * MapChunk.TILE_SIZE) {
+            localTransform.position.x += MapChunk.CHUNK_SIZE * MapChunk.TILE_SIZE;
             globalChunkScrollX++;
         }
         
         if ( localTransform.position.x > 0f ) {
-            localTransform.position.x -= MapChunk.CHUNK_SIZE * 50f;
+            localTransform.position.x -= MapChunk.CHUNK_SIZE * MapChunk.TILE_SIZE;
             globalChunkScrollX--;
         }
         
-        if ( localTransform.position.y < MapChunk.CHUNK_SIZE * 50f ) {
-            localTransform.position.y += MapChunk.CHUNK_SIZE * 50f;
+        if ( localTransform.position.y < MapChunk.CHUNK_SIZE * MapChunk.TILE_SIZE ) {
+            localTransform.position.y += MapChunk.CHUNK_SIZE * MapChunk.TILE_SIZE;
             globalChunkScrollY++;
         }
         
         if ( localTransform.position.y > 0f ) {
-            localTransform.position.y -= MapChunk.CHUNK_SIZE * 50f;
+            localTransform.position.y -= MapChunk.CHUNK_SIZE * MapChunk.TILE_SIZE;
             globalChunkScrollY--;
         }
     }

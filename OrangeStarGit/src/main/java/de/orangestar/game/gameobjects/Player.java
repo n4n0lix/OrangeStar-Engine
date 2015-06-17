@@ -9,12 +9,10 @@ import de.orangestar.engine.values.Vector3f;
 
 public class Player extends GameObject {
 
-    public Player() {      	
-        getLocalTransform().scale(new Vector3f(2f,2f,1f));
-        
+    public Player() {      	        
         // Setup and link components
-        UnitLogicComponent   logic  = new PlayerLogicComponent(this);
         UnitPhysicsComponent physic = new UnitPhysicsComponent(this);
+        UnitLogicComponent   logic  = new PlayerLogicComponent(this, physic);
         UnitRenderComponent  render = new PlayerRenderComponent(this);
         
         // Set the components

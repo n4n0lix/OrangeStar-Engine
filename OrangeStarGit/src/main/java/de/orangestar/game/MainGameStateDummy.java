@@ -117,7 +117,7 @@ public class MainGameStateDummy extends GameState {
         float width_2  = width/2;
         float height_2 = height/2;
         
-        camera.setViewport(-width_2 , -height_2, width_2, height_2);
+        camera.setViewport( -width_2, -height_2, width_2, height_2 );
     }
     
     private Player             player = new Player();
