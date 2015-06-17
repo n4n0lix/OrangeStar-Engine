@@ -58,7 +58,7 @@ public class MapRenderComponent extends UnitRenderComponent {
         
         int chunksX = (int) Math.ceil(_tmpRenderWidth  / (_tilemapTileWidth  * MapChunk.CHUNK_SIZE)) + 1;
         int chunksY = (int) Math.ceil(_tmpRenderHeight / (_tilemapTileHeight * MapChunk.CHUNK_SIZE)) + 1;
-        System.out.println( chunksX + "/" + chunksY);
+        // System.out.println( chunksX + "/" + chunksY);
 
         super.onRender();
     } 

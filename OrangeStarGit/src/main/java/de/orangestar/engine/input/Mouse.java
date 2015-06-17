@@ -7,6 +7,7 @@ public class Mouse {
 	private boolean _button2Pressed;
 	private double  _xPos;
 	private double  _yPos;
+	private double  _lastScroll;
 	
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	/*                               GETTER                               */
@@ -31,6 +32,10 @@ public class Mouse {
 	public boolean getButton2() {
 		return _button2Pressed;
 	}
+	
+	public double getLastScroll() {
+		return _lastScroll;
+	}
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	/*                               SETTTER                              */
@@ -54,6 +59,10 @@ public class Mouse {
 
 	public void setButton2(boolean b) {
 		_button2Pressed = b;
+	}
+	
+	public void setLastScroll(double d) {
+		_lastScroll = d;
 	}
 
 	// static class MousePosition extends GLFWCursorPosCallback{

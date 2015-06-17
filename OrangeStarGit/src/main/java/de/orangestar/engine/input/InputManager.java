@@ -4,6 +4,7 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
+import org.lwjgl.glfw.GLFWScrollCallback;
 
 import de.orangestar.engine.AbstractManager;
 import de.orangestar.engine.GameObject;
@@ -52,6 +53,15 @@ public class InputManager extends AbstractManager {
 						break;
 					case 2: _mouse.setButton2(action == 1 || action == 2);
 				}		
+			}
+	    	
+	    });
+	    GLFW.glfwSetScrollCallback(windowHandle, _mouseScrollCallback = new GLFWScrollCallback() {
+
+			@Override
+			public void invoke(long window, double xoffset, double yoffset) {
+				_mouse.setLastScroll(yoffset);
+				
 			}
 	    	
 	    });
@@ -108,6 +118,7 @@ public class InputManager extends AbstractManager {
 	private Mouse 			   _mouse;
 	private GLFWCursorPosCallback      _cursorPosCallback;
 	private GLFWMouseButtonCallback    _mouseButtonCallback;
+	private GLFWScrollCallback		   _mouseScrollCallback;
 
     // Keyboard
     private GLFWKeyCallback     _keyCallback;
