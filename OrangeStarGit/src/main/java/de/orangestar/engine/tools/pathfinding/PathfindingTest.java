@@ -2,6 +2,7 @@ package de.orangestar.engine.tools.pathfinding;
 
 import static org.junit.Assert.*;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +48,21 @@ public class PathfindingTest {
 			assertEquals((testPath.get(i)), generatedPath.get(i));
 		}
 
+	}
+	
+	@Test
+	public void invalidPath() {
+		_find = new AStarSearch();
+		boolean[][] area = new boolean[10][10];
+		for(int i = 0; i < 10; i++) {
+			for(int j = 0; j < 10; j++) {
+				area[i][j] = true;
+			}
+		}
+		area[1][1] = false;
+		area[5][5] = false;
+		assertEquals(null, _find.findPath(area, 1, 1, 4, 4));
+		assertEquals(null, _find.findPath(area, 1, 2, 5, 5));
 	}
 	
 	private Pathfinding _find;

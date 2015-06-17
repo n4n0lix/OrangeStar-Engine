@@ -12,6 +12,10 @@ public class AStarSearch implements Pathfinding{
 	}
 	
 	public List<Pair<Integer, Integer>> findPath(boolean[][] area, int startX, int startY, int destX, int destY) {
+		
+		if(!area[startX][startY]|| !area[destX][destY]) {
+			return null;
+		}
 		_area = area;
 		setDestination(destX, destY);
 		int posX = startX;
