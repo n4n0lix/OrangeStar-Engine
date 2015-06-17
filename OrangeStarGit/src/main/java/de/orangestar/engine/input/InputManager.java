@@ -60,8 +60,7 @@ public class InputManager extends AbstractManager {
 
 			@Override
 			public void invoke(long window, double xoffset, double yoffset) {
-				_mouse.setLastScroll(yoffset);
-				
+				_mouse.addScrollOffset(yoffset);
 			}
 	    	
 	    });
@@ -94,6 +93,8 @@ public class InputManager extends AbstractManager {
                 obj.getInputModule().onUpdate();
             }
         }
+        
+        _mouse.setScrollOffset(0.0);
     }
     	
 	@Override

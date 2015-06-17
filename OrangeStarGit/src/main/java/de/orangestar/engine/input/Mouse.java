@@ -7,7 +7,11 @@ public class Mouse {
 	private boolean _button2Pressed;
 	private double  _xPos;
 	private double  _yPos;
-	private double  _lastScroll;
+	private double  _scrollOffset;
+	
+	public void addScrollOffset(double offset) {
+		_scrollOffset += offset;
+	}
 	
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	/*                               GETTER                               */
@@ -33,8 +37,8 @@ public class Mouse {
 		return _button2Pressed;
 	}
 	
-	public double getLastScroll() {
-		return _lastScroll;
+	public double getScrollOffset() {
+		return _scrollOffset;
 	}
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -61,8 +65,8 @@ public class Mouse {
 		_button2Pressed = b;
 	}
 	
-	public void setLastScroll(double d) {
-		_lastScroll = d;
+	public void setScrollOffset(double d) {
+		_scrollOffset = d;
 	}
 
 	// static class MousePosition extends GLFWCursorPosCallback{
