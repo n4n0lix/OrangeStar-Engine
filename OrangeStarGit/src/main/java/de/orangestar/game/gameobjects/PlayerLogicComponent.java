@@ -2,6 +2,7 @@ package de.orangestar.game.gameobjects;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import de.orangestar.engine.GameObject;
@@ -28,8 +29,8 @@ public class PlayerLogicComponent extends UnitLogicComponent {
         
         Vector3f position = getGameObject().getLocalTransform().position;
 
-        int x = (int) position.x * MapChunk.TILE_SIZE;
-        int y = (int) position.y * MapChunk.TILE_SIZE;
+        int x = 0;//(int) position.x * MapChunk.TILE_SIZE;
+        int y = 0;//(int) position.y * MapChunk.TILE_SIZE;
         
         boolean[][] world = new boolean[MapChunk.CHUNK_SIZE][MapChunk.CHUNK_SIZE];
         for(int i = 0; i < world.length; i++) {
@@ -39,7 +40,11 @@ public class PlayerLogicComponent extends UnitLogicComponent {
         }
         
         _pathFinder = new AStarSearch();
-        _currentPath = new LinkedList<>(_pathFinder.findPath(world, x, y, 15, 7));
+        _currentPath = _pathFinder.findPath(world, x, y, 8, 5);
+        
+        for(int i = 0; i < _currentPath.size(); i++) {
+            System.out.println(_currentPath.get(i));
+        }
 	}
 
 	@Override
@@ -67,8 +72,9 @@ public class PlayerLogicComponent extends UnitLogicComponent {
         
         // Try to get a new target location if we haven't one
         if (_currentTarget == null && !_currentPath.isEmpty()) {
-            _currentTarget = _currentPath.poll();
-            DebugManager.Get().debug(PlayerLogicComponent.class, "Player AI new target location (" + _currentTarget.x + "/" + _currentTarget.x + ")");
+            _index++;
+            _currentTarget = _currentPath.get(_index);
+            DebugManager.Get().debug(PlayerLogicComponent.class, "Player AI new target location (" + _currentTarget.x + "/" + _currentTarget.y + ")");
         }
         
         // Do movement into the direction of the current target
@@ -91,9 +97,11 @@ public class PlayerLogicComponent extends UnitLogicComponent {
         }
 	}
 	
+	private int _index = 0;
+	
     private Pathfinding                    _pathFinder;
 	private Pair<Integer,Integer>          _currentTarget;
-	private Queue<Pair<Integer,Integer>>   _currentPath;
+	private List<Pair<Integer,Integer>>   _currentPath;
 
 	private UnitPhysicsComponent _physics;
 }
