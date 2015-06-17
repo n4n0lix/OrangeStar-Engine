@@ -33,12 +33,14 @@ public class PathfindingTest {
 		testPath.add(Pair.New(3, 3));
 		testPath.add(Pair.New(4, 4));
 		testPath.add(Pair.New(5, 5));
-		List<Pair<Integer, Integer>> generatedPath = _find.findPath(area, 0, 0, 5, 5);
+		testPath.add(Pair.New(6, 5));
+		List<Pair<Integer, Integer>> generatedPath = _find.findPath(area, 0, 0, 6, 5);
 		
 		assertEquals(testPath.size(), generatedPath.size());
 		for(int i = 0; i < generatedPath.size(); i++) {
 			System.out.println(generatedPath.get(i));
 		}
+		assertEquals(testPath.get(testPath.size()-1), generatedPath.get(generatedPath.size()-1));
 		for(int i = 0; i < testPath.size(); i++) {
 			assertEquals((testPath.get(i)), generatedPath.get(i));
 		}

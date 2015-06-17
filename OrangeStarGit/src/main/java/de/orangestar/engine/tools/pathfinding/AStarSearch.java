@@ -23,7 +23,7 @@ public class AStarSearch implements Pathfinding{
 		path.add(new Pair<>(startX, startY));
 		System.out.println(Math.pow(3,2));
 		
-		while((posX != _destX && posY != _destY) || distance < 0) {
+		while((posX != _destX || posY != _destY) && distance >= 0) {
 			boolean next = false;
 			Pair<Integer, Integer> p = Pair.New(-1, -1); // create new Pair, setting correct value later
 			_area[posX][posY] = false; // mark current node
