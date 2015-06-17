@@ -3,6 +3,7 @@ package de.orangestar.game;
 import de.orangestar.engine.World;
 import de.orangestar.engine.input.InputManager;
 import de.orangestar.engine.input.Keyboard;
+import de.orangestar.engine.input.Mouse;
 import de.orangestar.engine.logic.GameManager;
 import de.orangestar.engine.logic.GameState;
 import de.orangestar.engine.physics.component.UnitPhysicsComponent;
@@ -19,7 +20,7 @@ public class MainGameStateDummy extends GameState {
     /*                            Public Static                           */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
-    public static float ZOOM_SPEED   = 0.5f;
+    public static float ZOOM_SPEED   = 4f;
     public static float SCROLL_SPEED = 256f;
     
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -96,26 +97,19 @@ public class MainGameStateDummy extends GameState {
     }
     
     private void handleZooming() {
-        Keyboard keyboard = InputManager.Get().getKeyboard();
-        
-        if (keyboard.Q.isDown()) {        
-            _zoom *= 1f - ZOOM_SPEED * GameManager.DELTA_TIME;
-        }
-        
-        if (keyboard.E.isDown()) {
-            _zoom *= 1f + ZOOM_SPEED * GameManager.DELTA_TIME;
-        }
+        Mouse mouse = InputManager.Get().getMouse();
+
+        _zoom *= 1f + -mouse.getScrollOffset() * ZOOM_SPEED * GameManager.DELTA_TIME;
         
         // Apply Zoom
-        RenderManager manager = RenderManager.Get();
-        GLWindow window = manager.getMainWindow();
+        GLWindow window = RenderManager.Get().getMainWindow();
         
         float width  = window.getRenderWidth()  * _zoom;
         float height = window.getRenderHeight() * _zoom;
         float width_2  = width/2;
         float height_2 = height/2;
         
-        manager.setProjectionMatrix(Matrix4f.ortho2D( -width_2 , width_2 , height_2, -height_2));
+        camera.setViewport(-width_2 , -height_2, width_2, height_2);
     }
     
     private Player             player = new Player();
@@ -123,5 +117,6 @@ public class MainGameStateDummy extends GameState {
 
     private OrthographicCamera camera = new OrthographicCamera();
     
-    private float _zoom = 1f;
+    private float _zoom             = 1f;
+
 }

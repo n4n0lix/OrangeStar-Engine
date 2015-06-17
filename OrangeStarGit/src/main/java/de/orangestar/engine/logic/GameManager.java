@@ -45,8 +45,11 @@ public class GameManager extends AbstractManager {
         // 1# Update the logic if we are behind
         while ( lag >= GameManager.TICK_TIME )
         {
-
-            // 1.1# Manage Gamestate
+            
+            // 1.1# Handle new input
+            InputManager.Get().update();
+            
+            // 1.2# Manage Gamestate
             if (gamestate != null) {
                 if (gamestate.hasFinished()) {
                     gamestate.onStateEnd();
@@ -61,10 +64,7 @@ public class GameManager extends AbstractManager {
                 
                 gamestate.onUpdate();
             }
-        
-            // 1.2# Handle new input
-            InputManager.Get().update();
-            
+
             // 1.3# Update the world
             for(GameObject obj : World.Get()) {
                 if (obj.getLogicModule() != null) {

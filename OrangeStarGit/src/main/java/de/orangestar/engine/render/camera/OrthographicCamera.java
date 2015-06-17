@@ -1,8 +1,10 @@
 package de.orangestar.engine.render.camera;
 
+import de.orangestar.engine.input.InputManager;
 import de.orangestar.engine.render.RenderManager;
 import de.orangestar.engine.values.Matrix4f;
 import de.orangestar.engine.values.Rectangle4f;
+import de.orangestar.engine.values.Vector3f;
 
 public class OrthographicCamera implements Camera {
 
@@ -15,6 +17,24 @@ public class OrthographicCamera implements Camera {
     }
     
     public void updateView() {
+        
+        if (InputManager.Get().getKeyboard().I.isDown()) {
+            _eye.z += 16f;
+        }
+        
+        if (InputManager.Get().getKeyboard().K.isDown()) {
+            _eye.z -= 16f;
+        }
+        
+        if (InputManager.Get().getKeyboard().J.isDown()) {
+            _eye.x -= 16f;
+        }
+        
+        if (InputManager.Get().getKeyboard().L.isDown()) {
+            _eye.x += 16f;
+        }
+        
+        RenderManager.Get().setViewMatrix(Matrix4f.lookAtLH(Vector3f.Z_AXIS.neg(), Vector3f.zero(), Vector3f.Y_AXIS));
         RenderManager.Get().setProjectionMatrix(Matrix4f.ortho2D(_viewport._x, _viewport._width, _viewport._height, _viewport._y));
     }
     
@@ -34,5 +54,6 @@ public class OrthographicCamera implements Camera {
     /*                              Private                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
+    private Vector3f    _eye = new Vector3f(0,0,0);
     private Rectangle4f _viewport;
 }

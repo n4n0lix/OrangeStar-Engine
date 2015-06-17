@@ -62,6 +62,7 @@ public class RenderManager extends AbstractManager {
         GL11.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         GL11.glViewport(0, 0, _mainWindow.getRenderWidth(), _mainWindow.getRenderHeight());
 
+        // Camera setups view
         _camera.updateView();
         
         // Use a priority queue to sort all rendermodules by its rendering priority

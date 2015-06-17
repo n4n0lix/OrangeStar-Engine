@@ -5,6 +5,10 @@ public class Vector3f {
     public static final int ComponentsCount = 3;
     public static final int ByteSize = 3 * Float.BYTES;
     
+    public static final Vector3f X_AXIS = new Vector3f(1f, 0f, 0f);
+    public static final Vector3f Y_AXIS = new Vector3f(0f, 1f, 0f);
+    public static final Vector3f Z_AXIS = new Vector3f(0f, 0f, 1f);
+    
     public static Vector3f zero() {
         return new Vector3f(0f, 0f, 0f);
     }
