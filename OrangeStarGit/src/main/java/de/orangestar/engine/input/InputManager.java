@@ -60,7 +60,7 @@ public class InputManager extends AbstractManager {
 
 			@Override
 			public void invoke(long window, double xoffset, double yoffset) {
-				_mouse.addScrollOffset(yoffset);
+				_asyncScrollOffset += yoffset;
 			}
 	    	
 	    });
@@ -94,7 +94,8 @@ public class InputManager extends AbstractManager {
             }
         }
         
-        _mouse.setScrollOffset(0.0);
+        _mouse.setScrollOffset(_asyncScrollOffset);
+        _asyncScrollOffset = 0.0;
     }
     	
 	@Override
@@ -120,6 +121,7 @@ public class InputManager extends AbstractManager {
 	private GLFWCursorPosCallback      _cursorPosCallback;
 	private GLFWMouseButtonCallback    _mouseButtonCallback;
 	private GLFWScrollCallback		   _mouseScrollCallback;
+	private double					   _asyncScrollOffset;
 
     // Keyboard
     private GLFWKeyCallback     _keyCallback;
