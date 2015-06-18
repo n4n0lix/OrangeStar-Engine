@@ -220,12 +220,12 @@ public class Matrix4f {
         yaxis = zaxis.cross(xaxis);
         
         result = Matrix4f.one();
-        result.m00 = xaxis.x; result.m01 = yaxis.x; result.m02 = zaxis.x; 
-        result.m10 = xaxis.y; result.m11 = yaxis.y; result.m12 = zaxis.y;
-        result.m20 = xaxis.z; result.m21 = yaxis.z; result.m22 = zaxis.z;
+        result.m00 = xaxis.x; result.m10 = yaxis.x; result.m20 = zaxis.x; 
+        result.m01 = xaxis.y; result.m11 = yaxis.y; result.m21 = zaxis.y;
+        result.m02 = xaxis.z; result.m12 = yaxis.z; result.m22 = zaxis.z;
 
-        result.m30 = -xaxis.dot(eye);
-        result.m31 = -yaxis.dot(eye);
+        result.m03 = -xaxis.dot(eye);
+        result.m13 = -yaxis.dot(eye);
         result.m32 = -zaxis.dot(eye);
         
         return result;
