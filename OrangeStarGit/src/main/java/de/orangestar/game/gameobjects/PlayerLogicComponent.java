@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Random;
 
 import de.orangestar.engine.GameObject;
 import de.orangestar.engine.debug.DebugManager;
@@ -17,7 +18,7 @@ import de.orangestar.game.gameobjects.map.MapChunk;
 
 public class PlayerLogicComponent extends UnitLogicComponent {
 
-    public static final float MOVE_SPEED = 16f;
+    public static final float MOVE_SPEED = 20f;
     
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
@@ -26,25 +27,8 @@ public class PlayerLogicComponent extends UnitLogicComponent {
     public PlayerLogicComponent(GameObject obj, UnitPhysicsComponent physics) {
 		super(obj);
 		_physics = physics;
-        
-        Vector3f position = getGameObject().getLocalTransform().position;
 
-        int x = 0;//(int) position.x * MapChunk.TILE_SIZE;
-        int y = 0;//(int) position.y * MapChunk.TILE_SIZE;
-        
-        boolean[][] world = new boolean[MapChunk.CHUNK_SIZE][MapChunk.CHUNK_SIZE];
-        for(int i = 0; i < world.length; i++) {
-            for(int p = 0; p < world[0].length; p++) {
-                world[i][p] = true;
-            }
-        }
-        
         _pathFinder = new AStarSearch();
-        _currentPath = new LinkedList<>(_pathFinder.findPath(world, x, y, 8, 5));
-        
-        for(int i = 0; i < _currentPath.size(); i++) {
-            System.out.println(_currentPath.peek());
-        }
 	}
 
 	@Override
@@ -61,8 +45,21 @@ public class PlayerLogicComponent extends UnitLogicComponent {
 	private void handleAIMovement() {
         Vector3f position = getGameObject().getLocalTransform().position;
 
-        int x = (int) position.x / MapChunk.TILE_SIZE;
-        int y = (int) position.y / MapChunk.TILE_SIZE;
+        int x = (int) position.x / MapChunk.TILE_SIZE + 16;
+        int y = (int) position.y / MapChunk.TILE_SIZE + 16;
+        
+        if (_currentPath == null || _currentPath.isEmpty()) {
+            // Constantly generate test data
+            boolean[][] world = new boolean[MapChunk.CHUNK_SIZE][MapChunk.CHUNK_SIZE];
+            for(int i = 0; i < world.length; i++) {
+                for(int p = 0; p < world[0].length; p++) {
+                    world[i][p] = true;
+                }
+            }
+            
+            Random rnd = new Random();
+            _currentPath = new LinkedList<>(_pathFinder.findPath(world, x, y, rnd.nextInt(32), rnd.nextInt(32)));
+        }
         
         // Check if we arrived our current target location
         if (_currentTarget != null && x == _currentTarget.x && y == _currentTarget.y) {
@@ -72,7 +69,6 @@ public class PlayerLogicComponent extends UnitLogicComponent {
         
         // Try to get a new target location if we haven't one
         if (_currentTarget == null && !_currentPath.isEmpty()) {
-            _index++;
             _currentTarget = _currentPath.poll();
             DebugManager.Get().debug(PlayerLogicComponent.class, "Player AI new target location (" + _currentTarget.x + "/" + _currentTarget.y + ")");
         }
@@ -96,9 +92,7 @@ public class PlayerLogicComponent extends UnitLogicComponent {
             }
         }
 	}
-	
-	private int _index = 0;
-	
+
     private Pathfinding                    _pathFinder;
 	private Pair<Integer,Integer>          _currentTarget;
 	private Queue<Pair<Integer,Integer>>   _currentPath;

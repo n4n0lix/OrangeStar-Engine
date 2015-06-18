@@ -1,12 +1,14 @@
 package de.orangestar.game;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import de.orangestar.engine.World;
 import de.orangestar.engine.input.InputManager;
 import de.orangestar.engine.input.Keyboard;
 import de.orangestar.engine.input.Mouse;
 import de.orangestar.engine.logic.GameManager;
 import de.orangestar.engine.logic.GameState;
-import de.orangestar.engine.physics.component.UnitPhysicsComponent;
 import de.orangestar.engine.render.GLWindow;
 import de.orangestar.engine.render.RenderManager;
 import de.orangestar.engine.render.camera.OrthographicCamera;
@@ -29,11 +31,14 @@ public class MainGameStateDummy extends GameState {
     
     @Override
     public void onStateStart() {
+
         // Setup World
         World.Get().addGameObject(map);
-    	map.addChild(player);
-    	
-        World.Get().addGameObject(player);
+        for(int i = 0; i < 200; i++) {
+            Player player = new Player();
+            map.addChild(player);
+            World.Get().addGameObject(player);
+        }
         
         // Setup Rendering
         RenderManager render = RenderManager.Get();
@@ -74,25 +79,20 @@ public class MainGameStateDummy extends GameState {
         Keyboard keyboard = InputManager.Get().getKeyboard();
         float speed = SCROLL_SPEED;
         
-        // MOVE MAP
-        if (keyboard.ShiftLeft.isDown()) {
-            speed *= 4f;
-        }
-        
         if (keyboard.W.isDown()) {
-            map.getPhysicsModule()._velocityY += speed;
+            camera.getEye().y -= SCROLL_SPEED * GameManager.DELTA_TIME;
         }
         
         if (keyboard.S.isDown()) {
-            map.getPhysicsModule()._velocityY -= speed;
+            camera.getEye().y += SCROLL_SPEED * GameManager.DELTA_TIME;
         }
         
         if (keyboard.A.isDown()) {
-            map.getPhysicsModule()._velocityX += speed;
+            camera.getEye().x -= SCROLL_SPEED * GameManager.DELTA_TIME;
         }
         
         if (keyboard.D.isDown()) {
-            map.getPhysicsModule()._velocityX -= speed;
+            camera.getEye().x += SCROLL_SPEED * GameManager.DELTA_TIME;
         }
     }
     
@@ -120,7 +120,6 @@ public class MainGameStateDummy extends GameState {
         camera.setViewport( -width_2, -height_2, width_2, height_2 );
     }
     
-    private Player             player = new Player();
     private Map                map    = new Map();
 
     private OrthographicCamera camera = new OrthographicCamera();
