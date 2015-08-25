@@ -1,0 +1,16 @@
+de\orangestar\engine\values\Vector4fTest.class
+de\orangestar\game\MainGameStateTest.class
+de\orangestar\engine\tools\pathfinding\PathfindingTest.class
+de\orangestar\engine\GameObjectTest$1.class
+de\orangestar\engine\values\Color4Test.class
+de\orangestar\engine\ComponentTest$1.class
+de\orangestar\engine\GameObjectTest.class
+de\orangestar\engine\values\Matrix4fTest.class
+de\orangestar\engine\GameObjectTest$3.class
+de\orangestar\engine\values\Vector3fTest.class
+de\orangestar\game\gameobjects\tree\TreeTest.class
+de\orangestar\engine\ComponentTest.class
+de\orangestar\engine\GameObjectTest$2.class
+de\orangestar\engine\values\Vector2fTest.class
+de\orangestar\engine\WorldTest.class
+de\orangestar\engine\logic\LogicManagerTest.class
