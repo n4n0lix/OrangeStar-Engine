@@ -1,5 +1,10 @@
 package de.orangestar.engine.debug;
 
+/**
+ * A standard engine exception.
+ * 
+ * @author Oliver &amp; Basti
+ */
 public class EngineException extends RuntimeException {
 
     private static final long serialVersionUID = -4878444553674955311L;

@@ -1,41 +1,47 @@
 package de.orangestar.engine;
 
-
 /**
  * Base class for Components.
+ * The gameobject has to be set in the constructor and cannot be changed afterwards.
  * 
- * @author Basti
+ * @author Oliver &amp; Basti
  */
 public abstract class Component {
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-        
-	public Component(GameObject obj) {
-		setGameObject(obj);
-	}
 	
+	/**
+	 * Implement component initialization here. (Called upon everytime the component is assigned to a gameobject)
+	 */
+	public void onInitialize() { }
+    
+    /**
+     * Implement component deinitialization here. (Called upon everytime the component is removed from a gameobject)
+     */
+    public void onDeinitialize() { }
+    
     /**
      * Returns the associated gameobject.
      * @return A gameobject
      */
     public GameObject getGameObject() {
-        return _parent;
+        return _gameObject;
     }
     
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                              Package                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    
-    public void setGameObject(GameObject obj) {
-        _parent = obj;
+
+    void setGameObject(GameObject object) {
+        _gameObject = object;
     }
     
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                              Private                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
-    private GameObject _parent;
+    private GameObject _gameObject;
     
 }

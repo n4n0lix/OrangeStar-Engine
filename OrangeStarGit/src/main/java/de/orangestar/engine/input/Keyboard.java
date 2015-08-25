@@ -2,103 +2,167 @@ package de.orangestar.engine.input;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
-import de.orangestar.engine.debug.DebugManager;
 
 /**
  * A keyboard that contains multiple {@link Key}s.
  * 
- * @author Basti
+ * @author Oliver &amp; Basti
  */
-public class Keyboard implements Iterable<Key> {
+public class Keyboard {
 
-    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    /*                              Private                               */
-    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    
-    private List<Key> _allKeys = new LinkedList<>();
-    
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-    public final Key Esc        = new Key(this, GLFW_KEY_ESCAPE);
-    public final Key Enter      = new Key(this, GLFW_KEY_ENTER);
-    public final Key Spacebar   = new Key(this, GLFW_KEY_SPACE);
-    public final Key ShiftLeft  = new Key(this, GLFW_KEY_LEFT_SHIFT);
-    public final Key ShiftRight = new Key(this, GLFW_KEY_RIGHT_SHIFT);
-    public final Key CtrlLeft   = new Key(this, GLFW_KEY_LEFT_CONTROL);
-    public final Key CtrlRight  = new Key(this, GLFW_KEY_RIGHT_CONTROL);
-    public final Key AltLeft    = new Key(this, GLFW_KEY_LEFT_ALT);
-    public final Key AltRight   = new Key(this, GLFW_KEY_RIGHT_ALT);
-    public final Key CapsLock   = new Key(this, GLFW_KEY_CAPS_LOCK);
-    public final Key Tab        = new Key(this, GLFW_KEY_TAB);
+    public Keyboard() {
+        _listAllKeys      = new ArrayList<>();
+        _allKeys          = new Key[512];
+        _readOnlyAllKeys  = Collections.unmodifiableList(_listAllKeys);
+        
+        _0 = addKey( new Key( GLFW_KEY_0 ));
+        _1 = addKey( new Key( GLFW_KEY_1 ));
+        _2 = addKey( new Key( GLFW_KEY_2 ));
+        _3 = addKey( new Key( GLFW_KEY_3 ));
+        _4 = addKey( new Key( GLFW_KEY_4 ));
+        _5 = addKey( new Key( GLFW_KEY_5 ));
+        _6 = addKey( new Key( GLFW_KEY_6 ));
+        _7 = addKey( new Key( GLFW_KEY_7 ));
+        _8 = addKey( new Key( GLFW_KEY_8 ));
+        _9 = addKey( new Key( GLFW_KEY_9 ));
+        
+        Esc        = addKey( new Key( GLFW_KEY_ESCAPE ));       
+        Enter      = addKey( new Key( GLFW_KEY_ENTER ));        
+        Spacebar   = addKey( new Key( GLFW_KEY_SPACE ));        
+        ShiftLeft  = addKey( new Key( GLFW_KEY_LEFT_SHIFT ));   
+        ShiftRight = addKey( new Key( GLFW_KEY_RIGHT_SHIFT ));  
+        CtrlLeft   = addKey( new Key( GLFW_KEY_LEFT_CONTROL )); 
+        CtrlRight  = addKey( new Key( GLFW_KEY_RIGHT_CONTROL ));
+        AltLeft    = addKey( new Key( GLFW_KEY_LEFT_ALT ));     
+        AltRight   = addKey( new Key( GLFW_KEY_RIGHT_ALT ));    
+        CapsLock   = addKey( new Key( GLFW_KEY_CAPS_LOCK ));    
+        Tab        = addKey( new Key( GLFW_KEY_TAB ));   
+        
+        A = addKey( new Key( GLFW_KEY_A ));
+        B = addKey( new Key( GLFW_KEY_B ));
+        C = addKey( new Key( GLFW_KEY_C ));
+        D = addKey( new Key( GLFW_KEY_D ));
+        E = addKey( new Key( GLFW_KEY_E ));
+        F = addKey( new Key( GLFW_KEY_F ));
+        G = addKey( new Key( GLFW_KEY_G ));
+        H = addKey( new Key( GLFW_KEY_H ));
+        I = addKey( new Key( GLFW_KEY_I ));
+        J = addKey( new Key( GLFW_KEY_J ));
+        K = addKey( new Key( GLFW_KEY_K ));
+        L = addKey( new Key( GLFW_KEY_L ));
+        M = addKey( new Key( GLFW_KEY_M ));
+        N = addKey( new Key( GLFW_KEY_N ));
+        O = addKey( new Key( GLFW_KEY_O ));
+        P = addKey( new Key( GLFW_KEY_P ));
+        Q = addKey( new Key( GLFW_KEY_Q ));
+        R = addKey( new Key( GLFW_KEY_R ));
+        S = addKey( new Key( GLFW_KEY_S ));
+        T = addKey( new Key( GLFW_KEY_T ));
+        U = addKey( new Key( GLFW_KEY_U ));
+        V = addKey( new Key( GLFW_KEY_V ));
+        W = addKey( new Key( GLFW_KEY_W ));
+        X = addKey( new Key( GLFW_KEY_X ));
+        Y = addKey( new Key( GLFW_KEY_Y ));
+        Z = addKey( new Key( GLFW_KEY_Z ));
+        
+        F1  = addKey( new Key( GLFW_KEY_F1 )); 
+        F2  = addKey( new Key( GLFW_KEY_F2 )); 
+        F3  = addKey( new Key( GLFW_KEY_F3 )); 
+        F4  = addKey( new Key( GLFW_KEY_F4 )); 
+        F5  = addKey( new Key( GLFW_KEY_F5 )); 
+        F6  = addKey( new Key( GLFW_KEY_F6 )); 
+        F7  = addKey( new Key( GLFW_KEY_F7 )); 
+        F8  = addKey( new Key( GLFW_KEY_F8 )); 
+        F9  = addKey( new Key( GLFW_KEY_F9 )); 
+        F10 = addKey( new Key( GLFW_KEY_F10 ));
+        F11 = addKey( new Key( GLFW_KEY_F11 ));
+        F12 = addKey( new Key( GLFW_KEY_F12 ));
+    }
     
-    public final Key _0 = new Key(this, GLFW_KEY_0);
-    public final Key _1 = new Key(this, GLFW_KEY_1);
-    public final Key _2 = new Key(this, GLFW_KEY_2);
-    public final Key _3 = new Key(this, GLFW_KEY_3);
-    public final Key _4 = new Key(this, GLFW_KEY_4);
-    public final Key _5 = new Key(this, GLFW_KEY_5);
-    public final Key _6 = new Key(this, GLFW_KEY_6);
-    public final Key _7 = new Key(this, GLFW_KEY_7);
-    public final Key _8 = new Key(this, GLFW_KEY_8);
-    public final Key _9 = new Key(this, GLFW_KEY_9);
+    public final Key Esc;
+    public final Key Enter;
+    public final Key Spacebar;
+    public final Key ShiftLeft;
+    public final Key ShiftRight;
+    public final Key CtrlLeft;
+    public final Key CtrlRight;
+    public final Key AltLeft;
+    public final Key AltRight;
+    public final Key CapsLock;
+    public final Key Tab;
     
-    public final Key A = new Key(this, GLFW_KEY_A);
-    public final Key B = new Key(this, GLFW_KEY_B);
-    public final Key C = new Key(this, GLFW_KEY_C);
-    public final Key D = new Key(this, GLFW_KEY_D);
-    public final Key E = new Key(this, GLFW_KEY_E);
-    public final Key F = new Key(this, GLFW_KEY_F);
-    public final Key G = new Key(this, GLFW_KEY_G);
-    public final Key H = new Key(this, GLFW_KEY_H);
-    public final Key I = new Key(this, GLFW_KEY_I);
-    public final Key J = new Key(this, GLFW_KEY_J);
-    public final Key K = new Key(this, GLFW_KEY_K);
-    public final Key L = new Key(this, GLFW_KEY_L);
-    public final Key M = new Key(this, GLFW_KEY_M);
-    public final Key N = new Key(this, GLFW_KEY_N);
-    public final Key O = new Key(this, GLFW_KEY_O);
-    public final Key P = new Key(this, GLFW_KEY_P);
-    public final Key Q = new Key(this, GLFW_KEY_Q);
-    public final Key R = new Key(this, GLFW_KEY_R);
-    public final Key S = new Key(this, GLFW_KEY_S);
-    public final Key T = new Key(this, GLFW_KEY_T);
-    public final Key U = new Key(this, GLFW_KEY_U);
-    public final Key V = new Key(this, GLFW_KEY_V);
-    public final Key W = new Key(this, GLFW_KEY_W);
-    public final Key X = new Key(this, GLFW_KEY_X);
-    public final Key Y = new Key(this, GLFW_KEY_Y);
-    public final Key Z = new Key(this, GLFW_KEY_Z);
+    public final Key _0;
+    public final Key _1;
+    public final Key _2;
+    public final Key _3;
+    public final Key _4;
+    public final Key _5;
+    public final Key _6;
+    public final Key _7;
+    public final Key _8;
+    public final Key _9;
+
+    public final Key A;
+    public final Key B;
+    public final Key C;
+    public final Key D;
+    public final Key E;
+    public final Key F;
+    public final Key G;
+    public final Key H;
+    public final Key I;
+    public final Key J;
+    public final Key K;
+    public final Key L;
+    public final Key M;
+    public final Key N;
+    public final Key O;
+    public final Key P;
+    public final Key Q;
+    public final Key R;
+    public final Key S;
+    public final Key T;
+    public final Key U;
+    public final Key V;
+    public final Key W;
+    public final Key X;
+    public final Key Y;
+    public final Key Z;
     
-    public final Key F1  = new Key(this, GLFW_KEY_F1);
-    public final Key F2  = new Key(this, GLFW_KEY_F2);
-    public final Key F3  = new Key(this, GLFW_KEY_F3);
-    public final Key F4  = new Key(this, GLFW_KEY_F4);
-    public final Key F5  = new Key(this, GLFW_KEY_F5);
-    public final Key F6  = new Key(this, GLFW_KEY_F6);
-    public final Key F7  = new Key(this, GLFW_KEY_F7);
-    public final Key F8  = new Key(this, GLFW_KEY_F8);
-    public final Key F9  = new Key(this, GLFW_KEY_F9);
-    public final Key F10 = new Key(this, GLFW_KEY_F10);
-    public final Key F11 = new Key(this, GLFW_KEY_F11);
-    public final Key F12 = new Key(this, GLFW_KEY_F12);
+    public final Key F1;
+    public final Key F2;
+    public final Key F3;
+    public final Key F4;
+    public final Key F5;
+    public final Key F6;
+    public final Key F7;
+    public final Key F8;
+    public final Key F9;
+    public final Key F10;
+    public final Key F11;
+    public final Key F12;
     
-    @Override
-    public Iterator<Key> iterator() {
-        return _allKeys.iterator();
+    /**
+     * Returns a read only list of all keys of this keyboard.
+     * @return A read only list of all keys of this keyboard
+     */
+    public List<Key> getKeys() {
+        return _readOnlyAllKeys;
     }
     
     public String toString() {
         StringBuilder builder = new StringBuilder("Keyboard { Pressed: ");
         
-        for(Key key : this) {
+        for(Key key : getKeys()) {
             if (key.getState().isDown()) {
-                builder.append(key._glfwKey).append(" ");
+                builder.append(key._glfwCode).append(" ");
             }
         }
         
@@ -109,8 +173,15 @@ public class Keyboard implements Iterable<Key> {
     /*                              Package                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
-    void addKey(Key key) {
-        _allKeys.add(key);
+    /**
+     * Adds a key.
+     * @param key A key
+     * @return The key
+     */
+    Key addKey(Key key) {
+        _listAllKeys.add(key);
+        _allKeys[key._glfwCode] = key;
+        return key;
     }
     
     /**
@@ -119,15 +190,20 @@ public class Keyboard implements Iterable<Key> {
      * @return A Key instance or null if no key of this keyboard instance represents glfwkey
      */
     Key getKeyByGLFW(int glfwkey) {
-        for(Key key : this) {
-            if (key._glfwKey == glfwkey) {
-                return key;
-            }
-        }
-        
-        DebugManager.Get().info(Keyboard.class, "Unkown key pressed: " + glfwkey);
-        
-        return null;
+    	if (glfwkey >= _allKeys.length || glfwkey < 0) {
+    		return null;
+    	}
+    	
+    	return _allKeys[glfwkey];
     }
         
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    /*                              Private                               */
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    
+    private List<Key> _listAllKeys;           
+    private Key[] _allKeys;
+    private List<Key> _readOnlyAllKeys;
+    
+    
 }

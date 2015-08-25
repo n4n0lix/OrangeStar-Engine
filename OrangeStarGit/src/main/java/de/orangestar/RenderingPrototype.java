@@ -83,6 +83,8 @@ public class RenderingPrototype {
   
         // Configure our window
         glfwDefaultWindowHints(); // optional, the current window hints are already the default
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // the window will stay hidden after creation
         glfwWindowHint(GLFW_RESIZABLE, GL_TRUE); // the window will be resizable
   
@@ -102,7 +104,7 @@ public class RenderingPrototype {
                     glfwSetWindowShouldClose(window, GL_TRUE); // We will detect this in our rendering loop
             }
         });
-  
+
         // Get the resolution of the primary monitor
         ByteBuffer vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         // Center our window
@@ -111,16 +113,16 @@ public class RenderingPrototype {
             (GLFWvidmode.width(vidmode) - WIDTH) / 2,
             (GLFWvidmode.height(vidmode) - HEIGHT) / 2
         );
-  
+
         // Make the OpenGL context current
         glfwMakeContextCurrent(window);
         // Enable v-sync
         glfwSwapInterval(1);
-  
+
         // Make the window visible
         glfwShowWindow(window);
     }
-  
+
     private void loop() {
         // This line is critical for LWJGL's interoperation with GLFW's
         // OpenGL context, or any context that is managed externally.

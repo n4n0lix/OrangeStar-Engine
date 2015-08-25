@@ -1,64 +1,37 @@
 package de.orangestar.game.gameobjects.map;
 
 import de.orangestar.engine.GameObject;
-import de.orangestar.engine.physics.component.UnitPhysicsComponent;
-import de.orangestar.engine.tools.random.NoiseGenerator;
-import de.orangestar.engine.tools.random.PerlinNoiseGenerator;
+import de.orangestar.engine.render.OrthographicCamera;
+import de.orangestar.engine.render.RenderEngine;
 
+/**
+ * The Map gamobject.
+ * 
+ * @author Oliver &amp; Basti
+ */
 public class Map extends GameObject {
     
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
+	/**
+     * Creates the map
+     */
     public Map() {  
+        setName("Map#"+getUID());
+        
         // Initialize Test Data
-        getLocalTransform().scale(1f);
+        addTags("map");
 
-        // Setup and link components
-        MapLogicComponent   logic   = new MapLogicComponent(this);
-        for(int x = -8; x < 8; x++) {
-            for(int y = -8; y < 8; y++) {
-                MapChunk chunk = new MapChunk(x, y);
-                chunk.setData(generateTestData());
-                logic.addChunk(x, y, chunk);
-            }
-        }
-        
-        
-        UnitPhysicsComponent     physics = new UnitPhysicsComponent(this);
-        MapRenderComponent  render  = new MapRenderComponent(this, logic);
-
-        // Set the components
-        setLogicComponent(logic);
-        setPhysicComponent(physics);
-        setRenderComponent(render);
-
+        // Components
+        setLogicComponent( new MapLogicComponent() );
+        setRenderComponent( new MapRenderComponent() );
     }
 
-    
-    public UnitPhysicsComponent getPhysicsModule() {
-        return (UnitPhysicsComponent) super.getPhysicsModule();
-    }
-    
-    private static MapSurface[][] generateTestData() {
-
-        double[][] randomNoise = NoiseGenerator.translate(new PerlinNoiseGenerator().generate2DMap(MapChunk.CHUNK_SIZE, MapChunk.CHUNK_SIZE), -1d, 1d, 0d, 3d);
-
-        MapSurface[][] data = new MapSurface[MapChunk.CHUNK_SIZE][MapChunk.CHUNK_SIZE];
-        for(int x = 0; x < data.length; x++) {
-            for(int y = 0; y < data[0].length; y++) {
-                if (randomNoise[x][y] < 1d) {
-                    data[x][y] = MapSurface.WATER;
-                } else if(randomNoise[x][y] < 1.7d) {
-                    data[x][y] = MapSurface.DIRT;
-                } else {
-                    data[x][y] = MapSurface.GRASS;
-                }
-            }
-        }
-
-        return data;
+    @Override
+    public MapLogicComponent getLogicComponent() {
+        return (MapLogicComponent) super.getLogicComponent();
     }
 
 }

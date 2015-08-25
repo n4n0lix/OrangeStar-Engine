@@ -1,59 +1,65 @@
 package de.orangestar.engine.render.actor;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import org.lwjgl.opengl.GL11;
-
-import de.orangestar.engine.debug.DebugManager;
-import de.orangestar.engine.render.RenderManager;
+import de.orangestar.engine.render.IRenderEngine;
+import de.orangestar.engine.render.RenderEngine;
+import de.orangestar.engine.utils.Deinitializable;
+import de.orangestar.engine.values.Anchor;
+import de.orangestar.engine.values.Matrix4f;
 import de.orangestar.engine.values.Transform;
+import de.orangestar.engine.values.Vector3f;
 
-public abstract class Actor {
-
-    public enum AnchorType {
-        TOP_LEFT, TOP, TOP_RIGHT,
-        MID_LEFT, MID, MID_RIGHT,
-        BOT_LEFT, BOT, BOT_RIGHT;
-    }
-    
-//    public static class Animation {
-//        
-//        public static final String Idle    = "anim_idle";
-//        public static final String Walking = "anim_walking";
-//        public static final String Running = "anim_running";
-//        public static final String Jumping = "anim_jumping";
-//        
-//    }
-//    
-//    public class AnimPlayer {
-//        
-//        private String animName;
-//        private float  animStep;
-//        
-//        /**
-//         * Sets the new animation.
-//         * @param name
-//         */
-//        public void startAnimation(String name) {
-//            animName = name;
-//            animStep = 0.0f;
-//        }
-//        
-//    }
+/**
+ * Actors are filling the gap between hardware-near batches and the engines GameObject-Component system.
+ * Actors can be reused by multiple gameobjects because all they need to know is how to render themselfs at a 
+ * given location.
+ * 
+ * @author Oliver &amp; Basti
+ */
+public abstract class Actor implements Deinitializable {
         
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
+    /**
+     * Public-Constructor.
+     */
     public Actor() {
         _isVisible = true;
+        _anchor = Anchor.MID;
         _transform = new Transform();
         _children = new ArrayList<>();
     }
 
     /**
-     * If this actor is visible.
+     * If this actor is visible in the scene.
+     * @return If this actor is visible in the scene
+     */
+    public boolean isSceneVisible() {
+        if (!isVisible()) {
+            return false;
+        }
+        
+        Actor actor = getParent();
+        
+        while( actor != null ) {
+            if (!actor.isVisible()) {
+                return false;
+            }
+            
+            actor = actor.getParent();
+        }
+        
+        return true;
+    }
+    
+    /**
+     * If this actor is set as visible.
+     * @return If this actor is set as visible
      */
     public boolean isVisible() {
         return _isVisible;
@@ -61,22 +67,36 @@ public abstract class Actor {
     
     /**
      * Set the visibility.
-     * @param visible 
+     * @param visible The visibility
      */
     public void setVisible(boolean visible) {
         _isVisible = visible;
     }
-        
+      
     /**
-     * Adds a child actor to this one.
+     * If the <i>actor</i> is a child of this instance.
+     * @param actor A actor
+     * @return If the <i>actor</i> is a child of this instance
+     */
+    public boolean isChild(Actor actor) {
+        return _children.contains(actor);
+    }
+    
+    /**
+     * Adds a child actor to this one.<br>
+     * Preconditions:
+     * <ul>
+     *  <li><code>child != null</code>
+     *  <li><i>child</i> is not an ancestor of <i>this</i>
+     * </ul>
      * @param child An actor
      */
     public void addChild(Actor child) {
-        if (child._parent != null) {
-            DebugManager.Get().info(Actor.class, "Can't link child to parent, because child already has a parent!");
-            return;
-        }
+        // Preconditions:
+        assert child != null;
+        assert !hasChildParentCycle(this, child);
         
+        // Code:
         _children.add(child);
         child._parent = this;
     }
@@ -91,10 +111,12 @@ public abstract class Actor {
     }
     
     /**
-     * Returns all children of this actor.
+     * Returns a readonly list of all children of this actor.
+     * @return A readonly list of all children of this actor
      */
+    // TODO: Convert readonly list to memberfield
     public List<Actor> getChildren() {
-        return new ArrayList<>( _children );
+        return Collections.unmodifiableList( _children );
     }
     
     /**
@@ -105,96 +127,176 @@ public abstract class Actor {
         return _parent;
     }
         
+    /**
+     * Returns the transform that represents the local offset of this actor.
+     * @return The transform that represents the local offset of this actor
+     */
     public Transform getTransform() {
         return _transform;
     }
     
+    /**
+     * Sets the transform that represents the local offset of this actor.
+     * @param transform The transform
+     */
     public void setTransform(Transform transform) {
-        _transform = transform;
+        Transform.set(_transform, transform);
     }
     
-    public AnchorType getAnchorType() {
-        return _anchor;
-    }
-    
-    public void setAnchorType(AnchorType anchor) {
+    /**
+     * Sets the anchor of this image.
+     * @param anchor The anchor
+     */
+    public void setAnchor(Anchor anchor) {
         _anchor = anchor;
     }
     
     /**
-     * Renders this actor and then all it's children.
-     * @param parentTransform
+     * Returns the anchor of this image.
+     * @return Returns the anchor
      */
-    public void render(Transform parentTransform) {
-        if (!_isVisible) {
+    public Anchor getAnchor() {
+        return _anchor;
+    }
+
+    /**
+     * Renders this actor and then all it's children at the given transform.
+     * @param parentTransform The transform
+     */
+    public void render(IRenderEngine engine, Transform parentTransform) {
+        if (!_isVisible || _isDestroyed) {
             return;
         }
 
-        Transform transform = parentTransform.combine(_transform);
+        Matrix4f  renderMatrix          = Matrix4f.POOL.get();
+        Transform renderTransform       = Transform.POOL.get();
+        Transform copyCurrentTransform  = Transform.POOL.get();
         
-        RenderManager.Get().setWorldMatrix(transform.toMatrix4f());
-        onRender();
+        // Combine parentTransform with local _transform
+        Transform.set(renderTransform, parentTransform);
+        Transform.set(copyCurrentTransform, _transform);
+        anchorPosition(copyCurrentTransform.position, _anchor, copyCurrentTransform.scale);
         
-        for(Actor child : _children) {
-            child.render(transform);
+        Transform.combine(renderTransform, copyCurrentTransform);
+        
+        // Set the world matrix (the actual opengl rendering location) and render
+        Transform.toMatrix4f(renderTransform, renderMatrix);
+        engine.setWorldMatrix(renderMatrix);
+        onRender(engine);
+        
+        Matrix4f.POOL.release(renderMatrix);
+        Transform.POOL.release(copyCurrentTransform);
+        
+        // Render the children actors
+        for(int i = 0; i < _children.size(); i++) {
+            _children.get(i).render(engine, renderTransform);
         }
+        
+        // Cleanup rendering
+        Transform.POOL.release(renderTransform);
     }
 
-    public abstract void        onRender();
+    /**
+     * Destroys this actor and frees all it used resources.
+     */
+    public void onDeinitialize() {
+        onRelease();
+        _isDestroyed = true;
+    }
+    
+    /**
+     * If this actor has been destroyed and is not usable.
+     * @return If this actor has been destroyed and is not usable
+     */
+    public boolean isReleased() {
+        return _isDestroyed;
+    }
 
-    public abstract void        onDestroy();
+    /**
+     * When this method is called, all used resources shall be freed and the actor shall clean himself up.
+     */
+    public abstract void        onRelease();
+
+    /**
+     * Implement the actual rendering code here.
+     */
+    public abstract void        onRender(IRenderEngine engine);
         
+    /**
+     * Return the width for anchoring. 
+     * If the anchor is set to center, the positions x value is reduced by half of the width.
+     * @return The anchoring width
+     */
+    public abstract float       getWidth();
+    
+    /**
+     * Return the height. 
+     * If the anchor is set to middle, the positions y value is
+     * reduced by half of the anchoring height.
+     * @return The anchoring width
+     */
+    public abstract float       getHeight();
+    
+    /**
+     * Return the width for anchoring.
+     * If the anchor is set to middle, the positions y value is reduced by half of the anchoring height.
+     * @return The anchoring width
+     */
+    public abstract float       getDepth();
+    
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                              Private                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
     private boolean     _isVisible;
-    private AnchorType  _anchor;
+    private Anchor      _anchor;
 
     private Transform   _transform;
     private Actor       _parent;
     private List<Actor> _children;
+    private boolean     _isDestroyed;
     
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                           Private Static                           */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
-//    private static void linkParentWithChild(Actor parent, Actor child) {
-//        if (child == null) {
-//            return;
-//        }
-//
-//        if (parent == null) {
-//            return;
-//        }
-//
-//        if (parent._children.contains(child)) {
-//            return;
-//        }
-//        
-//        if (child._parent != null) {
-//            unlinkParentWithChild(child._parent, child);
-//        }
-//        
-//        parent._children.add(child);
-//        child._parent = parent;
-//    }
-//    
-//    private static void unlinkParentWithChild(Actor parent, Actor child) {
-//        if (child == null) {
-//            return;
-//        }
-//
-//        if (parent == null) {
-//            return;
-//        }
-//        
-//        if (!parent._children.contains(child)) {
-//            return;
-//        }
-//        
-//        parent._children.remove(child);
-//        child._parent = null;
-//    }
+    /**
+     * Tries to find a parent-child cycle (the <i>child</i> is already a parent of <i>parent</i>).
+     * @param parent The alleged parent actor
+     * @param child The alleged child actor
+     * @return If the <i>child</i> is already a parent of <i>parent</i>
+     */
+    private static boolean hasChildParentCycle(Actor parent, Actor child) {
+        while(parent._parent != null) {
+            if (parent._parent == child) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    private void anchorPosition(Vector3f out, Anchor anchor, Vector3f scale) {
+        // X
+        if (anchor.isXAxisCenter()) {
+            out.x -= getWidth() * scale.x * 0.5f ;
+        } else if (anchor.isRight()) {
+            out.x -= getWidth() * scale.x;
+        }
+        
+        // Y
+        if (anchor.isYAxisCenter()) {
+            out.y -= getHeight() * scale.y * 0.5f;
+        } else if (anchor.isBottom()) {
+            out.y -= getHeight() * scale.y;
+        }
+        
+        // Z
+        if (anchor.isZAxisCenter()) {
+            out.z -= getDepth() * scale.z * 0.5f;
+        } else if (anchor.isBottom()) {
+            out.z -= getDepth() * scale.z;
+        }
+    }
 
 }

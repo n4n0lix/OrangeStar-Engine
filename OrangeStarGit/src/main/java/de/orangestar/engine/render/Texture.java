@@ -5,31 +5,29 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-
-
-
-
-
-
-
 import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
-import de.orangestar.engine.debug.DebugManager;
+import de.orangestar.engine.debug.Logger;
 import de.orangestar.engine.debug.EngineException;
 import de.orangestar.engine.render.shader.Shader;
+import de.orangestar.engine.utils.Deinitializable;
 
-public class Texture {
+/**
+ * A texture that is usable for textured rendering.
+ * 
+ * @author Oliver &amp; Basti
+ */
+public class Texture implements Deinitializable {
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    /*                               PUBLIC                               */
+    /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
     public Texture(String path) {
@@ -54,7 +52,7 @@ public class Texture {
      * @param linearFiltering If the image shall be linear filtered
      */
     public Texture(BufferedImage img, boolean linearFiltering) {
-        this( bufferedImageToByteBuffer(img), img.getWidth(), img.getHeight(), linearFiltering);
+        this(bufferedImageToByteBuffer(img), img.getWidth(), img.getHeight(), linearFiltering);
     }
     
     /**
@@ -64,36 +62,38 @@ public class Texture {
      * @param height The height of the texture
      * @param linearFiltering If the image shall be linear filtered
      */
-    public Texture(ByteBuffer buffer, int width, int height, boolean linearFiltering) {
-        DebugManager.Get().glClearError();
-        
+    public Texture(ByteBuffer buffer, int width, int height, boolean linearFiltering) {   
         _width = width;
         _height = height;
         
         // 1# Configure texture object
         _id = GL11.glGenTextures();
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, _id);
+        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
         
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
-        
+
         if (!linearFiltering) {
-          GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-          GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST_MIPMAP_NEAREST);
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
         }
         else {
-            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
             GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
         }
-        //GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
 
         // 2# Load image data       
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA4, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
-        DebugManager.Get().glCheckError("Texture Creation");
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+        
+        GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
     }
     
     /**
-     * Sets this texture as the 'to use' texture. Texture unit 0 will be used.
+     * Sets this texture as the 'texture to use'. Texture unit 0 will be used.
+     * @param shader The shader
      */
     public void setAsActiveTexture(Shader shader) {
         setAsActiveTexture(shader, 0);
@@ -126,6 +126,12 @@ public class Texture {
         return _height;
     }
     
+
+    @Override
+    public void onDeinitialize() {
+        GL11.glDeleteTextures(_id);
+    }
+    
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -149,7 +155,7 @@ public class Texture {
     }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    /*                              PRIVATE                               */
+    /*                              Private                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
     private int _id;
@@ -158,9 +164,14 @@ public class Texture {
     private int _height;
     
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    /*                           PRIVATE STATIC                           */
+    /*                           Private Static                           */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+    /**
+     * Loads an image from a given file.
+     * @param file The file
+     * @return An image
+     */
     private static BufferedImage loadImage(File file) {
         try {
             return ImageIO.read(file);
@@ -197,7 +208,8 @@ public class Texture {
     
     /**
      * Simply maps an integer value onto the texture slot constants from OpenGL.
-     * @param slot
+     * @param slot The slot id
+     * @return The OpenGL texture slot constant or null if the slot doesn't exists
      */
     private static int glTextureSlot(int slot) {
         switch(slot) {
@@ -212,4 +224,5 @@ public class Texture {
             default: return -1;
         }
     }
+
 }

@@ -1,27 +1,25 @@
 package de.orangestar.engine.render.component;
 
-import de.orangestar.engine.GameObject;
-import de.orangestar.engine.render.RenderManager;
-import de.orangestar.engine.render.actor.Actor;
+import de.orangestar.engine.render.Camera;
+import de.orangestar.engine.render.IRenderEngine;
 import de.orangestar.engine.values.Transform;
 
-public class UnitRenderComponent extends RenderComponent {
+/**
+ * The unit implementation of the render component. The rendering position is
+ * interpolated between the current and the last transform to enable smooth
+ * rendering for moving gameobjects.
+ * 
+ * @author Oliver &amp; Basti
+ */
+public class UnitRenderComponent extends SimpleRenderComponent {
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-    public UnitRenderComponent(GameObject obj) {
-    	super(obj);
-    }
     
-    public void setActor(Actor actor) {
-        _actor = actor;
-    }
-
     @Override
-    public void onRender() {
-        if (_actor == null)  {
+    public void onUpdate(IRenderEngine engine, Camera camera) {
+        if (getActors().isEmpty())  {
             return;
         }
         
@@ -34,15 +32,15 @@ public class UnitRenderComponent extends RenderComponent {
         }
         
         // We try to predict where the next transform of this rendermodule would be, to ensure smooth rendering
-        Transform predictedT = Transform.interpolate(lastT, currentT, RenderManager.Get().getExtrapolation());
+        
+        Transform predictedT = Transform.POOL.get();
+        Transform.set(predictedT, lastT);
+        Transform.interpolate(predictedT, currentT, engine.getExtrapolation());
 
-        _actor.render(predictedT);
+        for(int i = 0; i < getActors().size(); i++) {
+            getActors().get(i).render(engine, predictedT);
+        }
+        
+        Transform.POOL.release(predictedT);
     }
-
-    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    /*                              Private                               */
-    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    
-    private Actor _actor;
-
 }
