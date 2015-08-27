@@ -105,9 +105,14 @@ public class PlayableGroup {
      */
     private void assignActionsToIdlePlayers() {
         for(Player player : _players) {
-            AIActionProcessor processor = player.getLogicComponent().getAIActionProcessor();
-            if (processor.isIdle() && !_actions.isEmpty()) {
-                processor.addAction(_actions.removeFirst());
+            PlayerLogicComponent logic = player.getLogicComponent();
+            
+            if (logic.isInitialized()) {
+                AIActionProcessor processor = logic.getAIActionProcessor();
+                
+                if (processor.isIdle() && !_actions.isEmpty()) {
+                    processor.addAction(_actions.removeFirst());
+                }
             }
         }
     }

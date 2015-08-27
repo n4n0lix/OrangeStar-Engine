@@ -242,7 +242,7 @@ public class Batch implements Deinitializable {
         boolean isIndexedRendering   = _curNumIndices > 0;
         boolean isInstancedRendering = _curNumInstances > 0;
 
-        _material.getShader().updateWVP(engine);
+        _material.getShader().setWVP(engine.getWVPBuffer());
         _material.getShader().bind();
         
         if (_material.getTexture() != null) {

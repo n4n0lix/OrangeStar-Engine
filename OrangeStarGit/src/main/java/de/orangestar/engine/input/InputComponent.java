@@ -7,7 +7,7 @@ import de.orangestar.engine.Component;
  * 
  * @author Oliver &amp; Basti
  */
-public class InputComponent extends Component {
+public abstract class InputComponent extends Component {
 	
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
@@ -16,6 +16,6 @@ public class InputComponent extends Component {
     /**
      * Implement component updates here. (Called on a frequently time by the corresponding manager)
      */
-    public void onUpdate() { }
-
+    public abstract void onUpdate();
+    
 }

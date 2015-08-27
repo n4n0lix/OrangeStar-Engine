@@ -1,5 +1,7 @@
 package de.orangestar.engine.logic;
 
+import de.orangestar.engine.World;
+
 public interface ILogicEngine {
     
     public static final long  TICK_RATE  = 100;
@@ -12,5 +14,8 @@ public interface ILogicEngine {
     public void         onUpdate();
     
     public void         onShutdown();
+    
+    public void         addWorld(World world);
+    public void         removeWorld(World world);
     
 }

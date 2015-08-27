@@ -37,12 +37,13 @@ public class PlayerLogicComponent extends LogicComponent {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
     @Override
-    public void onInitialize() {
-        super.onInitialize();
-        
+    protected void onInitialize() {
         _pathFinder  = new AStarSearch();
         _aiProcessor = new AIActionProcessor(this);
     }
+    
+    @Override
+    protected void onDeinitialize() { }
     
 	@Override
     public void onUpdate() {

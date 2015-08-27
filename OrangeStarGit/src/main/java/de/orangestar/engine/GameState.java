@@ -15,9 +15,7 @@ public abstract class GameState {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                              Public                                */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    
-    public GameState() { }
-    
+
     /**
      * If this gamestate has finished.
      * @return If this gamestate has finished

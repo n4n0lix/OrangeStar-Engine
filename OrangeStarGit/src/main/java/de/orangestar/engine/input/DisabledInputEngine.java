@@ -1,5 +1,7 @@
 package de.orangestar.engine.input;
 
+import de.orangestar.engine.World;
+
 public class DisabledInputEngine implements IInputEngine {
 
     @Override
@@ -24,7 +26,14 @@ public class DisabledInputEngine implements IInputEngine {
         return _keyboard;
     }
     
+    @Override
+    public void addWorld(World world) { }
+
+    @Override
+    public void removeWorld(World world) { }
+    
     private Mouse    _mouse;
     private Keyboard _keyboard;
+
 
 }

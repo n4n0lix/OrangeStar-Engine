@@ -15,15 +15,17 @@ import org.junit.Test;
 import de.orangestar.engine.input.InputComponent;
 import de.orangestar.engine.logic.LogicComponent;
 import de.orangestar.engine.physics.PhysicsComponent;
+import de.orangestar.engine.render.Camera;
+import de.orangestar.engine.render.IRenderEngine;
 import de.orangestar.engine.render.RenderComponent;
 
 public class GameObjectTest {
 
     @Before
     public void setup() {
-        fakeLogicComponent   = new LogicComponent()   { };
-        fakeRenderComponent  = new RenderComponent()  { };
-        fakeInputComponent   = new InputComponent()   { };
+        fakeLogicComponent   = new FakeLogicComponent();
+        fakeRenderComponent  = new FakeRenderComponent();
+        fakeInputComponent   = new FakeInputComponent();
         
         gameobject = new GameObject();
         gameobject.setLogicComponent(fakeLogicComponent);
@@ -119,4 +121,35 @@ public class GameObjectTest {
     private LogicComponent fakeLogicComponent;
     private RenderComponent fakeRenderComponent;
     private InputComponent fakeInputComponent;
+    
+    private class FakeLogicComponent extends LogicComponent {
+
+        @Override
+        protected void onInitialize() { }
+        @Override
+        protected void onDeinitialize() { }
+        
+    }
+    
+    private class FakeInputComponent extends InputComponent {
+
+        @Override
+        public void onUpdate() { }
+        @Override
+        protected void onInitialize() { }
+        @Override
+        protected void onDeinitialize() { }
+
+    }
+    
+    private class FakeRenderComponent extends RenderComponent {
+
+        @Override
+        public void onRender(IRenderEngine engine, Camera camera) { }
+        @Override
+        protected void onInitialize() { }
+        @Override
+        protected void onDeinitialize() { }
+        
+    }
 }

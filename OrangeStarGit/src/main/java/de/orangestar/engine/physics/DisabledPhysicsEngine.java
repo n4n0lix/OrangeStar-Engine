@@ -29,4 +29,10 @@ public class DisabledPhysicsEngine implements IPhysicsEngine {
         return new ArrayList<GameObject>();
     }
 
+    @Override
+    public void addWorld(World world) { }
+
+    @Override
+    public void removeWorld(World world) { }
+
 }

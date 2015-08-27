@@ -19,7 +19,7 @@ import de.orangestar.game.MainGameState;
 public class PropsModelRenderComponent extends UnitRenderComponent {
 
 	@Override
-	public void onInitialize() {
+    protected void onInitialize() {
 	    super.onInitialize();
 	    
 	    setLayer(MainGameState.LAYER_PROPS);

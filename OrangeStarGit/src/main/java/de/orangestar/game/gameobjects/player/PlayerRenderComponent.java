@@ -31,7 +31,7 @@ public class PlayerRenderComponent extends UnitRenderComponent {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
     @Override
-    public void onInitialize() {
+    protected void onInitialize() {
         super.onInitialize();
         
         _actor = new Image.Builder()
@@ -52,7 +52,7 @@ public class PlayerRenderComponent extends UnitRenderComponent {
     }
     
     @Override
-    public void onDeinitialize() {
+    protected void onDeinitialize() {
         super.onDeinitialize();
         
         removeActor(_actor);

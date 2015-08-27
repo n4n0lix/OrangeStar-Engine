@@ -16,11 +16,12 @@ public class PlayerPhysicsComponent extends PhysicsComponent {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
     @Override
-    public void onInitialize() {
-        super.onInitialize();
-        
+    protected void onInitialize() {
         setupCollisionBox();
     }
+    
+    @Override
+    protected void onDeinitialize() { }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                              Private                               */

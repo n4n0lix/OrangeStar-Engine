@@ -118,4 +118,20 @@ public class PhysicsEngine implements IPhysicsEngine {
 
     }
 
+    @Override
+    public void addWorld(World world) {
+        _worlds.add(world);
+    }
+
+    @Override
+    public void removeWorld(World world) {
+        _worlds.remove(world);
+    }
+    
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    /*                              Private                               */
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    
+    private List<World> _worlds;
+
 }

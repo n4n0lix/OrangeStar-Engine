@@ -19,12 +19,13 @@ public class TreeModelLogicComponent extends LogicComponent {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
     @Override
-    public void onInitialize() {
-        super.onInitialize();
-        
+    protected void onInitialize() {
         _trees = new LinkedList<TreeFlyweight>();
         _readOnlyTrees = Collections.unmodifiableList(_trees);
     }
+    
+    @Override
+    protected void onDeinitialize() { }
     
     /**
      * Adds a flyweight to the model.

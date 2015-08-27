@@ -64,7 +64,7 @@ public abstract class Camera {
         }
         
         for(RenderComponent comp : renderingQueue) {
-            comp.onUpdate(_engine, this);
+            comp.onRender(_engine, this);
         }
     }
     

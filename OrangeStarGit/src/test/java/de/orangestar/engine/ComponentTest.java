@@ -23,13 +23,13 @@ public class ComponentTest {
         
         LogicComponent fakeComponent = new LogicComponent() {
             @Override
-            public void onInitialize() { initialized.setValue(true); }
+            protected void onInitialize() { initialized.setValue(true); }
             
             @Override
             public void onUpdate() { updated.setValue(true); }
             
             @Override
-            public void onDeinitialize() { cleanUp.setValue(true); }
+            protected void onDeinitialize() { cleanUp.setValue(true); }
         };
         
         // 2# Execute a component lifecycle

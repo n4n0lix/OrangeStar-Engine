@@ -38,7 +38,7 @@ public class MapRenderComponent extends UnitRenderComponent {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
     @Override
-    public void onInitialize() {
+    protected void onInitialize() {
         super.onInitialize();
         
         _cache       = new HashMap<>();
@@ -59,7 +59,7 @@ public class MapRenderComponent extends UnitRenderComponent {
     }
     
     @Override
-    public void onUpdate(IRenderEngine engine, Camera camera) {
+    public void onRender(IRenderEngine engine, Camera camera) {
         checkIfCameraChanged(camera);
 
         if (_orthoCamera == null) {
@@ -69,7 +69,7 @@ public class MapRenderComponent extends UnitRenderComponent {
         reloadVisibleChangedChunks();
         updateVisibleChunks();
         
-        super.onUpdate(engine, camera);
+        super.onRender(engine, camera);
     }
 
     private void checkIfCameraChanged(Camera camera) {
@@ -92,7 +92,7 @@ public class MapRenderComponent extends UnitRenderComponent {
     }
 
     @Override
-    public void onDeinitialize() {
+    protected void onDeinitialize() {
         super.onDeinitialize();
         
         _orthoCamera.removeViewChangedListener( _cameraViewUpdatedListener );

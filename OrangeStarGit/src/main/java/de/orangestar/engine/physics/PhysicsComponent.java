@@ -10,7 +10,7 @@ import de.orangestar.engine.values.Vector3f;
  *
  * @author Oliver &amp; Basti
  */
-public class PhysicsComponent extends Component {
+public abstract class PhysicsComponent extends Component {
     
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
@@ -67,7 +67,7 @@ public class PhysicsComponent extends Component {
         _velocityY = 0;
         _velocityZ = 0;
     }
-
+        
     /**
      * Adds velocity on the x axis.
      * @param velocity The added velocity

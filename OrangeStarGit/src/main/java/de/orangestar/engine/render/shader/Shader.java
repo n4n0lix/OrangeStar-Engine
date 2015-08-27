@@ -1,5 +1,7 @@
 package de.orangestar.engine.render.shader;
 
+import java.nio.ByteBuffer;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL33;
@@ -53,11 +55,12 @@ public class Shader {
     public static final String OutAttibNameColor        = "out_color";
     
     /* Default engine shaders */
+    // TODO: Make non-static
     public static final Shader GodShader = new ShaderBuilder()
                                                             .textured()
                                                             .colored()
                                                             .build();
-    
+    // TODO: Make non-static
     public static final Shader ColorShader = new ShaderBuilder()
                                                             .colored()
                                                             .build();
@@ -66,8 +69,8 @@ public class Shader {
     /*                               PUBLIC                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-    public void updateWVP(IRenderEngine engine) {       
-        GL20.glUniformMatrix4fv(_uniLocationWVP, 1, true, engine.getWVPBuffer());
+    public void setWVP(ByteBuffer wvp) {       
+        GL20.glUniformMatrix4fv(_uniLocationWVP, 1, true, wvp);
     }
     
     /**

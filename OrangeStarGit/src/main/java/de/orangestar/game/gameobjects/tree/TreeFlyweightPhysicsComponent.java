@@ -16,10 +16,13 @@ public class TreeFlyweightPhysicsComponent extends PhysicsComponent {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
     @Override
-    public void onInitialize() {
+    protected void onInitialize() {
         setupCollisionBox();
     }
-
+    
+    @Override
+    protected void onDeinitialize() { }
+    
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                              Private                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

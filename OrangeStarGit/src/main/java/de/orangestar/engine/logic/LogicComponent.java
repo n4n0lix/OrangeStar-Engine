@@ -1,6 +1,10 @@
 package de.orangestar.engine.logic;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import de.orangestar.engine.Component;
+import de.orangestar.engine.render.actor.Actor;
 
 /**
  * The base class for logic modules.
@@ -8,7 +12,7 @@ import de.orangestar.engine.Component;
  * 
  * @author Oliver &amp; Basti
  */
-public class LogicComponent extends Component {
+public abstract class LogicComponent extends Component {
     
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
@@ -18,5 +22,5 @@ public class LogicComponent extends Component {
      * Implement component updates here. (Called on a frequently time by the corresponding manager)
      */
     public void onUpdate() { }
-    
+
 }

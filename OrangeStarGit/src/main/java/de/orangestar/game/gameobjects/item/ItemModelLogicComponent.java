@@ -3,7 +3,6 @@ package de.orangestar.game.gameobjects.item;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.orangestar.engine.World;
 import de.orangestar.engine.logic.LogicComponent;
 import de.orangestar.engine.render.RenderComponent;
 import de.orangestar.engine.values.Transform;
@@ -16,6 +15,12 @@ import de.orangestar.engine.values.Vector3f;
  */
 public class ItemModelLogicComponent extends LogicComponent {
 
+    @Override
+    protected void onInitialize() { }
+
+    @Override
+    protected void onDeinitialize() { }
+    
 	/**
 	 * Sets an ItemSpawner if no ItemSpawner exists of this Item and returns it, otherwise just returns the Spawner.
 	 * 
@@ -110,5 +115,5 @@ public class ItemModelLogicComponent extends LogicComponent {
     	
     	private ItemType _itemType;
     }
-    
+
 }

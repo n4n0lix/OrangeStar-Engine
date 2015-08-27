@@ -1,7 +1,11 @@
 package de.orangestar.engine.render.component;
 
+import java.util.List;
+
 import de.orangestar.engine.render.Camera;
 import de.orangestar.engine.render.IRenderEngine;
+import de.orangestar.engine.render.RenderComponent;
+import de.orangestar.engine.render.actor.Actor;
 import de.orangestar.engine.values.Transform;
 
 /**
@@ -11,14 +15,14 @@ import de.orangestar.engine.values.Transform;
  * 
  * @author Oliver &amp; Basti
  */
-public class UnitRenderComponent extends SimpleRenderComponent {
+public class UnitRenderComponent extends RenderComponent {
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
     @Override
-    public void onUpdate(IRenderEngine engine, Camera camera) {
+    public void onRender(IRenderEngine engine, Camera camera) {
         if (getActors().isEmpty())  {
             return;
         }
@@ -37,10 +41,24 @@ public class UnitRenderComponent extends SimpleRenderComponent {
         Transform.set(predictedT, lastT);
         Transform.interpolate(predictedT, currentT, engine.getExtrapolation());
 
-        for(int i = 0; i < getActors().size(); i++) {
-            getActors().get(i).render(engine, predictedT);
+        List<Actor> actors = getActors();
+        
+        for(int i = 0; i < actors.size(); i++) {
+            actors.get(i).render(engine, predictedT);
         }
         
         Transform.POOL.release(predictedT);
+    }
+
+    @Override
+    protected void onInitialize() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    protected void onDeinitialize() {
+        // TODO Auto-generated method stub
+        
     }
 }

@@ -93,6 +93,12 @@ public class PropsModelLogicComponent extends LogicComponent {
     	
     	return spawner;
 	}
+	
+	@Override
+    protected void onInitialize() { }
+	
+	@Override
+    protected void onDeinitialize() { }
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                              Private                               */

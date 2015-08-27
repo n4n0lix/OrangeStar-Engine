@@ -1,8 +1,13 @@
 package de.orangestar.engine.render;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import de.orangestar.engine.Component;
+import de.orangestar.engine.GameObject;
+import de.orangestar.engine.render.actor.Actor;
 
 /**
  * The base class for render modules.
@@ -10,7 +15,7 @@ import de.orangestar.engine.Component;
  * 
  * @author Oliver &amp; Basti
  */
-public class RenderComponent extends Component {
+public abstract class RenderComponent extends Component {
 
 	/**
      * Used to compare the rendering priority of two actors.
@@ -27,7 +32,23 @@ public class RenderComponent extends Component {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+    public RenderComponent() {
+        _actors = new ArrayList<Actor>();
+        _readOnlyActors = Collections.unmodifiableList(_actors);
+    }
     
+    @Override
+    public void deinitialize() {
+        super.deinitialize();
+        _actors.clear();
+    }
+    
+    /**
+     * Implement component updates here. (Called on a frequently time by the corresponding manager)
+     */
+    public abstract void onRender(IRenderEngine engine, Camera camera);
+        
     /**
      * Sets on which layer the root actor is rendered. Use this to control which actor
      * is displayed in front/back of other actors.
@@ -45,15 +66,36 @@ public class RenderComponent extends Component {
         return _layer;
     }
 
-    /**
-     * Implement component updates here. (Called on a frequently time by the corresponding manager)
-     */
-    public void onUpdate(IRenderEngine engine, Camera camera) { }
-
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                              Private                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+    /**
+     * Add an actor.
+     * @param actor A actor
+     */
+    public void addActor(Actor actor) {
+        _actors.add(actor);
+    }
+
+    /**
+     * Removes an actor.
+     * @param actor A actor
+     */
+    public void removeActor(Actor actor) {
+        _actors.remove(actor);
+    }
+
+    /**
+     * Returns an unmodifiable list of all actors.
+     * @return An unmodifiable list of all actors
+     */
+    public List<Actor> getActors() {
+        return _readOnlyActors;
+    }
+
     private int        _layer;
+    private List<Actor> _actors;
+    private List<Actor> _readOnlyActors;
     
 }

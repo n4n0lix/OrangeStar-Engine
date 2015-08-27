@@ -11,16 +11,6 @@ public abstract class Component {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-	
-	/**
-	 * Implement component initialization here. (Called upon everytime the component is assigned to a gameobject)
-	 */
-	public void onInitialize() { }
-    
-    /**
-     * Implement component deinitialization here. (Called upon everytime the component is removed from a gameobject)
-     */
-    public void onDeinitialize() { }
     
     /**
      * Returns the associated gameobject.
@@ -28,20 +18,45 @@ public abstract class Component {
      */
     public GameObject getGameObject() {
         return _gameObject;
-    }
+    } 
     
-    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    /*                              Package                               */
-    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    public void initialize(GameObject gameObject) {
+        _gameObject = gameObject;
+        onInitialize();
 
-    void setGameObject(GameObject object) {
-        _gameObject = object;
+        _isInitialized = true;
+    }
+
+    public void deinitialize() {
+        onDeinitialize();
+        _gameObject = null;
+        
+        _isInitialized = false;
     }
     
+    public boolean isInitialized() {
+        return _isInitialized;
+    }
+
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    /*                              Protected                             */
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    
+    /**
+     * Implement component initialization here. (Called upon everytime the component is assigned to a gameobject)
+     */
+    protected abstract void onInitialize();
+    
+    /**
+     * Implement component deinitialization here. (Called upon everytime the component is removed from a gameobject)
+     */
+    protected abstract void onDeinitialize();
+
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                              Private                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
+    private boolean    _isInitialized;
     private GameObject _gameObject;
     
 }

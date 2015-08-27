@@ -1,7 +1,7 @@
-package de.orangestar.engine;
+package de.orangestar.game;
 
+import de.orangestar.engine.Engine;
 import de.orangestar.engine.debug.Logger;
-import de.orangestar.game.MainGameState;
 
 /**
  * The engines main entry point.

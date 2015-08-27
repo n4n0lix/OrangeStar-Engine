@@ -19,4 +19,7 @@ public interface IPhysicsEngine {
     
     public List<GameObject> getGameObjectsByRayCast(final World world, final Ray ray);
     
+    public void         addWorld(World world);
+    public void         removeWorld(World world);
+    
 }

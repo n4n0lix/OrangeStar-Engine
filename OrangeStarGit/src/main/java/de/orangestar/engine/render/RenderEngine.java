@@ -7,8 +7,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.PriorityQueue;
-
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWvidmode;
@@ -35,6 +33,10 @@ public class RenderEngine implements IRenderEngine {
 	
 	@Override
 	public void onStart() {
+	    if ( glfwInit() != GL11.GL_TRUE ) {
+	        throw new IllegalStateException("Unable to initialize GLFW");
+        }
+	    
 	    // Setup debugging
         glfwSetErrorCallback(_glfwErrorCallback = new GLFWErrorCallback() {
             @Override
@@ -73,13 +75,12 @@ public class RenderEngine implements IRenderEngine {
         GL11.glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
         
         // Culling
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glCullFace(GL11.GL_BACK);
-        GL11.glFrontFace(GL11.GL_CCW);
+        setCullingMode(CullingMode.BACK_FACE);
 	}
 
     @Override
     public void onUpdate() {
+        _mainWindow.doGuiEvents();
         GL11.glViewport(0, 0, _mainWindow.getRenderWidth(), _mainWindow.getRenderHeight());
         
         // Render
@@ -204,6 +205,35 @@ public class RenderEngine implements IRenderEngine {
         
 	}
 	
+    @Override
+    public void setCullingMode(CullingMode mode) {
+        _culling = mode;
+        
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        
+        switch(_culling) {
+            case FRONT_FACE :
+            {
+                GL11.glCullFace(GL11.GL_FRONT);
+            } break;
+            case BACK_FACE :
+            {
+                GL11.glCullFace(GL11.GL_BACK);
+            } break;
+            default : 
+            {
+                GL11.glCullFace(GL11.GL_FRONT_AND_BACK);
+            } break;   
+        }
+
+        GL11.glFrontFace(GL11.GL_CCW);
+    }
+
+    @Override
+    public CullingMode getCullingMode() {
+        return _culling;
+    }
+    
 	/**
 	 * Returns the ByteBuffer that contains the WVP matrix.
 	 * @return The ByteBuffer that contains the WVP matrix
@@ -301,6 +331,7 @@ public class RenderEngine implements IRenderEngine {
 	private boolean      _vsync;
 	private boolean      _wireframe;
 	private boolean      _alphaBlending;
+	private CullingMode  _culling;
 	
     private float        _extrapolation;
     

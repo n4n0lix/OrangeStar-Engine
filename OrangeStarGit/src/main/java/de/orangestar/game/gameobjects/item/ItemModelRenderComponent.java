@@ -18,7 +18,7 @@ import de.orangestar.game.MainGameState;
 public class ItemModelRenderComponent extends UnitRenderComponent {
 
 	@Override
-	public void onInitialize() {
+    protected void onInitialize() {
 	    super.onInitialize();
 	    
 	    setLayer(MainGameState.LAYER_ITEM);

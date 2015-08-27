@@ -17,17 +17,6 @@ import de.orangestar.engine.utils.Deinitializable;
  */
 public class GLWindow implements Deinitializable {
 
-    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    /*                            Public Static                           */
-    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    
-    /**
-     * Does the OS dependent event handling for all windows of this engine instance.
-     */
-	public static void doGuiEvents() {
-		glfwPollEvents();
-	}
-
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                               Public                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -54,6 +43,13 @@ public class GLWindow implements Deinitializable {
         setTitle( "OrangeStar Engine - #indev" );
 	}
 	
+    /**
+     * Does the OS dependent event handling for all windows of this engine instance.
+     */
+    public void doGuiEvents() {
+        glfwPollEvents();
+    }
+    
 	/**
 	 * Sets the position of the window.
 	 * @param x The x coordiante

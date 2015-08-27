@@ -7,20 +7,12 @@ import java.util.List;
 import de.orangestar.engine.GameObject;
 import de.orangestar.engine.GameState;
 import de.orangestar.engine.World;
-import de.orangestar.engine.input.InputEngine;
-import de.orangestar.engine.input.Key.KeyState;
 import de.orangestar.engine.input.Keyboard;
 import de.orangestar.engine.input.Mouse;
 import de.orangestar.engine.logic.LogicEngine;
-import de.orangestar.engine.physics.PhysicsEngine;
-import de.orangestar.engine.render.GLWindow;
 import de.orangestar.engine.render.OrthographicCamera;
-import de.orangestar.engine.render.RenderEngine;
-import de.orangestar.engine.render.Texture;
-import de.orangestar.engine.render.actor.ui.Font;
 import de.orangestar.engine.utils.MathUtils;
 import de.orangestar.engine.utils.Pair;
-import de.orangestar.engine.values.Rectangle4i;
 import de.orangestar.engine.values.Vector3f;
 import de.orangestar.engine.values.Viewport4f;
 import de.orangestar.game.gameobjects.item.ItemModel;
@@ -224,6 +216,7 @@ public class MainGameState extends GameState {
     
     private void initGameWorld() {
         GAME_WORLD = new World();
+        getLogicEngine().addWorld(GAME_WORLD);
         
         _gameCamera = new OrthographicCamera();
         _gameCamera.setLayer(CAMERA_LAYER_GAMEWORLD);
@@ -262,6 +255,7 @@ public class MainGameState extends GameState {
     
     private void initUIWorld() {
         _uiWorld = new World();
+        getLogicEngine().addWorld(_uiWorld);
         
         _uiCamera = new OrthographicCamera();
         _uiCamera.setWorld(_uiWorld);
@@ -278,7 +272,7 @@ public class MainGameState extends GameState {
     private float              _zoomIs     = _zoomTarget;
     private float              _scrollingFactor = 0.0f;
 
-    public World               _uiWorld;
+    private World              _uiWorld;
     private OrthographicCamera _uiCamera;
     
     private Map                _map;

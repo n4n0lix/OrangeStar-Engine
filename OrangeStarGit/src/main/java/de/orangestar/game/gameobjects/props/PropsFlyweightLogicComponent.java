@@ -26,5 +26,11 @@ public class PropsFlyweightLogicComponent extends LogicComponent {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	
 	private PropsType _propsType;
+
+    @Override
+    protected void onInitialize() { }
+
+    @Override
+    protected void onDeinitialize() { }
 	
 }

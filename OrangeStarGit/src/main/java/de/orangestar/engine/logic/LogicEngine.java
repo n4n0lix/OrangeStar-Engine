@@ -1,5 +1,6 @@
 package de.orangestar.engine.logic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.orangestar.engine.GameObject;
@@ -19,28 +20,38 @@ public class LogicEngine implements ILogicEngine {
 
 	@Override
 	public void onStart() { 
-	    _allWorlds = World.getAllWorlds();
+	    _worlds = new ArrayList<>();
 	}
 
     @Override
     public void onUpdate() {
-            updateTransforms();        
-            updateLogic();
+        updateTransforms();
+        updateLogic();
     }
 
 	@Override
 	public void onShutdown() { }
+
+    @Override
+    public void addWorld(World world) {
+        _worlds.add(world);
+    }
+
+    @Override
+    public void removeWorld(World world) {
+        _worlds.add(world);
+    }
 	
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                              Private                               */
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	
-	private List<World> _allWorlds;
+	private List<World> _worlds;
 	
 	private void updateTransforms() {
-        for(int worldI = 0; worldI < _allWorlds.size(); worldI++) {
+        for(int worldI = 0; worldI < _worlds.size(); worldI++) {
 
-            List<GameObject> gameobjects = _allWorlds.get(worldI).getGameObjects();
+            List<GameObject> gameobjects = _worlds.get(worldI).getGameObjects();
 
             // LastTransform = CurrentTransform
             for(int i = 0; i < gameobjects.size(); i++) {
@@ -49,16 +60,17 @@ public class LogicEngine implements ILogicEngine {
             }
         }
 	}
-
+	
     private void updateLogic() {
-        for(int worldI = 0; worldI < _allWorlds.size(); worldI++) {
+        for(int worldI = 0; worldI < _worlds.size(); worldI++) {
             
-            List<GameObject> gameobjects = _allWorlds.get(worldI).getGameObjects();
+            List<GameObject> gameobjects = _worlds.get(worldI).getGameObjects();
             
             for(int i = 0; i < gameobjects.size(); i++) {
-                LogicComponent logic = gameobjects.get(i).getLogicComponent();
+                GameObject gameObject = gameobjects.get(i);
+                LogicComponent logic = gameObject.getLogicComponent();
                     
-                if (logic != null) {
+                if (logic != null) {                    
                     logic.onUpdate();
                 }
             }

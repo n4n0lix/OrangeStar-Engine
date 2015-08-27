@@ -26,5 +26,11 @@ public class ItemFlyweightLogicComponent extends LogicComponent {
 	}
 	
 	private Item _item;
+
+    @Override
+    protected void onInitialize() { }
+
+    @Override
+    protected void onDeinitialize() { }
 	
 }

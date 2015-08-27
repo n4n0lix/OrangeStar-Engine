@@ -10,7 +10,7 @@ import de.orangestar.game.MainGameState;
 public class UIRenderComponent extends SimpleRenderComponent {
 
     @Override
-    public void onInitialize() {
+    protected void onInitialize() {
         super.onInitialize();
         
         Font basicFont = new BasicFont();

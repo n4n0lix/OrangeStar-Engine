@@ -1,7 +1,6 @@
 package de.orangestar.game.gameobjects.item;
 
 import de.orangestar.engine.GameObject;
-import de.orangestar.engine.render.RenderEngine;
 /**
  * ItemModel class to link the ItemComponents.
  * 

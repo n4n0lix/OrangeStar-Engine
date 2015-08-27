@@ -79,13 +79,16 @@ public class MapLogicComponent extends LogicComponent {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
     @Override
-    public void onInitialize() {
-        super.onInitialize();
-        
+    protected void onInitialize() {        
         _chunks            = new HashMap<>();
         _mapChunkGenerator = new MapChunkGenerator();
     }
 
+    @Override
+    protected void onDeinitialize() {
+
+    }
+    
 	/**
 	 * Returns a chunk for a given chunk x/y position. If no chunk was found a new is generated.
 	 * @param x The chunk's x position
@@ -146,5 +149,5 @@ public class MapLogicComponent extends LogicComponent {
     
     private MapChunkGenerator _mapChunkGenerator;
     private Map<Pair<Integer,Integer>, MapChunk> _chunks;
-    
+
 }

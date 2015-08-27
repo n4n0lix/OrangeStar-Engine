@@ -10,7 +10,8 @@ import org.lwjgl.glfw.GLFWScrollCallback;
 
 import de.orangestar.engine.GameObject;
 import de.orangestar.engine.World;
-import de.orangestar.engine.render.RenderEngine;
+import de.orangestar.engine.debug.Logger;
+import de.orangestar.engine.debug.Logger.Level;
 
 /**
  * Handles the players input.
@@ -22,6 +23,8 @@ import de.orangestar.engine.render.RenderEngine;
 public class InputEngine implements IInputEngine {
 	
     // TODO: AsyncKeyListener for text input
+    
+    static { Logger.setLogging(InputEngine.class, Level.DEBUG); }
     
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	/*                               Public                               */
@@ -125,10 +128,22 @@ public class InputEngine implements IInputEngine {
 	    return _syncKeyboard;
 	}
 	
+    @Override
+    public void addWorld(World world) {
+        _worlds.add(world);
+    }
+
+    @Override
+    public void removeWorld(World world) {
+        _worlds.remove(world);
+    }
+    
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	/*                              Private                               */
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-	
+    
+    private List<World> _worlds;
+    
 	// TODO: A lot of copy+pasta code, maybe extract to method or handle differently
 	private void syncMouse() {
         List<Key> asyncMouseKeys = _asyncMouse.getAllKeys();

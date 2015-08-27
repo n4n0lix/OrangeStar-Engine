@@ -17,34 +17,30 @@ public interface IRenderEngine {
     public long getGLFWWindowHandle();
     
     public int getRenderWidth();
-    
     public int getRenderHeight();
     
     public void addActiveCamera(Camera camera);
     
-    public boolean isVSyncEnabled();
+    public boolean      isVSyncEnabled();
+    public void         setVSync(boolean vSync);
     
-    public void setVSync(boolean vSync);
+    public boolean      isWireframeEnabled();
+    public void         setWireframe(boolean wireframe);
     
-    public boolean isWireframeEnabled();
+    public boolean      isAlphablending();
+    public void         setAlphablending(boolean alphablending);
     
-    public void setWireframe(boolean wireframe);
+    public CullingMode  getCullingMode();
+    public void         setCullingMode(CullingMode culling);
     
-    public boolean isAlphablending();
-    
-    public void setAlphablending(boolean alphablending);
-    
-    public ByteBuffer getWVPBuffer();
-    
-    public Matrix4f getWorldMatrix();
+    public ByteBuffer   getWVPBuffer();
+    public Matrix4f     getWorldMatrix();
     
     public void setWorldMatrix(Matrix4f matrix);
-    
     public void setViewMatrix(Matrix4f matrix);
-    
     public void setProjectionMatrix(Matrix4f matrix);
     
-    public void setExtrapolation(float extrapolation);
+    public float    getExtrapolation();
+    public void     setExtrapolation(float extrapolation);
     
-    public float getExtrapolation();
 }

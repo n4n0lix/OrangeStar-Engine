@@ -30,13 +30,9 @@ public class Engine {
 
     public void run(Class<? extends GameState> startGamestate, String... args) {
         // Point the VM to the native libraries
-        System.out.println(new File("libs").getAbsolutePath());
-	    System.setProperty("org.lwjgl.librarypath", new File("libs").getAbsolutePath());
-
-	    // Not in RenderManager, because we want to be able to debug the renderer initialization
-	    if ( glfwInit() != GL11.GL_TRUE ) {
-            throw new IllegalStateException("Unable to initialize GLFW");
-        }
+        String lwjglLibPath = new File("libs").getAbsolutePath() + File.separator + "lwjgl-3.0.0" + File.separator + "native";
+	    System.setProperty("org.lwjgl.librarypath", lwjglLibPath);
+	    System.out.println("org.lwjgl.librarypath => " + System.getProperty("org.lwjgl.librarypath"));
 
 		_renderEngine.onStart();
 		_physicsEngine.onStart();
@@ -78,9 +74,7 @@ public class Engine {
             e.printStackTrace();
         }
 		
-	    while ( !programEnd ) {
-	        GLWindow.doGuiEvents();
-	        
+	    while ( !programEnd ) {	        
 	        // Calculate the tick rate
 	        tickCurrent  = System.nanoTime() / 1000000;
 	        tickDuration = tickCurrent - tickPrevious;

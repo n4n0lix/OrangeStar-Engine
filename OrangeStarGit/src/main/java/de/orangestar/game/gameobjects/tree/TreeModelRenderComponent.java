@@ -20,7 +20,7 @@ public class TreeModelRenderComponent extends UnitRenderComponent {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     
     @Override
-    public void onInitialize() {
+    protected void onInitialize() {
         super.onInitialize();
 
         _actor = new InstancedImage.Builder()
@@ -35,7 +35,7 @@ public class TreeModelRenderComponent extends UnitRenderComponent {
     }
     
     @Override
-    public void onDeinitialize() {
+    protected void onDeinitialize() {
         super.onDeinitialize();
         
         removeActor(_actor);

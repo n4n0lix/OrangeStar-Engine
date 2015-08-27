@@ -320,19 +320,19 @@ public class GameObject {
      */
     public void destroy() {
         if (_componentInput != null) {
-            _componentInput.onDeinitialize();
+            _componentInput.deinitialize();
         }
         
         if (_componentLogic != null) {
-            _componentLogic.onDeinitialize();
+            _componentLogic.deinitialize();
         }
         
         if (_componentPhysics != null) {
-            _componentPhysics.onDeinitialize();
+            _componentPhysics.deinitialize();
         }
         
         if (_componentRender != null) {
-            _componentRender.onDeinitialize();
+            _componentRender.deinitialize();
         }
     	
     	_parent.removeChild(this);
@@ -347,15 +347,13 @@ public class GameObject {
      */
     public void setLogicComponent(LogicComponent moduleLogic) {
         if (_componentLogic != null) {
-            _componentLogic.onDeinitialize();
-            ((Component) _componentLogic).setGameObject(null);
+            _componentLogic.deinitialize();
         }
         
         _componentLogic = moduleLogic;
         
         if (_componentLogic != null) {
-            ((Component) _componentLogic).setGameObject(this);
-            _componentLogic.onInitialize();
+            _componentLogic.initialize(this);
         }
     }
     
@@ -365,15 +363,13 @@ public class GameObject {
      */
     public void setRenderComponent(RenderComponent moduleRender) {
         if (_componentRender != null) {
-            _componentRender.onDeinitialize();
-            ((Component) _componentRender).setGameObject(null);
+            _componentRender.deinitialize();
         }
         
         _componentRender = moduleRender;
         
         if (_componentRender != null) {
-            ((Component) _componentRender).setGameObject(this);
-            _componentRender.onInitialize();
+            _componentRender.initialize(this);
         }
     }
     
@@ -383,15 +379,13 @@ public class GameObject {
      */
     public void setPhysicsComponent(PhysicsComponent compPhysics) {
         if (_componentPhysics != null) {
-            _componentPhysics.onDeinitialize();
-            ((Component) _componentPhysics).setGameObject(null);
+            _componentPhysics.deinitialize();
         }
         
         _componentPhysics = compPhysics;
         
         if (_componentPhysics != null) {
-            ((Component) _componentPhysics).setGameObject(this);
-            _componentPhysics.onInitialize();
+            _componentPhysics.initialize(this);
         }
     }
     
@@ -401,17 +395,15 @@ public class GameObject {
      */
     public void setInputComponent(InputComponent compInput) {
         if (_componentInput != null) {
-            _componentInput.onDeinitialize();
-            ((Component) _componentInput).setGameObject(null);
+            _componentInput.deinitialize();
         }
         
         _componentInput = compInput;
         
         if (_componentInput != null) {
-            ((Component) _componentInput).setGameObject(this);
-            _componentInput.onInitialize();
+            _componentInput.initialize(this);
         }
-    }
+    }   
     
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /*                              Package                               */
